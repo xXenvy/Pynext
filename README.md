@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img alt="" src="assets/logo.png" width="160px"/>
+  <img alt="" src="assets/discordlogo.png" width="200px"/>
   
   ## Pynext - Discord API Wrapper for Discord selfbots.
   `⚠️ Project only for educational purposes!`
