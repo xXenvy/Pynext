@@ -16,6 +16,7 @@
 - Proper rate limit handling
 - Optimised in both `speed` and `memory`
 - Properly typehinted
+- Support for multiple accounts.
 
 # 🛠️ Installation
 ```shell
