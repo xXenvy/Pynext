@@ -79,7 +79,7 @@ class Parser:
     async def on_user_ready_args(self, response: GatewayResponse) -> tuple[SelfBot]:
         await self._chunk_user(response.user, data=response.data)
         response.user._ready.set()
-        return (response.user,)
+        return response.user,
 
     @staticmethod
     async def on_message_create_args(

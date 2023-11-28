@@ -75,7 +75,7 @@ __all__: tuple[str, ...] = (
     "BanEntry",
     "Dispatcher",
     "GatewayResponse",
-    "HTTPTimeoutError",
+    "HTTPTimeoutError"
 )
 
 pynext_version: str = PynextClient.__version__
