@@ -45,7 +45,8 @@ if TYPE_CHECKING:
 
 class ContextHandler:
     """
-    RequestManager helping HTTP client. It handles configured delays, ratelimit and error handling.
+    RequestManager helps the HTTPclient.
+    It supports configured delays, ratelimit and error handling.
 
     Parameters
     ----------
