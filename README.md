@@ -1,6 +1,8 @@
 ## Pynext - Discord API Wrapper for Discord selfbots.
 > ⚠️ Project only for educational purposes!
-> 
+
+> ⚠️ Project is still under development. It may contain bugs, and future updates will bring breaking changes.
+
 ![License](https://img.shields.io/github/license/xXenvy/AsyncCore?style=for-the-badge&color=%2315b328)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/AsyncCore?style=for-the-badge&color=%2315b328)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/xXenvy/AsyncCore?style=for-the-badge&color=%2315b328)
