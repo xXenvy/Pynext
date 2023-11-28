@@ -66,7 +66,7 @@ class PynextClient:
         Major client dispatcher. You can find more information here: <link>.
     """
 
-    __version__: ClassVar[str] = "1.0.0"
+    __version__: ClassVar[str] = "1.0.1"
     __slots__ = ("gateway", "loop", "dispatcher", "_http", "_users", "_logger")
 
     def __init__(

@@ -71,7 +71,7 @@ class HTTPClient:
         "_request_delay",
         "_timeout",
     )
-    __version__: ClassVar[str] = "1.0.0"
+    __version__: ClassVar[str] = "1.0.1"
 
     BASE_URL: ClassVar[str] = "https://discord.com/api/v10/"
 
