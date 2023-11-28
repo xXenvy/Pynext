@@ -12,10 +12,10 @@
 > Python 3.9 or newer
 
 # 🔧 Pynext Features
-- Modern Pythonic API using `async` and `await`
-- Proper rate limit handling
-- Optimised in both `speed` and `memory`
-- Properly typehinted
+- Modern Pythonic API using `async` and `await`.
+- Proper rate limit handling.
+- Optimised in both `speed` and `memory`.
+- Properly typehinted.
 - Support for multiple accounts.
 
 # 🛠️ Installation
@@ -27,7 +27,7 @@ pip install -U pynext
 ```py
 import pynext
 
-client: pynext.PynextClient = pynext.PynextClient(chunk_guilds=False)
+client = pynext.PynextClient(chunk_guilds=False)
 
 @client.gateway.event('on_user_ready')
 async def on_ready(user: pynext.SelfBot):
