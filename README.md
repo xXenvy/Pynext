@@ -44,3 +44,8 @@ async def on_ready(user: pynext.SelfBot):
 
 client.run('TOKEN_1', 'TOKEN_2')
 ```
+
+# 📃 Todo
+- [x] Support for multiple accounts.
+- [ ] Discord connection support on the voice channel.
+- [ ] Slash commands and other interaction stuff handling.
