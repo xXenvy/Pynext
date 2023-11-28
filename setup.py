@@ -7,7 +7,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 DESCRIPTION = "Library that will allow you to manage selfbots."
 LONG_DESCRIPTION = (
     "The library was written mainly for selfbots. It has a structure similar to popular libraries such as discord.py"

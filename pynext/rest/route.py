@@ -21,10 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import Literal, TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from discord_typings import Snowflake
+from typing import Literal, Any
 
 
 class Route:
@@ -60,7 +57,7 @@ class Route:
         method: Literal["GET", "POST", "PUT", "DELETE", "PATCH"],
         url: str,
         headers: dict[str, Any] | None = None,
-        **params: Snowflake,
+        **params: str | int,
     ):
         self.method: str = method
         self.url: str = url.format(**params)
