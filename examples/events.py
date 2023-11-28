@@ -2,8 +2,6 @@ from typing import Union
 
 from pynext import PynextClient, SelfBot, GuildMessage, PrivateMessage
 
-# There are two main ways to handle events.
-
 """
 There are two main ways to handle events.
 
