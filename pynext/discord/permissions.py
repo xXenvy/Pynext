@@ -54,6 +54,7 @@ class Permissions(BaseFlags):
     permission_flags:
         Dict with the flag object and its status.
     """
+
     __slots__ = ("_flags", "permission_flags", "value")
 
     def __init__(self, value: int = 0, **permissions: bool) -> None:
@@ -61,7 +62,9 @@ class Permissions(BaseFlags):
         self.permission_flags: dict[PermissionsFlags, bool] = {}
 
         for permission, status in permissions.items():
-            flag: PermissionsFlags | None = getattr(PermissionsFlags, permission.upper(), None)
+            flag: PermissionsFlags | None = getattr(
+                PermissionsFlags, permission.upper(), None
+            )
 
             if not flag:
                 raise PynextError(f"Invalid permission: {permission}")
@@ -197,6 +200,7 @@ class PermissionOverwrite:
     permissions:
         Permissions with statuses. Use None to set permission default value.
     """
+
     __slots__ = ("_allow", "_deny")
 
     def __init__(self, **permissions: bool | None):
@@ -204,7 +208,9 @@ class PermissionOverwrite:
         self._deny: dict[PermissionsFlags, bool] = {}
 
         for permission, status in permissions.items():
-            flag: PermissionsFlags | None = getattr(PermissionsFlags, permission.upper(), None)
+            flag: PermissionsFlags | None = getattr(
+                PermissionsFlags, permission.upper(), None
+            )
 
             if not flag:
                 raise PynextError(f"Invalid permission type: {permission}")
@@ -291,9 +297,9 @@ class PermissionOverwrite:
 
     @classmethod
     def make_from_permissions(
-            cls,
-            allow: Permissions = Permissions.none(),
-            deny: Permissions = Permissions.none()
+        cls,
+        allow: Permissions = Permissions.none(),
+        deny: Permissions = Permissions.none(),
     ) -> PermissionOverwrite:
         """
         Classmethod to create overwrite via permissions objects.

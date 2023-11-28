@@ -47,6 +47,7 @@ class Emoji:
     encode:
         Emoji encode format.
     """
+
     __slots__ = ("name", "animated", "id", "encode")
 
     def __init__(self, name: str, animated: bool = False, emoji_id: int | None = None):
@@ -58,7 +59,9 @@ class Emoji:
         if not self.id:
             self.encode: str = self.name
         else:
-            self.encode: str = f"{self.name}:{self.id}" if not animated else f"a:{self.name}:{self.id}"
+            self.encode: str = (
+                f"{self.name}:{self.id}" if not animated else f"a:{self.name}:{self.id}"
+            )
 
     def __repr__(self) -> str:
         return f"<Emoji(name={self.name}, id={self.id})>"
@@ -85,8 +88,4 @@ class Emoji:
         """
         Method converts data to dict.
         """
-        return {
-            "id": self.id,
-            "name": self.name,
-            "animated": self.animated
-        }
+        return {"id": self.id, "name": self.name, "animated": self.animated}

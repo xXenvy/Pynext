@@ -63,6 +63,7 @@ class BaseChannel(Hashable):
     id:
         id of the channel.
     """
+
     __slots__ = ("id", "name", "type", "raw_data", "_state", "last_message_id", "guild")
 
     def __init__(self, state: State, data: dict[str, Any]):
@@ -104,15 +105,16 @@ class DMChannel(BaseChannel, Messageable):
     last_message_id:
         last message id. If any.
     """
-    __slots__ = ('target', '_messages')
+
+    __slots__ = ("target", "_messages")
 
     def __init__(self, state: State, data: dict[str, Any]):
         super().__init__(state=state, data=data)
 
-        author_data: dict[str, str | int] = data['recipients'][0]
+        author_data: dict[str, str | int] = data["recipients"][0]
         self.target: DiscordUser = self._state.create_user(data=author_data)
 
-        if last_message_id := data.get('last_message_id'):
+        if last_message_id := data.get("last_message_id"):
             self.last_message_id: int | None = int(last_message_id)
         else:
             self.last_message_id: int | None = None
@@ -153,17 +155,18 @@ class GuildChannel(BaseChannel):
     parent_id:
         Channel category id.
     """
+
     __slots__ = ("guild", "position", "flags", "type", "parent_id", "_overwrites")
 
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state=state, data=data)
 
         self.guild = guild
-        self.name: str = self.raw_data['name']
+        self.name: str = self.raw_data["name"]
 
-        self.position: int = self.raw_data['flags']
-        self.flags: int = self.raw_data['flags']
-        self.type: int = self.raw_data['type']
+        self.position: int = self.raw_data["flags"]
+        self.flags: int = self.raw_data["flags"]
+        self.type: int = self.raw_data["type"]
 
         self.parent_id: int | None = self.raw_data.get("parent_id")
         if self.parent_id is not None:
@@ -195,7 +198,9 @@ class GuildChannel(BaseChannel):
         """
         return self._overwrites
 
-    async def fetch_overwrites(self, user: SelfBot) -> dict[GuildMember | Role, PermissionOverwrite]:
+    async def fetch_overwrites(
+        self, user: SelfBot
+    ) -> dict[GuildMember | Role, PermissionOverwrite]:
         """
         Method to fetch channel overwrites.
 
@@ -204,8 +209,10 @@ class GuildChannel(BaseChannel):
         user:
             Selfbot required to send requests.
         """
-        overwrites = self.raw_data.get('permission_overwrites', [])
-        async for overwrite, target in self._state.create_overwrites(user, self.guild, overwrites):
+        overwrites = self.raw_data.get("permission_overwrites", [])
+        async for overwrite, target in self._state.create_overwrites(
+            user, self.guild, overwrites
+        ):
             self._add_overwrite(target=target, overwrite=overwrite)
 
         return self.overwrites
@@ -232,7 +239,9 @@ class GuildChannel(BaseChannel):
         """
         await self._state.http.delete_channel(user, channel_id=self.id)
 
-    def _add_overwrite(self, target: GuildMember | Role, overwrite: PermissionOverwrite) -> None:
+    def _add_overwrite(
+        self, target: GuildMember | Role, overwrite: PermissionOverwrite
+    ) -> None:
         self._overwrites[target] = overwrite
 
 
@@ -266,6 +275,7 @@ class CategoryChannel(GuildChannel):
     parent_id:
         Channel category id.
     """
+
     __slots__ = ()
 
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
@@ -275,11 +285,12 @@ class CategoryChannel(GuildChannel):
         return f"<CategoryChannel(name={self.name}, id={self.id})>"
 
     async def edit(
-            self,
-            user: SelfBot,
-            name: str | None = None,
-            position: int | None = None,
-            overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None) -> CategoryChannel:
+        self,
+        user: SelfBot,
+        name: str | None = None,
+        position: int | None = None,
+        overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None,
+    ) -> CategoryChannel:
         """
         Method to edit category channel.
 
@@ -315,24 +326,22 @@ class CategoryChannel(GuildChannel):
             permission_overwrites = self._state.to_overwrite_payload(overwrites)
 
         params: dict[str, Any] = {
-            'name': name,
-            'type': ChannelType.GUILD_CATEGORY.value,
-            'position': position,
-            'permission_overwrites': permission_overwrites
+            "name": name,
+            "type": ChannelType.GUILD_CATEGORY.value,
+            "position": position,
+            "permission_overwrites": permission_overwrites,
         }
 
         for key, value in params.copy().items():
             if value is None:
                 """
-                If a parameter has a value of None, 
+                If a parameter has a value of None,
                 we don't want it in the dict because it could overwrite an already set parameter.
                 """
                 del params[key]
 
         data: dict[str, Any] = await self._state.http.edit_channel(
-            user,
-            channel_id=self.id,
-            params=params
+            user, channel_id=self.id, params=params
         )
         channel = self._state.create_guild_channel(guild=self.guild, data=data)
 
@@ -376,14 +385,15 @@ class TextChannel(GuildChannel, Messageable):
     nsfw:
         Whether the channel has nsfw feature enabled.
     """
+
     __slots__ = ("topic", "nsfw", "last_message_id", "_messages", "_threads")
 
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state, guild, data)
 
-        self.topic: str | None = self.raw_data.get('nsfw')
-        self.nsfw: bool = self.raw_data.get('nsfw', False)
-        if last_message_id := data.get('last_message_id'):
+        self.topic: str | None = self.raw_data.get("nsfw")
+        self.nsfw: bool = self.raw_data.get("nsfw", False)
+        if last_message_id := data.get("last_message_id"):
             self.last_message_id: int | None = int(last_message_id)
         else:
             self.last_message_id: int | None = None
@@ -394,15 +404,16 @@ class TextChannel(GuildChannel, Messageable):
         return f"<TextChannel(name={self.name}, id={self.id})>"
 
     async def edit(
-            self,
-            user: SelfBot,
-            name: str,
-            topic: str | None = None,
-            parent: CategoryChannel | None = None,
-            position: int | None = None,
-            nsfw: bool = False,
-            slowmode: int | None = None,
-            overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None) -> TextChannel:
+        self,
+        user: SelfBot,
+        name: str,
+        topic: str | None = None,
+        parent: CategoryChannel | None = None,
+        position: int | None = None,
+        nsfw: bool = False,
+        slowmode: int | None = None,
+        overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None,
+    ) -> TextChannel:
         """
         Method to edit category channel.
 
@@ -442,28 +453,26 @@ class TextChannel(GuildChannel, Messageable):
             permission_overwrites = self._state.to_overwrite_payload(overwrites)
 
         params: dict[str, Any] = {
-            'name': name,
-            'type': ChannelType.GUILD_TEXT.value,
-            'topic': topic,
-            'parent_id': parent.id if parent else None,
-            'position': position,
-            'nsfw': nsfw,
-            'permission_overwrites': permission_overwrites,
-            'rate_limit_per_user': slowmode
+            "name": name,
+            "type": ChannelType.GUILD_TEXT.value,
+            "topic": topic,
+            "parent_id": parent.id if parent else None,
+            "position": position,
+            "nsfw": nsfw,
+            "permission_overwrites": permission_overwrites,
+            "rate_limit_per_user": slowmode,
         }
 
         for key, value in params.copy().items():
             if value is None:
                 """
-                If a parameter has a value of None, 
+                If a parameter has a value of None,
                 we don't want it in the dict because it could overwrite an already set parameter.
                 """
                 del params[key]
 
         data: dict[str, Any] = await self._state.http.edit_channel(
-            user,
-            channel_id=self.id,
-            params=params
+            user, channel_id=self.id, params=params
         )
 
         channel = self._state.create_guild_channel(guild=self.guild, data=data)
@@ -505,21 +514,24 @@ class VoiceChannel(GuildChannel):
     bitrate:
         Voice channel bitrate.
     """
+
     __slots__ = ("user_limit", "bitrate")
 
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state, guild, data)
 
-        self.user_limit: int | None = self.raw_data['user_limit']
+        self.user_limit: int | None = self.raw_data["user_limit"]
         if self.user_limit == 0:
             self.user_limit = None
 
-        self.bitrate: int = self.raw_data['bitrate']
+        self.bitrate: int = self.raw_data["bitrate"]
 
     def __repr__(self):
         return f"<VoiceChannel(name={self.name}, id={self.id})>"
 
-    async def connect(self, user: SelfBot, self_mute: bool = False, self_deaf: bool = False) -> None:
+    async def connect(
+        self, user: SelfBot, self_mute: bool = False, self_deaf: bool = False
+    ) -> None:
         """
         Method to connect selfbot to voice channel.
 
@@ -538,13 +550,15 @@ class VoiceChannel(GuildChannel):
             SelfBot has no connection to the gateway.
         """
         if not user.gateway:
-            raise WebsocketNotConnnected(f"SelfBot: {user} has no connection to the gateway.")
+            raise WebsocketNotConnnected(
+                f"SelfBot: {user} has no connection to the gateway."
+            )
 
         await user.gateway.change_voice_state(
             guild_id=self.guild.id,
             channel_id=self.id,
             self_mute=self_mute,
-            self_deaf=self_deaf
+            self_deaf=self_deaf,
         )
 
         user._update_voice_state(guild=self.guild, state=self)
@@ -566,30 +580,31 @@ class VoiceChannel(GuildChannel):
             SelfBot is not connected to any channel on the guild.
         """
         if not user.gateway:
-            raise WebsocketNotConnnected(f"SelfBot: {user} has no connection to the gateway.")
+            raise WebsocketNotConnnected(
+                f"SelfBot: {user} has no connection to the gateway."
+            )
 
         if user.get_voice_state(guild=self.guild) is None:
-            raise VoiceStateNotFound("SelfBot is not connected to any channel on the guild.")
+            raise VoiceStateNotFound(
+                "SelfBot is not connected to any channel on the guild."
+            )
 
-        await user.gateway.change_voice_state(
-            guild_id=self.guild.id,
-            channel_id=None
-        )
+        await user.gateway.change_voice_state(guild_id=self.guild.id, channel_id=None)
 
         user._update_voice_state(guild=self.guild, state=None)
 
     async def edit(
-            self,
-            user: SelfBot,
-            name: str,
-            parent: CategoryChannel | None = None,
-            position: int | None = None,
-            nsfw: bool = False,
-            slowmode: int | None = None,
-            bitrate: int | None = None,
-            user_limit: int | None = None,
-            video_quality_mode: int | None = None,
-            overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None
+        self,
+        user: SelfBot,
+        name: str,
+        parent: CategoryChannel | None = None,
+        position: int | None = None,
+        nsfw: bool = False,
+        slowmode: int | None = None,
+        bitrate: int | None = None,
+        user_limit: int | None = None,
+        video_quality_mode: int | None = None,
+        overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None,
     ) -> VoiceChannel:
         """
         Method to edit voice channel.
@@ -634,27 +649,29 @@ class VoiceChannel(GuildChannel):
             permission_overwrites = self._state.to_overwrite_payload(overwrites)
 
         params: dict[str, Any] = {
-            'name': name,
-            'type': ChannelType.GUILD_VOICE.value,
-            'parent_id': parent.id if parent else None,
-            'position': position,
-            'nsfw': nsfw,
-            'permission_overwrite': permission_overwrites,
-            'rate_limit_per_user': slowmode,
-            'user_limit': user_limit,
-            'bitrate': bitrate,
-            'video_quality_mode': video_quality_mode
+            "name": name,
+            "type": ChannelType.GUILD_VOICE.value,
+            "parent_id": parent.id if parent else None,
+            "position": position,
+            "nsfw": nsfw,
+            "permission_overwrite": permission_overwrites,
+            "rate_limit_per_user": slowmode,
+            "user_limit": user_limit,
+            "bitrate": bitrate,
+            "video_quality_mode": video_quality_mode,
         }
 
         for key, value in params.copy().items():
             if value is None:
                 """
-                If a parameter has a value of None, 
+                If a parameter has a value of None,
                 we don't want it in the dict because it could overwrite an already set parameter.
                 """
                 del params[key]
 
-        data: dict[str, Any] = await self._state.http.edit_channel(user=user, channel_id=self.id, params=params)
+        data: dict[str, Any] = await self._state.http.edit_channel(
+            user=user, channel_id=self.id, params=params
+        )
         channel = self._state.create_guild_channel(guild=self.guild, data=data)
         assert isinstance(channel, VoiceChannel)
 

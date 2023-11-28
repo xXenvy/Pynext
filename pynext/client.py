@@ -65,26 +65,31 @@ class PynextClient:
     dispatcher:
         Major client dispatcher. You can find more information here: <link>.
     """
+
     __version__: ClassVar[str] = "1.0.0"
-    __slots__ = ('gateway', 'loop', 'dispatcher', '_http', '_users', '_logger')
+    __slots__ = ("gateway", "loop", "dispatcher", "_http", "_users", "_logger")
 
     def __init__(
-            self,
-            request_delay: float = 0.1,
-            ratelimit_delay: float = 0.5,
-            chunk_guilds: bool = True,
-            chunk_channels: bool = True,
-            http_timeout: ClientTimeout = ClientTimeout(total=10),
-            debug_events: bool = False
+        self,
+        request_delay: float = 0.1,
+        ratelimit_delay: float = 0.5,
+        chunk_guilds: bool = True,
+        chunk_channels: bool = True,
+        http_timeout: ClientTimeout = ClientTimeout(total=10),
+        debug_events: bool = False,
     ):
         self.gateway: WebSocketConnector = WebSocketConnector(
-            client=self, chunk_guilds=chunk_guilds,
-            chunk_channels=chunk_channels, debug_events=debug_events
+            client=self,
+            chunk_guilds=chunk_guilds,
+            chunk_channels=chunk_channels,
+            debug_events=debug_events,
         )
         self.loop: AbstractEventLoop = get_event_loop()
         self.dispatcher: Dispatcher[PynextClient] = Dispatcher(client=self)
 
-        self._http: HTTPClient = HTTPClient(request_delay, ratelimit_delay, self.dispatcher, http_timeout)
+        self._http: HTTPClient = HTTPClient(
+            request_delay, ratelimit_delay, self.dispatcher, http_timeout
+        )
         self._logger: Logger = getLogger("pynext.common")
         self._users: set[SelfBot] = set()
 

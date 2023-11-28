@@ -51,12 +51,13 @@ class BanEntry:
             BanEntry object passed by discord websocket (event)
             does not contain information about the reason for the ban even if there was one.
     """
+
     __slots__ = ("guild_id", "user", "reason")
 
     def __init__(self, state: State, data: dict[str, Any]):
-        self.guild_id: int = int(data['guild_id'])
+        self.guild_id: int = int(data["guild_id"])
         self.user: DiscordUser = state.create_user(data=data)
-        self.reason: str | None = data.get('reason')
+        self.reason: str | None = data.get("reason")
 
     def __repr__(self) -> str:
         return f"<BanEntry(guild_id={self.guild_id}, user_id={self.user.id})>"

@@ -25,7 +25,7 @@ from typing import TypedDict, TYPE_CHECKING, Union, TypeVar, Generic
 
 from dataclasses import dataclass
 
-KeyT = TypeVar('KeyT')
+KeyT = TypeVar("KeyT")
 
 if TYPE_CHECKING:
     from discord_typings import Snowflake
@@ -35,8 +35,8 @@ if TYPE_CHECKING:
     from .selfbot import SelfBot
 
 
-Message = Union['PrivateMessage', 'GuildMessage']
-Channel = Union['GuildChannel', 'TextChannel', 'VoiceChannel', 'CategoryChannel']
+Message = Union["PrivateMessage", "GuildMessage"]
+Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel"]
 
 
 class MessageReference(TypedDict):

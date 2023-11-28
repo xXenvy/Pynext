@@ -41,18 +41,22 @@ class DebugLogger:
     logger:
         Debug logger object.
     """
-    __slots__ = ('logger',)
+
+    __slots__ = ("logger",)
 
     def __init__(self, logger: logging.Logger) -> None:
         self.logger: logging.Logger = logger
 
     @classmethod
     def run(
-            cls,
-            module: Literal['pynext', 'pynext.rest', 'pynext.gateway', 'pynext.common'] = 'pynext',
-            colored: bool = True,
-            level: int = logging.DEBUG,
-            file_path: str | None = None) -> DebugLogger:
+        cls,
+        module: Literal[
+            "pynext", "pynext.rest", "pynext.gateway", "pynext.common"
+        ] = "pynext",
+        colored: bool = True,
+        level: int = logging.DEBUG,
+        file_path: str | None = None,
+    ) -> DebugLogger:
         """
         Classmethod Which creates a logger class.
 
@@ -78,8 +82,14 @@ class DebugLogger:
         if file_path is not None:
             logger = logging.getLogger(module)
             logger.setLevel(level)
-            handler = logging.FileHandler(filename=file_path, encoding='utf-8', mode='w')
-            handler.setFormatter(logging.Formatter('%(asctime)s | %(name)s | %(levelname)s > %(message)s'))
+            handler = logging.FileHandler(
+                filename=file_path, encoding="utf-8", mode="w"
+            )
+            handler.setFormatter(
+                logging.Formatter(
+                    "%(asctime)s | %(name)s | %(levelname)s > %(message)s"
+                )
+            )
             logger.addHandler(handler)
 
         else:
@@ -88,10 +98,16 @@ class DebugLogger:
 
             if colored is True:
                 handler.setFormatter(
-                    ColoredFormatter('%(log_color)s %(asctime)s | %(name)s | %(levelname)s > %(message)s')
+                    ColoredFormatter(
+                        "%(log_color)s %(asctime)s | %(name)s | %(levelname)s > %(message)s"
+                    )
                 )
             else:
-                handler.setFormatter(logging.Formatter('%(asctime)s | %(name)s | %(levelname)s > %(message)s'))
+                handler.setFormatter(
+                    logging.Formatter(
+                        "%(asctime)s | %(name)s | %(levelname)s > %(message)s"
+                    )
+                )
 
             logger.addHandler(handler)
 

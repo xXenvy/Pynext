@@ -84,26 +84,41 @@ class Activity:
     small_text:
         Text displayed when hovering over the small image of the activity.
     """
-    __slots__ = ("name", "emoji_data", "created_at", "details", "state", "activity_type", "url",
-                 "large_image", "large_text", "small_image", "small_text", "application_id")
+
+    __slots__ = (
+        "name",
+        "emoji_data",
+        "created_at",
+        "details",
+        "state",
+        "activity_type",
+        "url",
+        "large_image",
+        "large_text",
+        "small_image",
+        "small_text",
+        "application_id",
+    )
 
     def __init__(
-            self,
-            name: str,
-            activity_type: ActivityType | int,
-            application_id: int | None = None,
-            details: str | None = None,
-            state: str | None = None,
-            url: str | None = None,
-            emoji: Emoji | None = None,
-            large_image: str | None = None,
-            large_text: str | None = None,
-            small_image: str | None = None,
-            small_text: str | None = None
+        self,
+        name: str,
+        activity_type: ActivityType | int,
+        application_id: int | None = None,
+        details: str | None = None,
+        state: str | None = None,
+        url: str | None = None,
+        emoji: Emoji | None = None,
+        large_image: str | None = None,
+        large_text: str | None = None,
+        small_image: str | None = None,
+        small_text: str | None = None,
     ):
         self.name: str = name
         self.application_id: int | None = application_id
-        self.emoji_data: dict | None = emoji.to_dict() if isinstance(emoji, Emoji) else None
+        self.emoji_data: dict | None = (
+            emoji.to_dict() if isinstance(emoji, Emoji) else None
+        )
         self.created_at: int = int(time())
         self.details: str | None = details
         self.state: str | None = state
@@ -129,9 +144,11 @@ class Activity:
     def _validate_url(self, url: str):
         if self.activity_type != 1:
             # According to discord docs, links only work when ActivityType is set to 1 (Streaming)
-            raise PynextError("The url parameter can only be used if ActivityType is Streaming.")
+            raise PynextError(
+                "The url parameter can only be used if ActivityType is Streaming."
+            )
 
-        youtube_regex = r'(https?://)?(www\.)?youtube\.(com|nl)/watch\?v=([-\w]+)'
+        youtube_regex = r"(https?://)?(www\.)?youtube\.(com|nl)/watch\?v=([-\w]+)"
         match: re.Match | None = re.match(youtube_regex, url)
 
         # If the regex did not find the youtube link and there is no twitch in the url
@@ -156,6 +173,6 @@ class Activity:
                 "large_text": self.large_text,
                 "large_image": self.large_image,
                 "small_text": self.small_text,
-                "small_image": self.small_image
-            }
+                "small_image": self.small_image,
+            },
         }

@@ -68,21 +68,31 @@ class Role(Hashable):
     color:
         Role color.
     """
-    __slots__ = ("id", "name", "managed", "position", "hoist",
-                 "mentionable", "guild", "color", "permissions")
+
+    __slots__ = (
+        "id",
+        "name",
+        "managed",
+        "position",
+        "hoist",
+        "mentionable",
+        "guild",
+        "color",
+        "permissions",
+    )
 
     def __init__(self, guild: Guild, data: dict[str, Any]):
         self.guild: Guild = guild
-        self.permissions: Permissions = Permissions(value=int(data['permissions']))
+        self.permissions: Permissions = Permissions(value=int(data["permissions"]))
 
-        self.id: int = int(data['id'])
-        self.name: str = data['name']
-        self.managed: bool = data['managed']
+        self.id: int = int(data["id"])
+        self.name: str = data["name"]
+        self.managed: bool = data["managed"]
 
-        self.position: int = data['position']
-        self.hoist: bool = data['hoist']
-        self.mentionable: bool = data['mentionable']
-        self.color: Color = Color(data['color'])
+        self.position: int = data["position"]
+        self.hoist: bool = data["hoist"]
+        self.mentionable: bool = data["mentionable"]
+        self.color: Color = Color(data["color"])
 
     def __repr__(self) -> str:
         return f"<Role(name={self.name}, id={self.id})>"
@@ -130,20 +140,17 @@ class Role(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        await user.http.delete_role(
-            user,
-            guild_id=self.guild.id,
-            role_id=self.id
-        )
+        await user.http.delete_role(user, guild_id=self.guild.id, role_id=self.id)
 
     async def edit(
-            self,
-            user: SelfBot,
-            name: str | None = None,
-            permissions: Permissions | None = None,
-            color: Color | None = None,
-            hoist: bool = False,
-            mentionable: bool = False) -> Role:
+        self,
+        user: SelfBot,
+        name: str | None = None,
+        permissions: Permissions | None = None,
+        color: Color | None = None,
+        hoist: bool = False,
+        mentionable: bool = False,
+    ) -> Role:
         """
         Method to edit role.
 
@@ -174,25 +181,22 @@ class Role(Hashable):
             Selfbot doesn't have proper permissions.
         """
         params: dict[str, Any] = {
-            'name': name,
-            'permissions': permissions,
-            'color': color.value if color else None,
-            'hoist': hoist,
-            'mentionable': mentionable
+            "name": name,
+            "permissions": permissions,
+            "color": color.value if color else None,
+            "hoist": hoist,
+            "mentionable": mentionable,
         }
 
         for key, value in params.copy().items():
             if value is None:
                 """
-                If a parameter has a value of None, 
+                If a parameter has a value of None,
                 we don't want it in the dict because it could overwrite an already set parameter.
                 """
                 del params[key]
 
         data: dict[str, Any] = await user.http.edit_role(
-            user,
-            guild_id=self.guild.id,
-            role=self,
-            params=params
+            user, guild_id=self.guild.id, role=self, params=params
         )
         return Role(guild=self.guild, data=data)

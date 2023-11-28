@@ -76,26 +76,46 @@ class Guild(Hashable):
     premium_tier:
         Guild boost level.
     """
-    __slots__ = ("_state", "id", "name", "owner_id", "_roles", "_channels", "_members",
-                 "_emojis", "icon_id", "afk_channel_id", "preferred_locale", "verification_level",
-                 "premium_tier", 'system_channel_id', 'afk_timeout', 'premium_progress_bar_enabled')
+
+    __slots__ = (
+        "_state",
+        "id",
+        "name",
+        "owner_id",
+        "_roles",
+        "_channels",
+        "_members",
+        "_emojis",
+        "icon_id",
+        "afk_channel_id",
+        "preferred_locale",
+        "verification_level",
+        "premium_tier",
+        "system_channel_id",
+        "afk_timeout",
+        "premium_progress_bar_enabled",
+    )
 
     def __init__(self, state: State, data: dict[str, Any]):
         self._state: State = state
 
         self.id: int = int(data["id"])
-        self.name: str = data['name']
+        self.name: str = data["name"]
         self.owner_id: int = int(data["owner_id"])
-        self.icon_id: str | None = data['icon']
+        self.icon_id: str | None = data["icon"]
 
-        self.afk_channel_id: int | None = int(data['afk_channel_id']) if data['afk_channel_id'] else None
-        self.afk_timeout: int = data['afk_timeout']
-        self.system_channel_id: int | None = int(data['system_channel_id']) if data['system_channel_id'] else None
+        self.afk_channel_id: int | None = (
+            int(data["afk_channel_id"]) if data["afk_channel_id"] else None
+        )
+        self.afk_timeout: int = data["afk_timeout"]
+        self.system_channel_id: int | None = (
+            int(data["system_channel_id"]) if data["system_channel_id"] else None
+        )
 
-        self.premium_progress_bar_enabled: bool = data['premium_progress_bar_enabled']
-        self.verification_level: int = data['verification_level']
-        self.preferred_locale: str = data['preferred_locale']
-        self.premium_tier: int = data['premium_tier']
+        self.premium_progress_bar_enabled: bool = data["premium_progress_bar_enabled"]
+        self.verification_level: int = data["verification_level"]
+        self.preferred_locale: str = data["preferred_locale"]
+        self.premium_tier: int = data["premium_tier"]
 
         self._roles: dict[int, Role] = {}
         self._channels: dict[int, Channel] = {}
@@ -107,11 +127,12 @@ class Guild(Hashable):
 
             self._roles[role.id] = role
 
-        for emoji_data in data['emojis']:
+        for emoji_data in data["emojis"]:
             emoji = Emoji(
-                name=emoji_data['name'],
-                animated=emoji_data['animated'],
-                emoji_id=int(emoji_data['id']))
+                name=emoji_data["name"],
+                animated=emoji_data["animated"],
+                emoji_id=int(emoji_data["id"]),
+            )
 
             self._emojis.add(emoji)
 
@@ -168,7 +189,9 @@ class Guild(Hashable):
         if self.icon_id is None:
             return None
 
-        return Image._from_guild_icon(state=self._state, guild_id=self.id, icon_id=self.icon_id)
+        return Image._from_guild_icon(
+            state=self._state, guild_id=self.id, icon_id=self.icon_id
+        )
 
     @property
     def emojis(self) -> list[Emoji]:
@@ -292,10 +315,14 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        data: dict[str, Any] = await user.http.fetch_guild_ban(user=user, guild_id=self.id, user_id=user_id)
+        data: dict[str, Any] = await user.http.fetch_guild_ban(
+            user=user, guild_id=self.id, user_id=user_id
+        )
         return BanEntry(state=self._state, data=data)
 
-    async def fetch_bans(self, user: SelfBot, limit: int = 1000) -> AsyncIterable[BanEntry]:
+    async def fetch_bans(
+        self, user: SelfBot, limit: int = 1000
+    ) -> AsyncIterable[BanEntry]:
         """
         Method to fetch guild bans.
 
@@ -318,9 +345,9 @@ class Guild(Hashable):
             Selfbot doesn't have proper permissions.
         """
         for ban_data in await user.http.fetch_guild_bans(
-                user=user, guild_id=self.id, limit=limit):
-
-            ban_data['guild_id'] = self.id
+            user=user, guild_id=self.id, limit=limit
+        ):
+            ban_data["guild_id"] = self.id
             yield BanEntry(state=self._state, data=ban_data)
 
     async def fetch_roles(self, user: SelfBot) -> list[Role]:
@@ -343,7 +370,9 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        data: list[dict[str, Any]] = await self._state.http.fetch_guild_roles(user, guild_id=self.id)
+        data: list[dict[str, Any]] = await self._state.http.fetch_guild_roles(
+            user, guild_id=self.id
+        )
 
         for role_data in data:
             role = Role(guild=self, data=role_data)
@@ -374,7 +403,9 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        data: dict[str, Any] = await self._state.http.fetch_channel(user, channel_id=channel_id)
+        data: dict[str, Any] = await self._state.http.fetch_channel(
+            user, channel_id=channel_id
+        )
         channel: Channel = self._state.create_guild_channel(guild=self, data=data)
         await channel.fetch_overwrites(user)
 
@@ -401,7 +432,9 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        channel_data: list[dict[str, Any]] = await self._state.http.fetch_channels(user, guild_id=self.id)
+        channel_data: list[dict[str, Any]] = await self._state.http.fetch_channels(
+            user, guild_id=self.id
+        )
 
         for data in channel_data:
             channel: Channel = self._state.create_guild_channel(guild=self, data=data)
@@ -432,20 +465,23 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        data: dict[str, Any] = await self._state.http.fetch_member(user, guild_id=self.id, member_id=member_id)
+        data: dict[str, Any] = await self._state.http.fetch_member(
+            user, guild_id=self.id, member_id=member_id
+        )
         member: GuildMember = self._state.create_guild_member(data=data, guild=self)
 
         self._add_member(member)
         return member
 
     async def create_role(
-            self,
-            user: SelfBot,
-            name: str | None = None,
-            permissions: Permissions | None = None,
-            color: Color | None = None,
-            hoist: bool = False,
-            mentionable: bool = False) -> Role:
+        self,
+        user: SelfBot,
+        name: str | None = None,
+        permissions: Permissions | None = None,
+        color: Color | None = None,
+        hoist: bool = False,
+        mentionable: bool = False,
+    ) -> Role:
         """
         Method to create role.
 
@@ -476,26 +512,28 @@ class Guild(Hashable):
             Selfbot doesn't have proper permissions.
         """
         params: dict[str, Any] = {
-            'name': name,
-            'permissions': permissions.get_bitwise_by_flags() if permissions else None,
-            'color': color.value if color else None,
-            'hoist': hoist,
-            'mentionable': mentionable
+            "name": name,
+            "permissions": permissions.get_bitwise_by_flags() if permissions else None,
+            "color": color.value if color else None,
+            "hoist": hoist,
+            "mentionable": mentionable,
         }
 
-        data: dict[str, Any] = await self._state.http.create_role(user, guild_id=self.id, params=params)
+        data: dict[str, Any] = await self._state.http.create_role(
+            user, guild_id=self.id, params=params
+        )
         return Role(guild=self, data=data)
 
     async def create_text_channel(
-            self,
-            user: SelfBot,
-            name: str,
-            topic: str | None = None,
-            parent: CategoryChannel | None = None,
-            position: int | None = None,
-            nsfw: bool = False,
-            slowmode: int | None = None,
-            overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None
+        self,
+        user: SelfBot,
+        name: str,
+        topic: str | None = None,
+        parent: CategoryChannel | None = None,
+        position: int | None = None,
+        nsfw: bool = False,
+        slowmode: int | None = None,
+        overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None,
     ) -> TextChannel:
         """
         Method to create text channel.
@@ -537,34 +575,36 @@ class Guild(Hashable):
             permission_overwrites = self._state.to_overwrite_payload(overwrites)
 
         params: dict[str, Any] = {
-            'name': name,
-            'type': ChannelType.GUILD_TEXT.value,
-            'topic': topic,
-            'parent_id': parent.id if parent else None,
-            'position': position,
-            'nsfw': nsfw,
-            'permission_overwrites': permission_overwrites,
-            'rate_limit_per_user': slowmode
+            "name": name,
+            "type": ChannelType.GUILD_TEXT.value,
+            "topic": topic,
+            "parent_id": parent.id if parent else None,
+            "position": position,
+            "nsfw": nsfw,
+            "permission_overwrites": permission_overwrites,
+            "rate_limit_per_user": slowmode,
         }
 
-        data: dict[str, Any] = await self._state.http.create_channel(user=user, guild_id=self.id, params=params)
+        data: dict[str, Any] = await self._state.http.create_channel(
+            user=user, guild_id=self.id, params=params
+        )
         channel = self._state.create_guild_channel(guild=self, data=data)
         assert isinstance(channel, TextChannel)
 
         return channel
 
     async def create_voice_channel(
-            self,
-            user: SelfBot,
-            name: str,
-            parent: CategoryChannel | None = None,
-            position: int | None = None,
-            nsfw: bool = False,
-            slowmode: int | None = None,
-            bitrate: int | None = None,
-            user_limit: int = 0,
-            video_quality_mode: int | None = None,
-            overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None
+        self,
+        user: SelfBot,
+        name: str,
+        parent: CategoryChannel | None = None,
+        position: int | None = None,
+        nsfw: bool = False,
+        slowmode: int | None = None,
+        bitrate: int | None = None,
+        user_limit: int = 0,
+        video_quality_mode: int | None = None,
+        overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None,
     ) -> VoiceChannel:
         """
         Method to create text channel.
@@ -609,30 +649,32 @@ class Guild(Hashable):
             permission_overwrites = self._state.to_overwrite_payload(overwrites)
 
         params: dict[str, Any] = {
-            'name': name,
-            'type': ChannelType.GUILD_VOICE.value,
-            'parent_id': parent.id if parent else None,
-            'position': position,
-            'nsfw': nsfw,
-            'permission_overwrites': permission_overwrites,
-            'rate_limit_per_user': slowmode,
-            'user_limit': user_limit,
-            'bitrate': bitrate,
-            'video_quality_mode': video_quality_mode
+            "name": name,
+            "type": ChannelType.GUILD_VOICE.value,
+            "parent_id": parent.id if parent else None,
+            "position": position,
+            "nsfw": nsfw,
+            "permission_overwrites": permission_overwrites,
+            "rate_limit_per_user": slowmode,
+            "user_limit": user_limit,
+            "bitrate": bitrate,
+            "video_quality_mode": video_quality_mode,
         }
 
-        data: dict[str, Any] = await self._state.http.create_channel(user=user, guild_id=self.id, params=params)
+        data: dict[str, Any] = await self._state.http.create_channel(
+            user=user, guild_id=self.id, params=params
+        )
         channel = self._state.create_guild_channel(guild=self, data=data)
         assert isinstance(channel, VoiceChannel)
 
         return channel
 
     async def create_category_channel(
-            self,
-            user: SelfBot,
-            name: str,
-            position: int | None = None,
-            overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None
+        self,
+        user: SelfBot,
+        name: str,
+        position: int | None = None,
+        overwrites: dict[GuildMember | Role, PermissionOverwrite] | None = None,
     ) -> CategoryChannel:
         """
         Method to create text channel.
@@ -665,13 +707,15 @@ class Guild(Hashable):
             permission_overwrites = self._state.to_overwrite_payload(overwrites)
 
         params: dict[str, Any] = {
-            'name': name,
-            'type': ChannelType.GUILD_CATEGORY.value,
-            'position': position,
-            'permission_overwrites': permission_overwrites
+            "name": name,
+            "type": ChannelType.GUILD_CATEGORY.value,
+            "position": position,
+            "permission_overwrites": permission_overwrites,
         }
 
-        data: dict[str, Any] = await self._state.http.create_channel(user=user, guild_id=self.id, params=params)
+        data: dict[str, Any] = await self._state.http.create_channel(
+            user=user, guild_id=self.id, params=params
+        )
         channel = self._state.create_guild_channel(guild=self, data=data)
 
         assert isinstance(channel, CategoryChannel)

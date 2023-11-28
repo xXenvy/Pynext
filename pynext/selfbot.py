@@ -76,26 +76,43 @@ class SelfBot(DiscordUser):
     premium_type:
         Type of Nitro subscription on a user's account.
     """
+
     __slots__ = (
-        'gateway', 'state', 'authorization', 'global_name', 'mfa_enabled',
-        'username', 'discriminator', 'id', 'email', 'verified', 'avatar_id',
-        'locale', 'premium_type', '_guilds', '_voice_states', '_dm_channels',
-        '_users', '_ready'
+        "gateway",
+        "state",
+        "authorization",
+        "global_name",
+        "mfa_enabled",
+        "username",
+        "discriminator",
+        "id",
+        "email",
+        "verified",
+        "avatar_id",
+        "locale",
+        "premium_type",
+        "_guilds",
+        "_voice_states",
+        "_dm_channels",
+        "_users",
+        "_ready",
     )
 
     def __init__(self, token: str, user_data: dict[str, Any], http: HTTPClient) -> None:
         super().__init__(state=State(http=http), user_data=user_data)
 
-        self.state: State = self._state  # The state for the selfbot should be public, I think.
+        self.state: State = (
+            self._state
+        )  # The state for the selfbot should be public, I think.
         self.gateway: DiscordWebSocket | None = None
         self.authorization: Authorization[str] = Authorization(token)
 
-        self.email: str = user_data['email']
-        self.verified: bool = user_data['verified']
+        self.email: str = user_data["email"]
+        self.verified: bool = user_data["verified"]
 
-        self.mfa_enabled: bool = user_data['mfa_enabled']
-        self.locale: str = user_data['locale']
-        self.premium_type: int | None = user_data['premium_type']
+        self.mfa_enabled: bool = user_data["mfa_enabled"]
+        self.locale: str = user_data["locale"]
+        self.premium_type: int | None = user_data["premium_type"]
 
         self._guilds: dict[int, Guild] = {}
         self._voice_states: dict[Guild, VoiceChannel] = {}
@@ -128,7 +145,7 @@ class SelfBot(DiscordUser):
         """
         if self.gateway is None:
             # Websocket is not connected yet.
-            return .0
+            return 0.0
 
         return self.gateway.latency
 
@@ -243,7 +260,7 @@ class SelfBot(DiscordUser):
             Fetching a guild failed.
         """
         data: dict[str, Any] = await self.http.fetch_guild(user=self, guild_id=guild_id)
-        data['channels'] = await self.http.fetch_channels(user=self, guild_id=guild_id)
+        data["channels"] = await self.http.fetch_channels(user=self, guild_id=guild_id)
 
         guild: Guild = await self.state.create_guild(user=self, guild_data=data)
 
@@ -300,7 +317,9 @@ class SelfBot(DiscordUser):
         HTTPException
             Fetching a channel failed.
         """
-        data: dict[str, Any] = await self.http.fetch_channel(user=self, channel_id=channel_id)
+        data: dict[str, Any] = await self.http.fetch_channel(
+            user=self, channel_id=channel_id
+        )
         channel: DMChannel = self.state.create_dm_channel(data=data)
         self._add_dm_channel(channel)
 
@@ -323,7 +342,9 @@ class SelfBot(DiscordUser):
             Selfbot has not connection to the gateway.
         """
         if not self.gateway or not self.gateway.websocket_status:
-            raise WebsocketNotConnnected(f"SelfBot: {self} has no connection to the gateway.")
+            raise WebsocketNotConnnected(
+                f"SelfBot: {self} has no connection to the gateway."
+            )
 
         await self.gateway.change_presence(presence.to_dict())
 

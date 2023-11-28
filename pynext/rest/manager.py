@@ -27,7 +27,14 @@ from asyncio import sleep
 from logging import Logger, getLogger
 
 from ..utils import text_or_json
-from ..errors import NotFound, Forbidden, Unauthorized, CaptchaRequired, HTTPException, BadRequest
+from ..errors import (
+    NotFound,
+    Forbidden,
+    Unauthorized,
+    CaptchaRequired,
+    HTTPException,
+    BadRequest,
+)
 
 if TYPE_CHECKING:
     from aiohttp import ClientResponse
@@ -60,6 +67,7 @@ class ContextHandler:
     errors:
         Dict with errors to call when the request receives the specified status code.
     """
+
     __slots__ = ("additional_delay", "http", "ratelimited", "logger", "errors")
 
     def __init__(self, http: HTTPClient, additional_delay: float):
@@ -69,8 +77,10 @@ class ContextHandler:
 
         self.logger: Logger = getLogger("pynext.rest")
         self.errors: dict[int, Callable] = {
-            400: BadRequest, 404: NotFound,
-            401: Unauthorized, 403: Forbidden
+            400: BadRequest,
+            404: NotFound,
+            401: Unauthorized,
+            403: Forbidden,
         }
 
     def __repr__(self) -> str:
@@ -107,7 +117,7 @@ class ContextHandler:
         if isinstance(data, str):
             return "hcaptcha" in data
 
-        return bool(data.get('captcha_key', False))
+        return bool(data.get("captcha_key", False))
 
     async def handle_errors(self, response: ClientResponse) -> None:
         """
@@ -144,10 +154,7 @@ class ContextHandler:
             raise HTTPException(await text_or_json(response))
 
     async def handle_ratelimit(
-            self,
-            retry_after: float,
-            route: Route,
-            json: dict | None = None
+        self, retry_after: float, route: Route, json: dict | None = None
     ) -> ClientResponse:
         """
         Method to handle ratelimit.
@@ -166,16 +173,16 @@ class ContextHandler:
         request: dict[str, Any] = {"route": route, "json": json}
         self.ratelimited = True
 
-        self.logger.debug("Waiting for ratelimit... Releasing a request after: %ss", retry_after)
+        self.logger.debug(
+            "Waiting for ratelimit... Releasing a request after: %ss", retry_after
+        )
 
         await sleep(retry_after)
         self.ratelimited = False
 
         self.logger.debug("Releasing a request.")
 
-        return await self.http.request(
-            **request
-        )
+        return await self.http.request(**request)
 
 
 class RequestManager:
@@ -200,10 +207,15 @@ class RequestManager:
     request_delay:
         Delay between sending requests to rest api.
     """
+
     __slots__ = ("handler", "additional_delay", "request_delay", "logger")
 
-    def __init__(self, http: HTTPClient, ratelimit_delay: float, request_delay: float) -> None:
-        self.handler: ContextHandler = ContextHandler(http=http, additional_delay=ratelimit_delay)
+    def __init__(
+        self, http: HTTPClient, ratelimit_delay: float, request_delay: float
+    ) -> None:
+        self.handler: ContextHandler = ContextHandler(
+            http=http, additional_delay=ratelimit_delay
+        )
 
         self.additional_delay: float = ratelimit_delay
         self.request_delay: float = request_delay
@@ -218,7 +230,9 @@ class RequestManager:
             HTTP Session is not running.
         """
         if self.handler.http.session_status is False:
-            raise RuntimeError("The request method was called without a working Session.")
+            raise RuntimeError(
+                "The request method was called without a working Session."
+            )
 
         await sleep(self.request_delay)
         return self.handler

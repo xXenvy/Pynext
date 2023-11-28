@@ -54,6 +54,7 @@ class Parser:
     loop:
         Client loop.
     """
+
     __slots__ = ("chunk_guilds", "chunk_channels", "loop")
 
     def __init__(self, chunk_guilds: bool, chunk_channels: bool):
@@ -62,7 +63,9 @@ class Parser:
 
         self.loop: AbstractEventLoop = get_event_loop()
 
-    async def parse_event_args(self, response: GatewayResponse) -> tuple[Any, ...] | None:
+    async def parse_event_args(
+        self, response: GatewayResponse
+    ) -> tuple[Any, ...] | None:
         if response.event_name is not None:
             flag_args: Callable[[GatewayResponse], Coroutine] | None = getattr(
                 self, response.event_name + "_args", None
@@ -76,10 +79,12 @@ class Parser:
     async def on_user_ready_args(self, response: GatewayResponse) -> tuple[SelfBot]:
         await self._chunk_user(response.user, data=response.data)
         response.user._ready.set()
-        return response.user,
+        return (response.user,)
 
     @staticmethod
-    async def on_message_create_args(response: GatewayResponse) -> tuple[SelfBot, Message] | None:
+    async def on_message_create_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Message] | None:
         message: Message | None = await response.user.state.create_message_from_data(
             response.user, response.data
         )
@@ -89,7 +94,9 @@ class Parser:
             return response.user, message
 
     @staticmethod
-    async def on_message_edit_args(response: GatewayResponse) -> tuple[SelfBot, Message, Message] | None:
+    async def on_message_edit_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Message, Message] | None:
         message: Message | None = await response.user.state.create_message_from_data(
             response.user, response.data
         )
@@ -106,20 +113,22 @@ class Parser:
         return response.user, old_message, message
 
     @staticmethod
-    async def on_message_delete_args(response: GatewayResponse) -> tuple[SelfBot, Message] | None:
+    async def on_message_delete_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Message] | None:
         try:
-            guild_id: int | None = int(response.data['guild_id'])
+            guild_id: int | None = int(response.data["guild_id"])
         except KeyError:
             guild_id = None
 
-        channel_id: int = int(response.data['channel_id'])
-        message_id: int = int(response.data['id'])
+        channel_id: int = int(response.data["channel_id"])
+        message_id: int = int(response.data["id"])
 
         message: Message | None = await response.user.state.fetch_message_from_raw(
             user=response.user,
             guild_id=guild_id,
             channel_id=channel_id,
-            message_id=message_id
+            message_id=message_id,
         )
 
         if message:
@@ -127,12 +136,14 @@ class Parser:
             return response.user, message
 
     @staticmethod
-    async def on_channel_create_args(response: GatewayResponse) -> tuple[SelfBot, Channel | DMChannel]:
+    async def on_channel_create_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Channel | DMChannel]:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        if data.get('guild_id'):
-            guild_id: int = int(data['guild_id'])
+        if data.get("guild_id"):
+            guild_id: int = int(data["guild_id"])
             guild: Guild | None = user.get_guild(guild_id)
 
             if guild is None:
@@ -147,14 +158,16 @@ class Parser:
             return user, dm_channel
 
     @staticmethod
-    async def on_channel_edit_args(response: GatewayResponse) -> tuple[SelfBot, Channel, Channel] | None:
+    async def on_channel_edit_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Channel, Channel] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        if data.get('guild_id'):
-            guild_id: int = int(data['guild_id'])
+        if data.get("guild_id"):
+            guild_id: int = int(data["guild_id"])
             guild: Guild | None = user.get_guild(guild_id)
-            channel_id: int = int(data['id'])
+            channel_id: int = int(data["id"])
 
             if guild is None:
                 guild = await user.fetch_guild(guild_id)
@@ -172,13 +185,15 @@ class Parser:
             if old_channel:
                 return user, old_channel, channel
 
-    async def on_channel_delete_args(self, response: GatewayResponse) -> tuple[SelfBot, Channel] | None:
+    async def on_channel_delete_args(
+        self, response: GatewayResponse
+    ) -> tuple[SelfBot, Channel] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        if data.get('guild_id'):
-            channel_id: int = int(data['id'])
-            guild_id: int = int(data['guild_id'])
+        if data.get("guild_id"):
+            channel_id: int = int(data["id"])
+            guild_id: int = int(data["guild_id"])
             guild: Guild | None = user.get_guild(guild_id)
 
             if guild is None:
@@ -199,24 +214,32 @@ class Parser:
         user._add_guild(guild)
         return user, guild
 
-    async def on_guild_update_args(self, response: GatewayResponse) -> tuple[SelfBot, Guild, Guild] | None:
+    async def on_guild_update_args(
+        self, response: GatewayResponse
+    ) -> tuple[SelfBot, Guild, Guild] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        guild_id: int = int(data['id'])
+        guild_id: int = int(data["id"])
         old_guild: Guild | None = user.get_guild(guild_id)
 
-        data['channels'] = await user.state.http.fetch_channels(user=user, guild_id=guild_id)
-        new_guild: Guild = await self.chunk_user_guild(user=user, guild_data=data, fetch_only=True)
+        data["channels"] = await user.state.http.fetch_channels(
+            user=user, guild_id=guild_id
+        )
+        new_guild: Guild = await self.chunk_user_guild(
+            user=user, guild_data=data, fetch_only=True
+        )
 
         if old_guild:
             return user, old_guild, new_guild
 
-    async def on_guild_emojis_update_args(self, response: GatewayResponse) -> tuple[SelfBot, EmojisUpdatePayload] | None:
+    async def on_guild_emojis_update_args(
+        self, response: GatewayResponse
+    ) -> tuple[SelfBot, EmojisUpdatePayload] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        guild_id: int = int(data['guild_id'])
+        guild_id: int = int(data["guild_id"])
         guild: Guild | None = user.get_guild(guild_id)
 
         if guild is None:
@@ -225,11 +248,11 @@ class Parser:
 
         updated_emojis: list[Emoji] = [
             Emoji(
-                name=emoji_data['name'],
-                animated=emoji_data['animated'],
-                emoji_id=emoji_data['id']
+                name=emoji_data["name"],
+                animated=emoji_data["animated"],
+                emoji_id=emoji_data["id"],
             )
-            for emoji_data in data['emojis']
+            for emoji_data in data["emojis"]
         ]
 
         added_emojis: list[Emoji] = []
@@ -245,14 +268,18 @@ class Parser:
                 guild._add_emoji(updated_emoji)
                 added_emojis.append(updated_emoji)
 
-        return user, EmojisUpdatePayload(guild, added_emojis=added_emojis, deleted_emojis=removed_emojis)
+        return user, EmojisUpdatePayload(
+            guild, added_emojis=added_emojis, deleted_emojis=removed_emojis
+        )
 
     @staticmethod
-    async def on_member_update_args(response: GatewayResponse) -> tuple[SelfBot, GuildMember, GuildMember] | None:
+    async def on_member_update_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, GuildMember, GuildMember] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        guild_id: int = int(data['guild_id'])
+        guild_id: int = int(data["guild_id"])
         guild: Guild | None = user.get_guild(guild_id)
 
         if guild is None:
@@ -269,11 +296,13 @@ class Parser:
             return user, old_member, new_member
 
     @staticmethod
-    async def on_guild_delete_args(response: GatewayResponse) -> tuple[SelfBot, Guild] | None:
+    async def on_guild_delete_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Guild] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        guild_id: int = int(data['id'])
+        guild_id: int = int(data["id"])
         guild: Guild | None = user.get_guild(guild_id)
 
         if guild:
@@ -281,7 +310,9 @@ class Parser:
             return user, guild
 
     @staticmethod
-    async def on_guild_ban_create_args(response: GatewayResponse) -> tuple[SelfBot, BanEntry]:
+    async def on_guild_ban_create_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, BanEntry]:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
@@ -295,19 +326,23 @@ class Parser:
         return user, ban_entry
 
     @staticmethod
-    async def on_guild_ban_remove_args(response: GatewayResponse) -> tuple[SelfBot, BanEntry]:
+    async def on_guild_ban_remove_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, BanEntry]:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
         return user, BanEntry(state=user.state, data=data)
 
     @staticmethod
-    async def on_guild_role_create_args(response: GatewayResponse) -> tuple[SelfBot, Role]:
+    async def on_guild_role_create_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Role]:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        role_data: dict[str, Any] = data['role']
-        guild_id: int = int(data['guild_id'])
+        role_data: dict[str, Any] = data["role"]
+        guild_id: int = int(data["guild_id"])
 
         guild: Guild | None = user.get_guild(guild_id)
 
@@ -319,12 +354,14 @@ class Parser:
 
         return user, role
 
-    async def on_guild_role_update_args(self, response: GatewayResponse) -> tuple[SelfBot, Role, Role] | None:
+    async def on_guild_role_update_args(
+        self, response: GatewayResponse
+    ) -> tuple[SelfBot, Role, Role] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        role_data: dict[str, Any] = data['role']
-        guild_id: int = int(data['guild_id'])
+        role_data: dict[str, Any] = data["role"]
+        guild_id: int = int(data["guild_id"])
 
         guild: Guild | None = user.get_guild(guild_id)
 
@@ -332,7 +369,7 @@ class Parser:
             self.loop.create_task(user.fetch_guild(guild_id))
             return
 
-        old_role: Role | None = guild.get_role(role_id=int(role_data['id']))
+        old_role: Role | None = guild.get_role(role_id=int(role_data["id"]))
 
         new_role: Role = Role(guild=guild, data=role_data)
         guild._add_role(new_role)
@@ -342,12 +379,14 @@ class Parser:
 
         return user, old_role, new_role
 
-    async def on_guild_role_delete_args(self, response: GatewayResponse) -> tuple[SelfBot, Role] | None:
+    async def on_guild_role_delete_args(
+        self, response: GatewayResponse
+    ) -> tuple[SelfBot, Role] | None:
         data: dict[str, Any] = response.data
         user: SelfBot = response.user
 
-        guild_id: int = int(data['guild_id'])
-        role_id: int = int(data['role_id'])
+        guild_id: int = int(data["guild_id"])
+        role_id: int = int(data["role_id"])
 
         guild: Guild | None = user.get_guild(guild_id=guild_id)
         if guild is None:
@@ -361,53 +400,63 @@ class Parser:
         return user, role
 
     @staticmethod
-    async def on_message_reaction_add_args(response: GatewayResponse) -> tuple[SelfBot, MessageReaction] | None:
+    async def on_message_reaction_add_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, MessageReaction] | None:
         try:
-            guild_id: int | None = int(response.data['guild_id'])
+            guild_id: int | None = int(response.data["guild_id"])
         except KeyError:
             guild_id = None
 
-        channel_id: int = int(response.data['channel_id'])
-        message_id: int = int(response.data['message_id'])
+        channel_id: int = int(response.data["channel_id"])
+        message_id: int = int(response.data["message_id"])
 
         message: Message | None = await response.user.state.fetch_message_from_raw(
             user=response.user,
             guild_id=guild_id,
             channel_id=channel_id,
-            message_id=message_id
+            message_id=message_id,
         )
 
         if message:
-            reaction: MessageReaction = MessageReaction(message=message, data=response.data)
+            reaction: MessageReaction = MessageReaction(
+                message=message, data=response.data
+            )
             message._add_reaction(reaction)
             return response.user, reaction
 
     @staticmethod
-    async def on_message_reaction_remove_args(response: GatewayResponse) -> tuple[SelfBot, MessageReaction] | None:
+    async def on_message_reaction_remove_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, MessageReaction] | None:
         try:
-            guild_id: int | None = int(response.data['guild_id'])
+            guild_id: int | None = int(response.data["guild_id"])
         except KeyError:
             guild_id = None
 
-        channel_id: int = int(response.data['channel_id'])
-        message_id: int = int(response.data['message_id'])
+        channel_id: int = int(response.data["channel_id"])
+        message_id: int = int(response.data["message_id"])
 
         message: Message | None = await response.user.state.fetch_message_from_raw(
             user=response.user,
             guild_id=guild_id,
             channel_id=channel_id,
-            message_id=message_id
+            message_id=message_id,
         )
         if message:
-            message_reaction: MessageReaction = MessageReaction(message=message, data=response.data)
+            message_reaction: MessageReaction = MessageReaction(
+                message=message, data=response.data
+            )
             message._remove_reaction(message_reaction)
             return response.user, message_reaction
 
-    async def chunk_user_guild(self, user: SelfBot, guild_data: dict[str, Any], fetch_only: bool = False) -> Guild:
+    async def chunk_user_guild(
+        self, user: SelfBot, guild_data: dict[str, Any], fetch_only: bool = False
+    ) -> Guild:
         guild: Guild | None = None
 
         if fetch_only is False:
-            guild = user.get_guild(guild_id=int(guild_data['id']))
+            guild = user.get_guild(guild_id=int(guild_data["id"]))
 
         if not guild:
             guild = await user.state.create_guild(
@@ -419,9 +468,11 @@ class Parser:
 
     async def _chunk_user(self, user: SelfBot, data: dict[str, Any]):
         if self.chunk_guilds:
-            for guild_data in data['guilds']:
+            for guild_data in data["guilds"]:
                 await self.chunk_user_guild(user, guild_data=guild_data)
 
-        for user_data in data['users']:
-            discord_user: DiscordUser = DiscordUser(state=user.state, user_data=user_data)
+        for user_data in data["users"]:
+            discord_user: DiscordUser = DiscordUser(
+                state=user.state, user_data=user_data
+            )
             user._add_user(discord_user)

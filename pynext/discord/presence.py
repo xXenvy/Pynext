@@ -63,22 +63,26 @@ class PresenceBuilder:
     PynextError
         Invalid status type. Expected str or StatusType.
     """
+
     __slots__ = ("status", "since", "afk", "activities")
 
     def __init__(
-            self,
-            status: Literal['online', 'dnd', 'idle', 'invisible', 'offline'] | StatusType = 'online',
-            afk: bool = False,
-            since: int | None = None,
-            activities: list[Activity] | None = None):
-
+        self,
+        status: Literal["online", "dnd", "idle", "invisible", "offline"]
+        | StatusType = "online",
+        afk: bool = False,
+        since: int | None = None,
+        activities: list[Activity] | None = None,
+    ):
         self.activities: list[Activity] = activities or []
 
         if isinstance(status, StatusType):
             status = status.value
 
         if not isinstance(status, str):
-            raise PynextError(f"Invalid status type. Expected str or StatusType, received: {type(status)}")
+            raise PynextError(
+                f"Invalid status type. Expected str or StatusType, received: {type(status)}"
+            )
 
         self.status = status
         self.since: int = since or int(time())
@@ -110,11 +114,11 @@ class PresenceBuilder:
         Method to format all data into a dict.
         """
         return {
-            'op': GatewayCodes.PRESENCE.value,
-            'd': {
-                'since': self.since,
-                'activities': [activity.to_dict() for activity in self.activities],
-                'status': self.status,
-                'afk': self.afk
-            }
+            "op": GatewayCodes.PRESENCE.value,
+            "d": {
+                "since": self.since,
+                "activities": [activity.to_dict() for activity in self.activities],
+                "status": self.status,
+                "afk": self.afk,
+            },
         }

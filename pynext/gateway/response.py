@@ -54,6 +54,7 @@ class GatewayResponse:
     event_name:
         Name received event.
     """
+
     __slots__ = ("type", "user", "op", "data", "sequence", "event_name", "_raw_data")
 
     def __init__(self, response: WSMessage, user: SelfBot):
@@ -62,13 +63,13 @@ class GatewayResponse:
         self.user: SelfBot = user
         self.type: WSMsgType = response.type
 
-        self.op: int = self._raw_data['op']
-        self.data: dict = self._raw_data['d']
-        self.sequence: int | None = self._raw_data['s']
+        self.op: int = self._raw_data["op"]
+        self.data: dict = self._raw_data["d"]
+        self.sequence: int | None = self._raw_data["s"]
         self.event_name: str | None = self._format_event_name(self._raw_data.get("t"))
 
-        if self.event_name == 'on_ready':
-            self.event_name = 'on_user_ready'
+        if self.event_name == "on_ready":
+            self.event_name = "on_user_ready"
 
     def __repr__(self) -> str:
         return f"GatewayResponse(op={self.op}, sequence={self.sequence})"

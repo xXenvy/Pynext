@@ -49,7 +49,8 @@ class Image:
     animated:
         Whether the image is a animated (gif).
     """
-    __slots__ = ('_state', 'animated', 'url')
+
+    __slots__ = ("_state", "animated", "url")
     BASE_URL: ClassVar[str] = "https://cdn.discordapp.com"
 
     def __init__(self, state: State, url: str, animated: bool = False) -> None:
@@ -96,7 +97,7 @@ class Image:
         return cls(
             state=state,
             url=f"{cls.BASE_URL}/avatars/{user_id}/{avatar_id}.{file_type}?size=80",
-            animated=animated
+            animated=animated,
         )
 
     @classmethod
@@ -117,7 +118,9 @@ class Image:
         )
 
     @classmethod
-    def _from_guild_avatar(cls, state: State, guild_id: int, user_id: int, avatar_id: str) -> Image:
+    def _from_guild_avatar(
+        cls, state: State, guild_id: int, user_id: int, avatar_id: str
+    ) -> Image:
         """
         Image constructor based on GuildMember.
 

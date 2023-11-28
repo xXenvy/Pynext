@@ -31,7 +31,7 @@ from ..errors import FunctionIsNotCoroutine
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
 
-ObjectT = TypeVar('ObjectT', bound=object)
+ObjectT = TypeVar("ObjectT", bound=object)
 
 
 class Dispatcher(Generic[ObjectT]):
@@ -55,6 +55,7 @@ class Dispatcher(Generic[ObjectT]):
     logger:
         Logger for logging event registrations and running them.
     """
+
     __slots__ = ("client", "loop", "events", "logger")
 
     def __init__(self, client: ObjectT | None = None) -> None:
@@ -87,9 +88,12 @@ class Dispatcher(Generic[ObjectT]):
         FunctionIsNotCoroutine
             Function of the event is not asynchronous.
         """
+
         def wrapper(function: Callable) -> None:
             if not iscoroutinefunction(function):
-                raise FunctionIsNotCoroutine(f"Event function: {function} must be asynchronous.")
+                raise FunctionIsNotCoroutine(
+                    f"Event function: {function} must be asynchronous."
+                )
 
             self.register(event_name=event.lower(), function=function)
 
@@ -112,7 +116,9 @@ class Dispatcher(Generic[ObjectT]):
             Function of the event is not asynchronous.
         """
         if not iscoroutinefunction(function):
-            raise FunctionIsNotCoroutine(f"Event function: {function} must be asynchronous.")
+            raise FunctionIsNotCoroutine(
+                f"Event function: {function} must be asynchronous."
+            )
 
         self.events[event_name] = function
         self.logger.debug(f"Dispatcher registered new event: {event_name}.")
@@ -131,7 +137,10 @@ class Dispatcher(Generic[ObjectT]):
             Event kwargs.
         """
         event_name = event_name.lower()
-        for event in (self.events.get(event_name), getattr(self.client, event_name, None)):
+        for event in (
+            self.events.get(event_name),
+            getattr(self.client, event_name, None),
+        ):
             if event is not None and iscoroutinefunction(event):
                 self.logger.debug(f"Dispatching an event: {event_name}.")
                 self.loop.create_task(event(*args, **kwargs))

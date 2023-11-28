@@ -70,21 +70,28 @@ class GuildMember(DiscordUser):
     bot:
         Whether user is classified as a bot.
     """
-    __slots__ = ("guild", "_roles", "_muted", "nickname", 'communication_disabled_until')
+
+    __slots__ = (
+        "guild",
+        "_roles",
+        "_muted",
+        "nickname",
+        "communication_disabled_until",
+    )
 
     def __init__(self, data: dict[str, Any], guild: Guild):
         super().__init__(user_data=data, state=guild._state)
 
         self.guild: Guild = guild
-        self.nickname: str | None = data.get('nick')
+        self.nickname: str | None = data.get("nick")
 
         self.communication_disabled_until: None | datetime = None
-        if timeout_value := data.get('communication_disabled_until'):
+        if timeout_value := data.get("communication_disabled_until"):
             self.communication_disabled_until = str_to_datetime(timeout_value)
 
         self._roles: dict[int, Role] = {}
 
-        for role_id in data.get('roles', []):
+        for role_id in data.get("roles", []):
             if role := self.guild.get_role(int(role_id)):
                 self._roles[role.id] = role
 
@@ -113,7 +120,7 @@ class GuildMember(DiscordUser):
             state=self._state,
             user_id=self.id,
             guild_id=self.guild.id,
-            avatar_id=self.avatar_id
+            avatar_id=self.avatar_id,
         )
 
     @property
@@ -153,29 +160,28 @@ class GuildMember(DiscordUser):
             Selfbot doesn't have proper permissions.
         """
         data: dict[str, Any] = await user.http.fetch_member(
-            user=user,
-            guild_id=self.guild.id,
-            member_id=self.id
+            user=user, guild_id=self.guild.id, member_id=self.id
         )
 
         self._roles = {}
 
-        for role_id in data['roles']:
+        for role_id in data["roles"]:
             if role := self.guild.get_role(int(role_id)):
                 self._roles[role.id] = role
 
         return self.roles
 
     async def edit(
-            self,
-            user: SelfBot,
-            nick: str | None = None,
-            roles_to_add: Iterable[Role] | None = None,
-            roles_to_remove: Iterable[Role] | None = None,
-            communication_disabled_until: datetime | None = None,
-            voice_channel: VoiceChannel | None = None,
-            mute: bool | None = None,
-            deaf: bool | None = None) -> GuildMember:
+        self,
+        user: SelfBot,
+        nick: str | None = None,
+        roles_to_add: Iterable[Role] | None = None,
+        roles_to_remove: Iterable[Role] | None = None,
+        communication_disabled_until: datetime | None = None,
+        voice_channel: VoiceChannel | None = None,
+        mute: bool | None = None,
+        deaf: bool | None = None,
+    ) -> GuildMember:
         """
         Method to edit member.
 
@@ -210,26 +216,23 @@ class GuildMember(DiscordUser):
             Selfbot doesn't have proper permissions.
         """
         params: dict[str, Any] = {
-            'nick': nick,
-            'roles_to_add': roles_to_add,
-            'roles_to_remove': roles_to_remove,
-            'communication_disabled_until': communication_disabled_until,
-            'voice_channel_id': voice_channel.id if voice_channel else None
+            "nick": nick,
+            "roles_to_add": roles_to_add,
+            "roles_to_remove": roles_to_remove,
+            "communication_disabled_until": communication_disabled_until,
+            "voice_channel_id": voice_channel.id if voice_channel else None,
         }
 
         for key, value in params.copy().items():
             if value is None:
                 """
-                If a parameter has a value of None, 
+                If a parameter has a value of None,
                 we don't want it in the dict because it could overwrite an already set parameter.
                 """
                 del params[key]
 
         data: dict[str, Any] = await self._state.http.edit_member(
-            user,
-            guild_id=self.guild.id,
-            member=self,
-            params=params
+            user, guild_id=self.guild.id, member=self, params=params
         )
         return self._state.create_guild_member(guild=self.guild, data=data)
 

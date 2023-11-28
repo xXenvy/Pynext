@@ -105,15 +105,15 @@ class Events(Enum):
     CHANNEL_CREATE = "on_channel_create"
     CHANNEL_UPDATE = "on_channel_edit"
 
-    GUILD_CREATE = 'on_guild_create'
+    GUILD_CREATE = "on_guild_create"
     GUILD_UPDATE = "on_guild_update"
-    GUILD_DELETE = 'on_guild_delete'
+    GUILD_DELETE = "on_guild_delete"
 
-    GUILD_EMOJIS_UPDATE = 'on_guild_emojis_update'
-    GUILD_MEMBER_UPDATE = 'on_member_update'
+    GUILD_EMOJIS_UPDATE = "on_guild_emojis_update"
+    GUILD_MEMBER_UPDATE = "on_member_update"
 
-    GUILD_BAN_ADD = 'on_guild_ban_create'
-    GUILD_BAN_REMOVE = 'on_guild_ban_remove'
+    GUILD_BAN_ADD = "on_guild_ban_create"
+    GUILD_BAN_REMOVE = "on_guild_ban_remove"
 
     GUILD_ROLE_CREATE = "on_guild_role_create"
     GUILD_ROLE_UPDATE = "on_guild_role_update"

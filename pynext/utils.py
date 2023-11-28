@@ -30,9 +30,11 @@ DISCORD_EPOCH: int = 1420070400000
 
 try:
     import orjson  # pyright: ignore[reportMissingImports]
+
     INSTALLED_ORJSON: bool = True
 except ModuleNotFoundError:
     import json
+
     INSTALLED_ORJSON: bool = False
 
 
@@ -67,10 +69,10 @@ class Hashable(EqualityComparable):
 def json_dumps(value: Any) -> str:
     if INSTALLED_ORJSON is True:
         assert orjson
-        return orjson.dumps(value).decode('utf-8')
+        return orjson.dumps(value).decode("utf-8")
 
     assert json
-    return json.dumps(value, separators=(',', ':'))
+    return json.dumps(value, separators=(",", ":"))
 
 
 def json_loads(value: str) -> dict:
@@ -88,8 +90,8 @@ def snowflake_time(object_id: int) -> datetime:
 
 
 def str_to_datetime(value: str) -> datetime:
-    tuple_data: tuple[str, ...] = value.partition('T')
+    tuple_data: tuple[str, ...] = value.partition("T")
     datetime_str: str = f"{tuple_data[0]} {tuple_data[2][0:8]}"
 
-    datetime_object: datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
+    datetime_object: datetime = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
     return datetime_object

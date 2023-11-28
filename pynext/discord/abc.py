@@ -54,6 +54,7 @@ class Typing:
     channel_id:
         Id of the channel.
     """
+
     __slots__ = ("users", "channel_id", "_tasks", "_loop")
 
     def __init__(self, channel_id: int, users: tuple[SelfBot, ...]):
@@ -89,7 +90,6 @@ class Typing:
 
 
 class Messageable:
-
     if TYPE_CHECKING:
         _state: State
         id: int
@@ -104,48 +104,47 @@ class Messageable:
         return Typing(channel_id=self.id, users=users)
 
     @overload
-    async def send(self, user: SelfBot, content: str) -> PrivateMessage: ...
+    async def send(self, user: SelfBot, content: str) -> PrivateMessage:
+        ...
 
     @overload
-    async def send(self, user: SelfBot, content: str) -> GuildMessage: ...
+    async def send(self, user: SelfBot, content: str) -> GuildMessage:
+        ...
 
     async def send(self, user: SelfBot, content: str) -> GuildMessage | PrivateMessage:
         message_data: dict[str, Any] = await self._state.http.send_message(
-            user,
-            channel_id=self.id,
-            message_content=content
+            user, channel_id=self.id, message_content=content
         )
 
         if getattr(self, "guild", None):
-            message_data['guild_id'] = self.guild.id
+            message_data["guild_id"] = self.guild.id
 
-        message: GuildMessage | PrivateMessage | None = await self._state.create_message_from_data(
-            user=user, data=message_data
+        message: GuildMessage | PrivateMessage | None = (
+            await self._state.create_message_from_data(user=user, data=message_data)
         )
         if message is None:
-            raise HTTPException('Message not found. This is probably a library bug. Report it here: TODO')
+            raise HTTPException(
+                "Message not found. This is probably a library bug. Report it here: TODO"
+            )
 
         message.channel._add_message(message)
         return message
 
-    async def fetch_messages(self, user: SelfBot, limit: int = 10, message_id: int | None = None) \
-            -> list[GuildMessage | PrivateMessage]:
-
+    async def fetch_messages(
+        self, user: SelfBot, limit: int = 10, message_id: int | None = None
+    ) -> list[GuildMessage | PrivateMessage]:
         messages: list[GuildMessage | PrivateMessage] = []
 
         messages_data: list[dict[str, Any]] = await self._state.http.fetch_messages(
-            user=user,
-            channel_id=self.id,
-            limit=limit,
-            message_id=message_id
+            user=user, channel_id=self.id, limit=limit, message_id=message_id
         )
 
         for message_data in messages_data:
             if getattr(self, "guild", None):
-                message_data['guild_id'] = self.guild.id
+                message_data["guild_id"] = self.guild.id
 
-            message: GuildMessage | PrivateMessage | None = await self._state.create_message_from_data(
-                user, message_data
+            message: GuildMessage | PrivateMessage | None = (
+                await self._state.create_message_from_data(user, message_data)
             )
             if message is not None:
                 messages.append(message)
@@ -155,7 +154,9 @@ class Messageable:
 
         return messages
 
-    async def fetch_message(self, user: SelfBot, message_id: int) -> GuildMessage | PrivateMessage:
+    async def fetch_message(
+        self, user: SelfBot, message_id: int
+    ) -> GuildMessage | PrivateMessage:
         messages: list[GuildMessage | PrivateMessage] = await self.fetch_messages(
             user, limit=1, message_id=message_id
         )

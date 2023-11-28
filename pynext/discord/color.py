@@ -39,13 +39,16 @@ class Color:
     value:
         Raw integer color value.
     """
+
     from typing import Any
 
-    __slots__ = ('value',)
+    __slots__ = ("value",)
 
     def __init__(self, value: int):
         if not isinstance(value, int):
-            raise PynextError(f"Expected int parameter, received {type(value)} instead.")
+            raise PynextError(
+                f"Expected int parameter, received {type(value)} instead."
+            )
 
         self.value: int = value
 

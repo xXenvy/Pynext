@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from ..discord import GuildMember, DiscordUser, Guild
     from .message import BaseMessage
 
-MessageT = TypeVar('MessageT', bound='BaseMessage')
+MessageT = TypeVar("MessageT", bound="BaseMessage")
 
 
 class MessageReaction(Generic[MessageT]):
@@ -55,26 +55,29 @@ class MessageReaction(Generic[MessageT]):
     author_id:
         Reaction author id.
     """
+
     __slots__ = ("message", "emoji", "guild", "author_id")
 
     def __init__(self, message: MessageT, data: dict[str, Any]) -> None:
-        emoji_data: dict[str, Any] = data['emoji']
+        emoji_data: dict[str, Any] = data["emoji"]
 
         self.message: MessageT = message
         self.emoji: Emoji = Emoji(
-            name=emoji_data['name'],
-            emoji_id=emoji_data.get('id'),
-            animated=emoji_data.get('animated', False)
+            name=emoji_data["name"],
+            emoji_id=emoji_data.get("id"),
+            animated=emoji_data.get("animated", False),
         )
-        self.guild: Guild | None = getattr(self.message, 'guild', None)
+        self.guild: Guild | None = getattr(self.message, "guild", None)
 
-        if author_id := data.get('author_id'):
+        if author_id := data.get("author_id"):
             self.author_id: int | None = int(author_id)
         else:
             self.author_id: int | None = None
 
     def __repr__(self) -> str:
-        return f"<MessageReaction(message_id={self.message.id}, emoji={self.emoji.name})>"
+        return (
+            f"<MessageReaction(message_id={self.message.id}, emoji={self.emoji.name})>"
+        )
 
     def __hash__(self) -> int:
         return hash((self.message.id, self.emoji.unique_id, self.guild, self.author_id))
@@ -118,14 +121,16 @@ class MessageReaction(Generic[MessageT]):
             user=user,
             channel_id=self.message.channel_id,
             message_id=self.message.id,
-            emoji=self.emoji.encode
+            emoji=self.emoji.encode,
         )
 
         for user_data in data:
             if self.guild is None:
                 member = user.state.create_user(data=user_data)
             else:
-                member = user.state.create_guild_member(guild=self.guild, data=user_data)
+                member = user.state.create_guild_member(
+                    guild=self.guild, data=user_data
+                )
                 self.guild._add_member(member)
             yield member
 
@@ -157,5 +162,5 @@ class MessageReaction(Generic[MessageT]):
             channel_id=self.message.channel_id,
             message_id=self.message.id,
             emoji=self.emoji.encode,
-            user_id=member_id or user.id
+            user_id=member_id or user.id,
         )

@@ -21,7 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, AsyncIterable
+from typing import TYPE_CHECKING, Any
 
 from ..utils import Hashable, snowflake_time
 from ..types import MessageReference
@@ -74,24 +74,36 @@ class BaseMessage(Hashable):
     tts:
         Whether this was a TTS message.
     """
-    __slots__ = ("_state", "_reactions", "channel", "author", "type", "id",
-                 "content", "pinned", "author_id", "channel_id", "tts")
+
+    __slots__ = (
+        "_state",
+        "_reactions",
+        "channel",
+        "author",
+        "type",
+        "id",
+        "content",
+        "pinned",
+        "author_id",
+        "channel_id",
+        "tts",
+    )
 
     def __init__(self, state: State, data: dict[str, Any]):
         self._state: State = state
         self._reactions: dict[int, MessageReaction] = {}
 
         self.channel: DMChannel | TextChannel = data["channel"]
-        self.author: DiscordUser | GuildMember = data['user_author']
+        self.author: DiscordUser | GuildMember = data["user_author"]
 
         self.type: int | None = data.get("type")
         self.id: int = int(data["id"])
-        self.content: str = data['content']
-        self.pinned: bool = data['pinned']
+        self.content: str = data["content"]
+        self.pinned: bool = data["pinned"]
 
-        self.author_id: int = int(data['author']['id'])
+        self.author_id: int = int(data["author"]["id"])
         self.channel_id: int = int(data["channel_id"])
-        self.tts: bool = data['tts']
+        self.tts: bool = data["tts"]
 
     @property
     def created_at(self) -> datetime:
@@ -168,11 +180,11 @@ class BaseMessage(Hashable):
         message_data: dict[str, Any] = await self._state.http.edit_message(
             user, channel_id=self.channel_id, message_id=self.id, content=content
         )
-        message: GuildMessage | PrivateMessage | None = await self._state.create_message_from_data(
-            user=user, data=message_data
+        message: GuildMessage | PrivateMessage | None = (
+            await self._state.create_message_from_data(user=user, data=message_data)
         )
         if message is None:
-            raise NotFound('Message not found.')
+            raise NotFound("Message not found.")
 
         return message
 
@@ -205,10 +217,12 @@ class BaseMessage(Hashable):
             user=user,
             channel_id=self.channel_id,
             message_id=self.id,
-            emoji=emoji.encode if isinstance(emoji, Emoji) else emoji
+            emoji=emoji.encode if isinstance(emoji, Emoji) else emoji,
         )
 
-    async def remove_reaction(self, user: SelfBot, emoji: Emoji | str, member_id: int | None = None) -> None:
+    async def remove_reaction(
+        self, user: SelfBot, emoji: Emoji | str, member_id: int | None = None
+    ) -> None:
         """
         Method to remove reaction from message.
 
@@ -232,7 +246,7 @@ class BaseMessage(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        if isinstance(emoji, str) and '<' in emoji:
+        if isinstance(emoji, str) and "<" in emoji:
             emoji = emoji.strip("<>")
 
         await self._state.http.remove_reaction(
@@ -240,7 +254,7 @@ class BaseMessage(Hashable):
             channel_id=self.channel_id,
             message_id=self.id,
             emoji=emoji.encode if isinstance(emoji, Emoji) else emoji,
-            user_id=member_id or user.id
+            user_id=member_id or user.id,
         )
 
     async def remove_reactions(self, user: SelfBot):
@@ -264,12 +278,12 @@ class BaseMessage(Hashable):
             Selfbot doesn't have proper permissions.
         """
         await self._state.http.remove_all_reactions(
-            user=user,
-            channel_id=self.channel_id,
-            message_id=self.id
+            user=user, channel_id=self.channel_id, message_id=self.id
         )
 
-    async def reply(self, user: SelfBot, content: str, reply_mention: bool = True) -> PrivateMessage | GuildMessage:
+    async def reply(
+        self, user: SelfBot, content: str, reply_mention: bool = True
+    ) -> PrivateMessage | GuildMessage:
         """
         Method to reply message.
 
@@ -294,21 +308,21 @@ class BaseMessage(Hashable):
             Selfbot doesn't have proper permissions.
         """
         message_reference: MessageReference = MessageReference(
-            channel_id=self.channel_id,
-            message_id=self.id
+            channel_id=self.channel_id, message_id=self.id
         )
 
         message_data: dict[str, Any] = await self._state.http.send_message(
-            user=user, channel_id=self.channel_id,
-            message_content=content, message_reference=message_reference,
-            reply_mention=reply_mention
-        )
-        message: PrivateMessage | GuildMessage | None = await self._state.create_message_from_data(
             user=user,
-            data=message_data
+            channel_id=self.channel_id,
+            message_content=content,
+            message_reference=message_reference,
+            reply_mention=reply_mention,
+        )
+        message: PrivateMessage | GuildMessage | None = (
+            await self._state.create_message_from_data(user=user, data=message_data)
         )
         if message is None:
-            raise NotFound('Message not found.')
+            raise NotFound("Message not found.")
 
         return message
 
@@ -333,9 +347,7 @@ class BaseMessage(Hashable):
             Selfbot doesn't have proper permissions.
         """
         await self._state.http.unack_message(
-            user=user,
-            channel_id=self.channel_id,
-            message_id=self.id
+            user=user, channel_id=self.channel_id, message_id=self.id
         )
 
     def _add_reaction(self, reaction: MessageReaction) -> None:
@@ -381,16 +393,19 @@ class PrivateMessage(BaseMessage):
     tts:
         Whether this was a TTS message.
     """
-    __slots__ = ('channel', 'author')
+
+    __slots__ = ("channel", "author")
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
 
         self.channel: DMChannel = message_data["channel"]
-        self.author: DiscordUser = message_data['user_author']
+        self.author: DiscordUser = message_data["user_author"]
 
         for reaction_data in message_data.get("reactions", []):
-            reaction: MessageReaction[PrivateMessage] = MessageReaction(message=self, data=reaction_data)
+            reaction: MessageReaction[PrivateMessage] = MessageReaction(
+                message=self, data=reaction_data
+            )
             self._reactions[reaction.unique_id] = reaction
 
     def __repr__(self) -> str:
@@ -432,6 +447,7 @@ class GuildMessage(BaseMessage):
     tts:
         Whether this was a TTS message.
     """
+
     __slots__ = ("author", "guild", "channel")
 
     def __init__(self, state: State, message_data: dict[str, Any]):
@@ -439,10 +455,12 @@ class GuildMessage(BaseMessage):
 
         self.guild: Guild = message_data["guild"]
         self.channel: TextChannel = message_data["channel"]
-        self.author: GuildMember = message_data['user_author']
+        self.author: GuildMember = message_data["user_author"]
 
         for reaction_data in message_data.get("reactions", []):
-            reaction: MessageReaction[GuildMessage] = MessageReaction(message=self, data=reaction_data)
+            reaction: MessageReaction[GuildMessage] = MessageReaction(
+                message=self, data=reaction_data
+            )
             self._reactions[reaction.unique_id] = reaction
 
     def __repr__(self) -> str:

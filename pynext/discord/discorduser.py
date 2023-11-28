@@ -64,23 +64,32 @@ class DiscordUser(Hashable):
     bot:
         Whether user is classified as a bot.
     """
-    __slots__ = ("global_name", "username", "discriminator", "avatar_id", "id", "_state", "bot")
+
+    __slots__ = (
+        "global_name",
+        "username",
+        "discriminator",
+        "avatar_id",
+        "id",
+        "_state",
+        "bot",
+    )
 
     def __init__(self, state: State, user_data: dict[str, Any]):
         self._state: State = state
 
-        if user_data.get('user'):
-            data: dict = user_data['user']
+        if user_data.get("user"):
+            data: dict = user_data["user"]
         else:
             data: dict = user_data
 
         self.id: int = int(data["id"])
         self.global_name: str | None = data.get("global_name")
         self.username: str = data["username"]
-        self.bot: bool = user_data.get('bot', False)
+        self.bot: bool = user_data.get("bot", False)
 
         self.discriminator: str = data["discriminator"]
-        self.avatar_id: str | None = data['avatar']
+        self.avatar_id: str | None = data["avatar"]
 
     def __repr__(self) -> str:
         return f"<DiscordUser(username={self.username}, id={self.id})>"
@@ -108,9 +117,8 @@ class DiscordUser(Hashable):
             return None
 
         return Image._from_user(
-            state=self._state,
-            user_id=self.id,
-            avatar_id=self.avatar_id)
+            state=self._state, user_id=self.id, avatar_id=self.avatar_id
+        )
 
     @property
     def default_avatar(self) -> Image:
@@ -122,10 +130,7 @@ class DiscordUser(Hashable):
         else:
             avatar_index: int = int(self.discriminator) % 5
 
-        return Image._from_default_index(
-            state=self._state,
-            avatar_id=str(avatar_index)
-        )
+        return Image._from_default_index(state=self._state, avatar_id=str(avatar_index))
 
     async def fetch_dm_channel(self, user: SelfBot) -> DMChannel:
         """

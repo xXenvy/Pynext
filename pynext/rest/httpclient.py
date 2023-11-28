@@ -23,7 +23,12 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar, Any
 
-from aiohttp import ClientSession, ClientResponse, ClientTimeout, ClientWebSocketResponse
+from aiohttp import (
+    ClientSession,
+    ClientResponse,
+    ClientTimeout,
+    ClientWebSocketResponse,
+)
 from logging import getLogger, Logger
 from asyncio import get_event_loop, TimeoutError
 
@@ -56,19 +61,27 @@ class HTTPClient:
     timeout:
         Parameter to manage HTTP connection timeout.
     """
-    __slots__ = ("_state", "_dispatcher", "_logger", "_session", "_manager", "_request_delay", "_timeout")
-    __version__: ClassVar[str] = '1.0.0'
+
+    __slots__ = (
+        "_state",
+        "_dispatcher",
+        "_logger",
+        "_session",
+        "_manager",
+        "_request_delay",
+        "_timeout",
+    )
+    __version__: ClassVar[str] = "1.0.0"
 
     BASE_URL: ClassVar[str] = "https://discord.com/api/v10/"
 
     def __init__(
-            self,
-            request_delay: float,
-            ratelimit_delay: float,
-            dispatcher: Dispatcher,
-            timeout: ClientTimeout
+        self,
+        request_delay: float,
+        ratelimit_delay: float,
+        dispatcher: Dispatcher,
+        timeout: ClientTimeout,
     ):
-
         self._session: ClientSession | None = None
         self._dispatcher: Dispatcher = dispatcher
 
@@ -95,7 +108,7 @@ class HTTPClient:
             "SelfBot-Agent": f"Pynext HTTP (v{self.__version__})",
             "Accept": "*/*",
             "authority": "discord.com",
-            "Origin": "https://discord.com"
+            "Origin": "https://discord.com",
         }
 
     @property
@@ -117,7 +130,11 @@ class HTTPClient:
         """
         Whether the http session is working.
         """
-        return not self._session.closed if isinstance(self._session, ClientSession) else False
+        return (
+            not self._session.closed
+            if isinstance(self._session, ClientSession)
+            else False
+        )
 
     @property
     def timeout(self) -> ClientTimeout:
@@ -141,7 +158,9 @@ class HTTPClient:
             HTTP Session is not running.
         """
         if self.session_status is False:
-            raise RuntimeError("Connecting to gateway cannot be done without a working session.")
+            raise RuntimeError(
+                "Connecting to gateway cannot be done without a working session."
+            )
 
         assert isinstance(self._session, ClientSession)
         return await self._session.ws_connect(url=url, headers=self.default_headers)
@@ -162,10 +181,11 @@ class HTTPClient:
             await self._session.close()
 
     async def request(
-            self,
-            route: Route,
-            json: dict[str, Any] | None = None,
-            user: SelfBot | None = None) -> ClientResponse:
+        self,
+        route: Route,
+        json: dict[str, Any] | None = None,
+        user: SelfBot | None = None,
+    ) -> ClientResponse:
         """
         A method for sending HTTP requests.
 
@@ -205,35 +225,33 @@ class HTTPClient:
 
             try:
                 response: ClientResponse = await self._session.request(
-                    method=route.method,
-                    url=url,
-                    headers=headers,
-                    json=json
+                    method=route.method, url=url, headers=headers, json=json
                 )
             except TimeoutError:
                 raise HTTPTimeoutError(f"Reached timeout limit under route: {route}")
 
             if request_manager.is_ratelimited(response):
-
                 data: dict = await response.json()
-                retry_after: float = data['retry_after']
-                global_ratelimit: bool = data['global']
+                retry_after: float = data["retry_after"]
+                global_ratelimit: bool = data["global"]
 
-                self._logger.debug(f"Ratelimit reached. Retry after: {retry_after} |"
-                                   f" global: {global_ratelimit}. Under route: {route}.")
+                self._logger.debug(
+                    f"Ratelimit reached. Retry after: {retry_after} |"
+                    f" global: {global_ratelimit}. Under route: {route}."
+                )
 
-                self._dispatcher.dispatch('on_http_ratelimit', RatelimitPayload(
-                    retry_after=retry_after,
-                    is_global=global_ratelimit,
-                    route=route,
-                    user=user
-                    )
+                self._dispatcher.dispatch(
+                    "on_http_ratelimit",
+                    RatelimitPayload(
+                        retry_after=retry_after,
+                        is_global=global_ratelimit,
+                        route=route,
+                        user=user,
+                    ),
                 )
 
                 response: ClientResponse = await request_manager.handle_ratelimit(
-                    retry_after,
-                    route,
-                    json
+                    retry_after, route, json
                 )
 
             await request_manager.handle_errors(response)
@@ -248,10 +266,7 @@ class HTTPClient:
         url:
             image url.
         """
-        route: Route = Route(
-            method="GET",
-            url=url
-        )
+        route: Route = Route(method="GET", url=url)
         response: ClientResponse = await self.request(route)
         return await response.read()
 
@@ -289,7 +304,7 @@ class HTTPClient:
             method="GET",
             url="users/{user_id}",
             user_id=user_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
@@ -309,13 +324,11 @@ class HTTPClient:
             method="POST",
             url="users/@me/channels",
             user_id=user_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(
-            route,
-            json={"recipient_id": user_id},
-            user=user
+            route, json={"recipient_id": user_id}, user=user
         )
         return await response.json()
 
@@ -334,13 +347,9 @@ class HTTPClient:
             method="PUT",
             url="users/@me/relationships/{user_id}",
             user_id=user_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
-        await self.request(
-            route,
-            json={},
-            user=user
-        )
+        await self.request(route, json={}, user=user)
 
     async def remove_friend(self, user: SelfBot, user_id: int) -> None:
         """
@@ -357,12 +366,9 @@ class HTTPClient:
             method="DELETE",
             url="users/@me/relationships/{user_id}",
             user_id=user_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
-        await self.request(
-            route,
-            user=user
-        )
+        await self.request(route, user=user)
 
     async def fetch_guild(self, user: SelfBot, guild_id: int) -> dict[str, Any]:
         """
@@ -379,18 +385,20 @@ class HTTPClient:
             method="GET",
             url="guilds/{guild_id}",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
 
-    async def send_message(self,
-                           user: SelfBot,
-                           channel_id: int,
-                           message_content: str,
-                           message_reference: MessageReference | None = None,
-                           reply_mention: bool = True) -> dict[str, Any]:
+    async def send_message(
+        self,
+        user: SelfBot,
+        channel_id: int,
+        message_content: str,
+        message_reference: MessageReference | None = None,
+        reply_mention: bool = True,
+    ) -> dict[str, Any]:
         """
         HTTP request to send message.
 
@@ -417,7 +425,7 @@ class HTTPClient:
 
         payload: dict[str, Any] = {
             "content": message_content,
-            "message_reference": message_reference
+            "message_reference": message_reference,
         }
 
         if message_reference:
@@ -427,11 +435,12 @@ class HTTPClient:
         return await response.json()
 
     async def fetch_messages(
-            self,
-            user: SelfBot,
-            channel_id: int,
-            limit: int = 10,
-            message_id: int | None = None) -> list[dict[str, Any]]:
+        self,
+        user: SelfBot,
+        channel_id: int,
+        limit: int = 10,
+        message_id: int | None = None,
+    ) -> list[dict[str, Any]]:
         """
         HTTP request to fetch messages.
 
@@ -457,13 +466,15 @@ class HTTPClient:
             method="GET",
             url=url,
             headers=user.authorization.headers,
-            channel_id=channel_id
+            channel_id=channel_id,
         )
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
 
-    async def delete_message(self, user: SelfBot, channel_id: int, message_id: int) -> None:
+    async def delete_message(
+        self, user: SelfBot, channel_id: int, message_id: int
+    ) -> None:
         """
         HTTP request to delete message.
 
@@ -481,11 +492,13 @@ class HTTPClient:
             url="channels/{channel_id}/messages/{message_id}",
             headers=user.authorization.headers,
             channel_id=channel_id,
-            message_id=message_id
+            message_id=message_id,
         )
         await self.request(route, user=user)
 
-    async def edit_message(self, user: SelfBot, channel_id: int, message_id: int, content: str) -> dict[str, Any]:
+    async def edit_message(
+        self, user: SelfBot, channel_id: int, message_id: int, content: str
+    ) -> dict[str, Any]:
         """
         HTTP request to edit message.
 
@@ -505,17 +518,18 @@ class HTTPClient:
             url="channels/{channel_id}/messages/{message_id}",
             headers=user.authorization.headers,
             channel_id=channel_id,
-            message_id=message_id)
+            message_id=message_id,
+        )
 
         response: ClientResponse = await self.request(
-            route,
-            json={"content": content},
-            user=user
+            route, json={"content": content}, user=user
         )
 
         return await response.json()
 
-    async def fetch_guild_roles(self, user: SelfBot, guild_id: int) -> list[dict[str, Any]]:
+    async def fetch_guild_roles(
+        self, user: SelfBot, guild_id: int
+    ) -> list[dict[str, Any]]:
         """
         HTTP request to fetch guild roles.
 
@@ -530,13 +544,15 @@ class HTTPClient:
             method="GET",
             url="guilds/{guild_id}/roles",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
 
-    async def edit_role(self, user: SelfBot, guild_id: int, role: Role, params: dict[str, Any]) -> dict[str, Any]:
+    async def edit_role(
+        self, user: SelfBot, guild_id: int, role: Role, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         HTTP request to edit role.
 
@@ -556,14 +572,14 @@ class HTTPClient:
             url="guilds/{guild_id}/roles/{role_id}",
             guild_id=guild_id,
             role_id=role.id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        if isinstance(params.get('permissions'), Permissions):
-            permissions: Permissions = params['permissions']
+        if isinstance(params.get("permissions"), Permissions):
+            permissions: Permissions = params["permissions"]
 
             role.permissions = role.permissions.update(permissions)
-            params['permissions'] = role.permissions.get_bitwise_by_flags()
+            params["permissions"] = role.permissions.get_bitwise_by_flags()
 
         response: ClientResponse = await self.request(route, json=params, user=user)
         return await response.json()
@@ -586,7 +602,7 @@ class HTTPClient:
             url="guilds/{guild_id}/roles/{role_id}",
             guild_id=guild_id,
             role_id=role_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         await self.request(route, user=user)
@@ -606,13 +622,15 @@ class HTTPClient:
             method="GET",
             url="channels/{channel_id}",
             channel_id=channel_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
 
-    async def fetch_channels(self, user: SelfBot, guild_id: int) -> list[dict[str, Any]]:
+    async def fetch_channels(
+        self, user: SelfBot, guild_id: int
+    ) -> list[dict[str, Any]]:
         """
         HTTP request to guild channels.
 
@@ -627,13 +645,15 @@ class HTTPClient:
             method="GET",
             url="guilds/{guild_id}/channels",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
 
-    async def edit_channel(self, user: SelfBot, channel_id: int, params: dict[str, Any]) -> dict[str, Any]:
+    async def edit_channel(
+        self, user: SelfBot, channel_id: int, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         HTTP request to edit channel.
 
@@ -650,31 +670,27 @@ class HTTPClient:
             method="PATCH",
             url="channels/{channel_id}",
             channel_id=channel_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        if params.get('overwrites'):
+        if params.get("overwrites"):
             overwrites_payload: list[OverwritePayload] = []
 
-            for overwrite_data in params['overwrites']:
+            for overwrite_data in params["overwrites"]:
                 for target, overwrite in overwrite_data.items():
                     overwrites_payload.append(
                         OverwritePayload(
                             id=target.id,
                             type=0 if isinstance(target, Role) else 1,
                             allow=str(overwrite.allow.key),
-                            deny=str(overwrite.deny.key)
+                            deny=str(overwrite.deny.key),
                         )
                     )
 
-            del params['overwrites']
-            params['permission_overwrites'] = overwrites_payload
+            del params["overwrites"]
+            params["permission_overwrites"] = overwrites_payload
 
-        response: ClientResponse = await self.request(
-            route,
-            json=params,
-            user=user
-        )
+        response: ClientResponse = await self.request(route, json=params, user=user)
         return await response.json()
 
     async def delete_channel(self, user: SelfBot, channel_id: int) -> None:
@@ -692,12 +708,14 @@ class HTTPClient:
             method="DELETE",
             url="channels/{channel_id}",
             channel_id=channel_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         await self.request(route, user=user)
 
-    async def fetch_member(self, user: SelfBot, guild_id: int, member_id: int) -> dict[str, Any]:
+    async def fetch_member(
+        self, user: SelfBot, guild_id: int, member_id: int
+    ) -> dict[str, Any]:
         """
         HTTP request to fetch guild member.
 
@@ -715,18 +733,15 @@ class HTTPClient:
             url="guilds/{guild_id}/members/{member_id}",
             guild_id=guild_id,
             member_id=member_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
 
     async def edit_member(
-            self,
-            user: SelfBot,
-            guild_id: int,
-            member: GuildMember,
-            params: dict[str, Any]) -> dict[str, Any]:
+        self, user: SelfBot, guild_id: int, member: GuildMember, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         HTTP request to edit member.
 
@@ -747,55 +762,57 @@ class HTTPClient:
             url="guilds/{guild_id}/members/{member_id}",
             guild_id=guild_id,
             member_id=member.id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
         member_roles: list[Role] = member.roles
 
-        if params.get('roles_to_add') is not None:
-            for role_to_add in params['roles_to_add']:
+        if params.get("roles_to_add") is not None:
+            for role_to_add in params["roles_to_add"]:
                 if role_to_add not in member_roles:
                     member_roles.append(role_to_add)
 
-        if params.get('roles_to_remove') is not None:
-            for role_to_remove in params['roles_to_remove']:
+        if params.get("roles_to_remove") is not None:
+            for role_to_remove in params["roles_to_remove"]:
                 if role_to_remove in member_roles:
                     member_roles.remove(role_to_remove)
 
         try:
-            time: datetime | None = params['communication_disabled_until']
+            time: datetime | None = params["communication_disabled_until"]
             if time:
-                params['communication_disabled_until'] = time.isoformat()
+                params["communication_disabled_until"] = time.isoformat()
         except KeyError:
             pass
 
         try:
-            del params['roles_to_add']
+            del params["roles_to_add"]
         except KeyError:
             pass
 
         try:
-            del params['roles_to_remove']
+            del params["roles_to_remove"]
         except KeyError:
             pass
 
         try:
-            channel_id: int | None = params['voice_channel_id']
-            del params['voice_channel_id']
+            channel_id: int | None = params["voice_channel_id"]
+            del params["voice_channel_id"]
 
             if channel_id:
-                params['channel_id'] = channel_id
+                params["channel_id"] = channel_id
         except KeyError:
             pass
 
-        params['roles'] = [role.id for role in member_roles]
+        params["roles"] = [role.id for role in member_roles]
 
-        if len(params['roles']) <= 0:
-            del params['roles']
+        if len(params["roles"]) <= 0:
+            del params["roles"]
 
         response: ClientResponse = await self.request(route, json=params, user=user)
         return await response.json()
 
-    async def fetch_user_profile(self, user: SelfBot, user_id: int, **settings: Any) -> dict[str, Any]:
+    async def fetch_user_profile(
+        self, user: SelfBot, user_id: int, **settings: Any
+    ) -> dict[str, Any]:
         """
         HTTP request to fetch member profile.
 
@@ -817,17 +834,16 @@ class HTTPClient:
             method="GET",
             url=url[:-1],
             user_id=user_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        response: ClientResponse = await self.request(
-            route,
-            user=user
-        )
+        response: ClientResponse = await self.request(route, user=user)
 
         return await response.json()
 
-    async def create_reaction(self, user: SelfBot, channel_id: int, message_id: int, emoji: str) -> None:
+    async def create_reaction(
+        self, user: SelfBot, channel_id: int, message_id: int, emoji: str
+    ) -> None:
         """
         HTTP request to add reaction to message.
 
@@ -848,14 +864,13 @@ class HTTPClient:
             channel_id=channel_id,
             message_id=message_id,
             emoji=emoji,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
-        await self.request(
-            route,
-            user=user
-        )
+        await self.request(route, user=user)
 
-    async def remove_reaction(self, user: SelfBot, channel_id: int, message_id: int, emoji: str, user_id: int) -> None:
+    async def remove_reaction(
+        self, user: SelfBot, channel_id: int, message_id: int, emoji: str, user_id: int
+    ) -> None:
         """
         HTTP request to remove reaction from message.
 
@@ -879,15 +894,14 @@ class HTTPClient:
             message_id=message_id,
             emoji=emoji,
             user_id=user_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        await self.request(
-            route,
-            user=user
-        )
+        await self.request(route, user=user)
 
-    async def remove_all_reactions(self, user: SelfBot, channel_id: int, message_id: int) -> None:
+    async def remove_all_reactions(
+        self, user: SelfBot, channel_id: int, message_id: int
+    ) -> None:
         """
         HTTP request to remove all reactions from message.
 
@@ -905,16 +919,14 @@ class HTTPClient:
             url="channels/{channel_id}/messages/{message_id}/reactions",
             channel_id=channel_id,
             message_id=message_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        await self.request(
-            route,
-            user=user
-        )
+        await self.request(route, user=user)
 
-    async def get_reactions(self, user: SelfBot, channel_id: int, message_id: int, emoji: str) \
-            -> list[dict[str, Any]]:
+    async def get_reactions(
+        self, user: SelfBot, channel_id: int, message_id: int, emoji: str
+    ) -> list[dict[str, Any]]:
         """
         HTTP request to get all reactions from message.
 
@@ -935,17 +947,16 @@ class HTTPClient:
             channel_id=channel_id,
             message_id=message_id,
             emoji=emoji,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        response: ClientResponse = await self.request(
-            route,
-            user=user
-        )
+        response: ClientResponse = await self.request(route, user=user)
 
         return await response.json()
 
-    async def fetch_guild_ban(self, user: SelfBot, guild_id: int, user_id: int) -> dict[str, Any]:
+    async def fetch_guild_ban(
+        self, user: SelfBot, guild_id: int, user_id: int
+    ) -> dict[str, Any]:
         """
         HTTP request to get ban data.
 
@@ -962,18 +973,16 @@ class HTTPClient:
             method="GET",
             url=f"guilds/{guild_id}/bans/{user_id}",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        response: ClientResponse = await self.request(
-            route,
-            user=user
-        )
+        response: ClientResponse = await self.request(route, user=user)
 
         return await response.json()
 
-    async def fetch_guild_bans(self, user: SelfBot, guild_id: int, limit: int = 1000) \
-            -> list[dict[str, Any]]:
+    async def fetch_guild_bans(
+        self, user: SelfBot, guild_id: int, limit: int = 1000
+    ) -> list[dict[str, Any]]:
         """
         HTTP request to fetch all guild bans.
 
@@ -990,13 +999,10 @@ class HTTPClient:
             method="GET",
             url=f"guilds/{guild_id}/bans?limit={limit}",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        response: ClientResponse = await self.request(
-            route,
-            user=user
-        )
+        response: ClientResponse = await self.request(route, user=user)
 
         return await response.json()
 
@@ -1015,12 +1021,14 @@ class HTTPClient:
             method="POST",
             url="channels/{channel_id}/typing",
             channel_id=channel_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         await self.request(route, user=user)
 
-    async def create_role(self, user: SelfBot, guild_id: int, params: dict[str, Any]) -> dict[str, Any]:
+    async def create_role(
+        self, user: SelfBot, guild_id: int, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         HTTP request to create guild role.
 
@@ -1037,12 +1045,14 @@ class HTTPClient:
             method="POST",
             url="guilds/{guild_id}/roles",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
         response: ClientResponse = await self.request(route, json=params, user=user)
         return await response.json()
 
-    async def create_channel(self, user: SelfBot, guild_id: int, params: dict[str, Any]) -> dict[str, Any]:
+    async def create_channel(
+        self, user: SelfBot, guild_id: int, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         HTTP request to create guild channel.
 
@@ -1059,13 +1069,15 @@ class HTTPClient:
             method="POST",
             url="guilds/{guild_id}/channels",
             guild_id=guild_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
         response: ClientResponse = await self.request(route, json=params, user=user)
         return await response.json()
 
-    async def unack_message(self, user: SelfBot, channel_id: int, message_id: int) -> None:
+    async def unack_message(
+        self, user: SelfBot, channel_id: int, message_id: int
+    ) -> None:
         """
         HTTP request to mark a message as unread.
 
@@ -1083,12 +1095,9 @@ class HTTPClient:
             url="channels/{channel_id}/messages/{message_id}/ack",
             channel_id=channel_id,
             message_id=message_id,
-            headers=user.authorization.headers
+            headers=user.authorization.headers,
         )
 
-        payload: dict[str, bool | int] = {
-            'manual': True,
-            'mention_count': 0
-        }
+        payload: dict[str, bool | int] = {"manual": True, "mention_count": 0}
 
         await self.request(route, json=payload, user=user)

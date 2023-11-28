@@ -61,11 +61,25 @@ class WebSocketConnector:
     client:
         Pynext client.
     """
-    __slots__ = ("client", "_events", "_logger", "_chunk_guilds", "_chunk_channels", "_debug_events")
+
+    __slots__ = (
+        "client",
+        "_events",
+        "_logger",
+        "_chunk_guilds",
+        "_chunk_channels",
+        "_debug_events",
+    )
 
     gateway_url: ClassVar[str] = "wss://gateway.discord.gg/?v=10&encoding=json"
 
-    def __init__(self, client: PynextClient, chunk_guilds: bool, chunk_channels: bool, debug_events: bool):
+    def __init__(
+        self,
+        client: PynextClient,
+        chunk_guilds: bool,
+        chunk_channels: bool,
+        debug_events: bool,
+    ):
         self.client: PynextClient = client
 
         self._chunk_guilds: bool = chunk_guilds
@@ -85,7 +99,9 @@ class WebSocketConnector:
         """
         tasks: list[Task] = []
 
-        self._logger.debug(f"Creating a gateway connection for {len(self.client.users)} users...")
+        self._logger.debug(
+            f"Creating a gateway connection for {len(self.client.users)} users..."
+        )
 
         for user in self.client.users:
             userWebSocket = DiscordWebSocket(
@@ -93,10 +109,12 @@ class WebSocketConnector:
                 client=self.client,
                 chunk_guilds=self._chunk_guilds,
                 chunk_channels=self._chunk_channels,
-                debug_events=self._debug_events
+                debug_events=self._debug_events,
             )
 
-            task: Task = self.client.loop.create_task(userWebSocket.run(self.gateway_url))
+            task: Task = self.client.loop.create_task(
+                userWebSocket.run(self.gateway_url)
+            )
             tasks.append(task)
 
         await gather(*tasks)
@@ -141,25 +159,40 @@ class DiscordWebSocket:
     latency:
         Websocket latency value.
     """
-    __slots__ = ("user", "websocket", "dispatcher", "connected", "latency", "_request_queue",
-                 "_last_send", "_client", "_last_sequence", "_pulse", "_logger", "_parser",
-                 "_debug_events")
+
+    __slots__ = (
+        "user",
+        "websocket",
+        "dispatcher",
+        "connected",
+        "latency",
+        "_request_queue",
+        "_last_send",
+        "_client",
+        "_last_sequence",
+        "_pulse",
+        "_logger",
+        "_parser",
+        "_debug_events",
+    )
 
     def __init__(
-            self,
-            user: SelfBot,
-            client: PynextClient,
-            chunk_guilds: bool,
-            chunk_channels: bool,
-            debug_events: bool
+        self,
+        user: SelfBot,
+        client: PynextClient,
+        chunk_guilds: bool,
+        chunk_channels: bool,
+        debug_events: bool,
     ) -> None:
         self.user: SelfBot = user
         self.websocket: ClientWebSocketResponse | None = None
         self.connected: Event = Event()
         self.dispatcher: Dispatcher[PynextClient] = client.dispatcher
-        self.latency: float = .0
+        self.latency: float = 0.0
 
-        self._parser: Parser = Parser(chunk_guilds=chunk_guilds, chunk_channels=chunk_channels)
+        self._parser: Parser = Parser(
+            chunk_guilds=chunk_guilds, chunk_channels=chunk_channels
+        )
         self._request_queue: Queue[dict[str, Any]] = Queue()
         self._client: PynextClient = client
         self._debug_events: bool = debug_events
@@ -217,7 +250,7 @@ class DiscordWebSocket:
         tasks = [
             create_task(self.__ping_loop()),
             create_task(self.__receive_loop()),
-            create_task(self.__request_loop())
+            create_task(self.__request_loop()),
         ]
 
         for task in tasks:
@@ -238,7 +271,9 @@ class DiscordWebSocket:
             Somehow selfbot received a request to send, but there is no connection to the websocket.
         """
         if self.websocket_status is False:
-            raise WebsocketNotConnnected("Received request to send, but websocket has no connection to discord!")
+            raise WebsocketNotConnnected(
+                "Received request to send, but websocket has no connection to discord!"
+            )
 
         assert isinstance(self.websocket, ClientWebSocketResponse)
         await self.websocket.send_str(json_dumps(data))
@@ -266,10 +301,14 @@ class DiscordWebSocket:
             if response.op == GatewayCodes.HEARTBEAT_ACK.value:
                 ack: float = perf_counter()
                 self.latency = ack - self._last_send
-                self._logger.debug(f"Received HEARTBEAT_ACK. Updating gateway latency ({self.latency})...")
+                self._logger.debug(
+                    f"Received HEARTBEAT_ACK. Updating gateway latency ({self.latency})..."
+                )
 
             if response.event and response.event_name:
-                event_args: tuple[Any, ...] | None = await self._parser.parse_event_args(response)
+                event_args: tuple[
+                    Any, ...
+                ] | None = await self._parser.parse_event_args(response)
                 if event_args is not None:
                     self.dispatcher.dispatch(response.event_name, *event_args)
 
@@ -290,8 +329,8 @@ class DiscordWebSocket:
             self._last_send = perf_counter()
 
             request: dict[str, Any] = {
-                'op': GatewayCodes.HEARTBEAT.value,
-                'd': int(time())
+                "op": GatewayCodes.HEARTBEAT.value,
+                "d": int(time()),
             }
             await self._request_queue.put(request)
 
@@ -316,15 +355,17 @@ class DiscordWebSocket:
             "intents": 3276799,
         }
 
-        self._logger.info(f"Received HELLO. Sending identify request to the gateway. {self.user}.")
+        self._logger.info(
+            f"Received HELLO. Sending identify request to the gateway. {self.user}."
+        )
         await self._request_queue.put(request)
 
     async def change_voice_state(
-            self,
-            guild_id: int,
-            channel_id: int | None,
-            self_mute: bool = False,
-            self_deaf: bool = False
+        self,
+        guild_id: int,
+        channel_id: int | None,
+        self_mute: bool = False,
+        self_deaf: bool = False,
     ):
         """
         A method to change the voice state on the guild.
@@ -341,13 +382,13 @@ class DiscordWebSocket:
             Whether selfbot should have a muted sound.
         """
         request: dict[str, Any] = {
-            'op': GatewayCodes.VOICE_STATE.value,
-            'd': {
-                'guild_id': guild_id,
-                'channel_id': channel_id,
-                'self_mute': self_mute,
-                'self_deaf': self_deaf
-            }
+            "op": GatewayCodes.VOICE_STATE.value,
+            "d": {
+                "guild_id": guild_id,
+                "channel_id": channel_id,
+                "self_mute": self_mute,
+                "self_deaf": self_deaf,
+            },
         }
 
         self._logger.debug(f"Changing voice state for {self.user}.")

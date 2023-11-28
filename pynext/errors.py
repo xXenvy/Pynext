@@ -26,6 +26,7 @@ class PynextError(Exception):
     """
     Base exception class for pynext.
     """
+
     __slots__ = ()
     from typing import Any
 
@@ -71,4 +72,3 @@ class WebsocketNotConnnected(PynextError):
 
 class VoiceStateNotFound(PynextError):
     """Called when user has no voice state set for the guild."""
-

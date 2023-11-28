@@ -57,7 +57,7 @@ class State:
 
     def __init__(self, http: HTTPClient) -> None:
         self.http: HTTPClient = http
-        self.logger: Logger = getLogger('pynext.common')
+        self.logger: Logger = getLogger("pynext.common")
 
     def create_private_message(self, data: dict[str, Any]) -> PrivateMessage:
         """
@@ -68,7 +68,7 @@ class State:
         data:
             Required data to create a message object.
         """
-        self.logger.debug('Creating a private message object...')
+        self.logger.debug("Creating a private message object...")
         return PrivateMessage(state=self, message_data=data)
 
     def create_guild_message(self, data: dict[str, Any]) -> GuildMessage:
@@ -80,7 +80,7 @@ class State:
         data:
             Required data to create a message object.
         """
-        self.logger.debug('Creating a guild message object...')
+        self.logger.debug("Creating a guild message object...")
         return GuildMessage(state=self, message_data=data)
 
     def create_guild_channel(self, guild: Guild, data: dict[str, Any]) -> Channel:
@@ -94,8 +94,10 @@ class State:
         data:
             Required data to create a channel object.
         """
-        self.logger.debug('Creating a guild channel object...')
-        return self.guild_channel_factory(GuildChannel(state=self, guild=guild, data=data))
+        self.logger.debug("Creating a guild channel object...")
+        return self.guild_channel_factory(
+            GuildChannel(state=self, guild=guild, data=data)
+        )
 
     def create_dm_channel(self, data: dict[str, Any]) -> DMChannel:
         """
@@ -106,7 +108,7 @@ class State:
         data:
             Required data to create a channel object.
         """
-        self.logger.debug('Creating a dm channel object...')
+        self.logger.debug("Creating a dm channel object...")
         return DMChannel(state=self, data=data)
 
     def create_user(self, data: dict[str, Any]) -> DiscordUser:
@@ -118,7 +120,7 @@ class State:
         data:
             Required data to create a user object.
         """
-        self.logger.debug('Creating a discord user object...')
+        self.logger.debug("Creating a discord user object...")
         return DiscordUser(state=self, user_data=data)
 
     def create_guild_member(self, guild: Guild, data: dict[str, Any]) -> GuildMember:
@@ -132,13 +134,12 @@ class State:
         data:
             Required data to create a member object.
         """
-        self.logger.debug('Creating a guild member object...')
+        self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
 
     async def create_message_from_data(
-            self,
-            user: SelfBot,
-            data: dict[str, Any]) -> PrivateMessage | GuildMessage | None:
+        self, user: SelfBot, data: dict[str, Any]
+    ) -> PrivateMessage | GuildMessage | None:
         """
         Method to create a message object from data.
 
@@ -149,11 +150,11 @@ class State:
         data:
             Required data to create a message object.
         """
-        self.logger.debug('Creating a message object...')
-        if data.get('type') is None:
-            guild_id: int = int(data['guild_id'])
-            channel_id: int = int(data['channel_id'])
-            message_id: int = int(data['id'])
+        self.logger.debug("Creating a message object...")
+        if data.get("type") is None:
+            guild_id: int = int(data["guild_id"])
+            channel_id: int = int(data["channel_id"])
+            message_id: int = int(data["id"])
 
             guild: Guild | None = user.get_guild(guild_id)
             if not guild:
@@ -171,33 +172,40 @@ class State:
 
             return
 
-        channel_id: int = int(data['channel_id'])
+        channel_id: int = int(data["channel_id"])
 
-        if data.get("guild_id") is None and data.get('message_reference', {}).get('guild_id') is None:
-            author_id: int = int(data['author']['id'])
+        if (
+            data.get("guild_id") is None
+            and data.get("message_reference", {}).get("guild_id") is None
+        ):
+            author_id: int = int(data["author"]["id"])
 
             author: DiscordUser | None = user.get_user(user_id=author_id)
             if not author:
-                author_data: dict[str, Any] = await self.http.fetch_user(user, user_id=author_id)
+                author_data: dict[str, Any] = await self.http.fetch_user(
+                    user, user_id=author_id
+                )
                 author = self.create_user(data=author_data)
                 user._add_user(author)
 
             dm_channel: DMChannel | None = user.get_dm_channel(channel_id=channel_id)
 
             if not isinstance(dm_channel, DMChannel):
-                channel_data: dict[str, Any] = await self.http.fetch_channel(user, channel_id=channel_id)
+                channel_data: dict[str, Any] = await self.http.fetch_channel(
+                    user, channel_id=channel_id
+                )
                 dm_channel = self.create_dm_channel(data=channel_data)
                 user._add_dm_channel(dm_channel)
 
             data["channel"] = dm_channel
-            data['user_author'] = author
+            data["user_author"] = author
 
             return self.create_private_message(data=data)
 
-        if data['type'] not in (19, 21):
-            guild_id: int = int(data['guild_id'])
+        if data["type"] not in (19, 21):
+            guild_id: int = int(data["guild_id"])
         else:
-            guild_id: int = int(data['message_reference']['guild_id'])
+            guild_id: int = int(data["message_reference"]["guild_id"])
 
         guild: Guild | None = user.get_guild(guild_id)
         if not guild:
@@ -206,9 +214,10 @@ class State:
         channel = guild.get_channel(channel_id=channel_id)
 
         if not isinstance(channel, TextChannel):
-
             try:
-                channel_data: dict[str, Any] = await self.http.fetch_channel(user, channel_id=channel_id)
+                channel_data: dict[str, Any] = await self.http.fetch_channel(
+                    user, channel_id=channel_id
+                )
             except (Forbidden, HTTPException, Unauthorized):
                 return
 
@@ -218,15 +227,13 @@ class State:
 
         data["guild"] = guild
         data["channel"] = channel
-        data['user_author'] = self.create_guild_member(guild=guild, data=data['author'])
+        data["user_author"] = self.create_guild_member(guild=guild, data=data["author"])
 
         return self.create_guild_message(data=data)
 
     async def create_guild(
-            self,
-            user: SelfBot,
-            guild_data: dict[str, Any],
-            chunk_channels: bool = True) -> Guild:
+        self, user: SelfBot, guild_data: dict[str, Any], chunk_channels: bool = True
+    ) -> Guild:
         """
         Method to create a guild object from data.
 
@@ -239,20 +246,24 @@ class State:
         chunk_channels:
             Whether to chunk channels after guild build.
         """
-        self.logger.debug('Creating a guild object...')
-        if guild_data.get('properties'):
-            guild_data = {**guild_data, **guild_data['properties']}
+        self.logger.debug("Creating a guild object...")
+        if guild_data.get("properties"):
+            guild_data = {**guild_data, **guild_data["properties"]}
 
         guild: Guild = Guild(state=self, data=guild_data)
 
         if chunk_channels:
-            await self.chunk_guild_channels(user=user, guild=guild, data=guild_data.get("channels", []))
+            await self.chunk_guild_channels(
+                user=user, guild=guild, data=guild_data.get("channels", [])
+            )
 
         await self.fetch_guild_owner(guild=guild, user=user)
 
         return guild
 
-    async def chunk_guild_channels(self, user: SelfBot, guild: Guild, data: list[dict[str, Any]]) -> None:
+    async def chunk_guild_channels(
+        self, user: SelfBot, guild: Guild, data: list[dict[str, Any]]
+    ) -> None:
         """
         Method to chunk guild channels.
 
@@ -290,7 +301,9 @@ class State:
         await guild.fetch_member(user, guild.owner_id)
 
     @staticmethod
-    def to_overwrite_payload(overwrites: dict[GuildMember | Role, PermissionOverwrite]) -> list[OverwritePayload]:
+    def to_overwrite_payload(
+        overwrites: dict[GuildMember | Role, PermissionOverwrite]
+    ) -> list[OverwritePayload]:
         """
         Method to convert overwrites to list with overwrite payload.
 
@@ -306,7 +319,7 @@ class State:
                     id=target.id,
                     type=0 if isinstance(target, Role) else 1,
                     allow=str(overwrite.allow.value),
-                    deny=str(overwrite.deny.value)
+                    deny=str(overwrite.deny.value),
                 )
             )
 
@@ -327,15 +340,18 @@ class State:
         if channel.type == ChannelType.GUILD_VOICE.value:
             return VoiceChannel(state=self, guild=channel.guild, data=channel.raw_data)
         if channel.type == ChannelType.GUILD_CATEGORY.value:
-            return CategoryChannel(state=self, guild=channel.guild, data=channel.raw_data)
+            return CategoryChannel(
+                state=self, guild=channel.guild, data=channel.raw_data
+            )
         if channel.type == ChannelType.GUILD_TEXT.value:
             return TextChannel(state=self, guild=channel.guild, data=channel.raw_data)
 
         return channel
 
     @staticmethod
-    async def create_overwrites(user: SelfBot, guild: Guild, overwrites_data: list[dict[str, Any]]) \
-            -> AsyncIterable[tuple[PermissionOverwrite, Role | GuildMember]]:
+    async def create_overwrites(
+        user: SelfBot, guild: Guild, overwrites_data: list[dict[str, Any]]
+    ) -> AsyncIterable[tuple[PermissionOverwrite, Role | GuildMember]]:
         """
         Method that creates overwrites from data.
 
@@ -350,24 +366,24 @@ class State:
         """
 
         for data in overwrites_data:
-            if int(data['type']) == 0:
-
-                role: Role | None = guild.get_role(int(data['id']))
+            if int(data["type"]) == 0:
+                role: Role | None = guild.get_role(int(data["id"]))
                 if role is None:
                     continue
 
                 overwrite: PermissionOverwrite = PermissionOverwrite.make_from_value(
-                    allow=int(data['allow']),
-                    deny=int(data['deny'])
+                    allow=int(data["allow"]), deny=int(data["deny"])
                 )
                 yield overwrite, role
 
             else:
-                member: GuildMember | None = guild.get_member(member_id=int(data['id']))
+                member: GuildMember | None = guild.get_member(member_id=int(data["id"]))
 
                 if member is None:
                     try:
-                        member = await guild.fetch_member(user, member_id=int(data['id']))
+                        member = await guild.fetch_member(
+                            user, member_id=int(data["id"])
+                        )
                     except (Forbidden, HTTPException, Unauthorized):
                         continue
 
@@ -375,13 +391,14 @@ class State:
                     continue
 
                 overwrite: PermissionOverwrite = PermissionOverwrite.make_from_value(
-                    allow=int(data['allow']),
-                    deny=int(data['deny'])
+                    allow=int(data["allow"]), deny=int(data["deny"])
                 )
 
                 yield overwrite, member
 
-    async def fetch_channel_parent(self, channel: Channel, user: SelfBot) -> CategoryChannel | None:
+    async def fetch_channel_parent(
+        self, channel: Channel, user: SelfBot
+    ) -> CategoryChannel | None:
         """
         Method which fetches the channel parent.
 
@@ -401,7 +418,9 @@ class State:
         if isinstance(category, CategoryChannel):
             return category
 
-        channel_data: dict[str, Any] = await self.http.fetch_channel(user, channel_id=parent_id)
+        channel_data: dict[str, Any] = await self.http.fetch_channel(
+            user, channel_id=parent_id
+        )
         channel = self.create_guild_channel(guild=channel.guild, data=channel_data)
 
         if channel is not None:
@@ -411,11 +430,8 @@ class State:
 
     @staticmethod
     async def fetch_message_from_raw(
-            user: SelfBot,
-            guild_id: int | None,
-            channel_id: int,
-            message_id: int) -> Message | None:
-
+        user: SelfBot, guild_id: int | None, channel_id: int, message_id: int
+    ) -> Message | None:
         """
         Method that fetches a message without Guild and Channel objects.
 

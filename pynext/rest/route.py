@@ -52,20 +52,16 @@ class Route:
     headers:
         HTTP request headers.
     """
+
     __slots__ = ("method", "url", "headers")
 
     def __init__(
-            self,
-            method: Literal[
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE",
-                "PATCH"],
-            url: str,
-            headers: dict[str, Any] | None = None,
-            **params: Snowflake):
-
+        self,
+        method: Literal["GET", "POST", "PUT", "DELETE", "PATCH"],
+        url: str,
+        headers: dict[str, Any] | None = None,
+        **params: Snowflake,
+    ):
         self.method: str = method
         self.url: str = url.format(**params)
         self.headers: dict[str, Any] = {} if headers is None else headers
