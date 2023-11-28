@@ -28,7 +28,6 @@ from dataclasses import dataclass
 KeyT = TypeVar("KeyT")
 
 if TYPE_CHECKING:
-    from discord_typings import Snowflake
 
     from .discord import *
     from .rest import Route
@@ -40,12 +39,12 @@ Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel"
 
 
 class MessageReference(TypedDict):
-    channel_id: Snowflake
-    message_id: Snowflake
+    channel_id: int | str
+    message_id: int | str
 
 
 class OverwritePayload(TypedDict):
-    id: Snowflake
+    id: int | str
     type: int
     allow: str
     deny: str
