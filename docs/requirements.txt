@@ -1,3 +1,4 @@
 sphinx_autodoc_typehints
 sphinxext.opengraph
 sphinx_inline_tabs
+furo
