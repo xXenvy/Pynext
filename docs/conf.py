@@ -27,6 +27,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinxext.opengraph",
     "sphinx_inline_tabs",
+    "enum_tools.autoenum"
 ]
 autodoc_typehints = "both"
 

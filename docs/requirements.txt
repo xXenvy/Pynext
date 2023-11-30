@@ -3,3 +3,4 @@ sphinxext.opengraph
 sphinx_inline_tabs
 furo
 pynext
+enum_tools
