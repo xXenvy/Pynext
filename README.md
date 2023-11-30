@@ -1,8 +1,8 @@
 <div align="center">
 
-  <img alt="" src="assets/logo.png" width="160px"/>
+  <img alt="" src="assets/discordlogo.png" width="200px"/>
   
-  ## Pynext - Discord API Wrapper for Discord selfbots.
+  ## Pynext - Discord API Wrapper for selfbots.
   `⚠️ Project only for educational purposes!`
   
   `⚠️ Project is still under development. It may contain bugs, and future updates will bring breaking changes.`
@@ -44,3 +44,8 @@ async def on_ready(user: pynext.SelfBot):
 
 client.run('TOKEN_1', 'TOKEN_2')
 ```
+
+# 📃 Todo
+- [x] Support for multiple accounts.
+- [ ] Discord connection support on the voice channel.
+- [ ] Slash commands and other interaction stuff handling.
