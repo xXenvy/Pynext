@@ -2,7 +2,7 @@
 
   <img alt="" src="assets/discordlogo.png" width="200px"/>
   
-  ## Pynext - Discord API Wrapper for selfbots.
+  ## Pynext - Discord API Wrapper for selfbots written from scratch in Python.
   `⚠️ Project only for educational purposes!`
   
   `⚠️ Project is still under development. It may contain bugs, and future updates will bring breaking changes.`
@@ -44,6 +44,9 @@ async def on_ready(user: pynext.SelfBot):
 
 client.run('TOKEN_1', 'TOKEN_2')
 ```
+# 🧷 Links
+- [Documentation](https://pynext.readthedocs.io/en/latest/)
+- [Report a bug or feature](https://github.com/xXenvy/pynext/issues/new/choose)
 
 # 📃 Todo
 - [x] Support for multiple accounts.
