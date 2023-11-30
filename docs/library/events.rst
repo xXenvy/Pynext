@@ -4,6 +4,15 @@ Events
 ======
 Documentation of all available library events. See how to use them: :ref:`Events Example`
 
+.. function:: on_user_login(selfbot)
+
+    Called when the selfbot object is properly created.
+
+    However, this does not mean that the selfbot has made a connection to the discord gateway.
+
+    :param selfbot: Selfbot, which just logged in.
+    :type selfbot: :class:`SelfBot`
+
 .. function:: on_user_ready(selfbot)
 
     Called when the selfbot connects to the gateway and completes chunking.
