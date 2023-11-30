@@ -55,7 +55,7 @@ __all__: tuple[str, ...] = (
     "FunctionIsNotCoroutine",
     "VoiceStateNotFound",
     "NotFound",
-    "WebsocketNotConnnected",
+    "WebsocketNotConnected",
     "Unauthorized",
     "Image",
     "pynext_version",
@@ -75,7 +75,9 @@ __all__: tuple[str, ...] = (
     "BanEntry",
     "Dispatcher",
     "GatewayResponse",
-    "HTTPTimeoutError"
+    "HTTPTimeoutError",
+    "Messageable",
+    "Typing",
 )
 
 pynext_version: str = PynextClient.__version__

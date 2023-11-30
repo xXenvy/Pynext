@@ -42,11 +42,11 @@ class Route:
 
     Attributes
     ----------
-    method:
+    method: :class:`str`
         HTTP request method.
-    url:
+    url: :class:`str`
         HTTP request url.
-    headers:
+    headers:  :class:`dict`
         HTTP request headers.
     """
 

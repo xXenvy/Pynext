@@ -38,13 +38,13 @@ class Emoji:
 
     Attributes
     ----------
-    name:
+    name: :class:`str`
         Emoji name.
-    animated:
+    animated: :class:`bool`
         Whether the emoji is animated.
-    id:
+    id: Optional[:class:`int`]
         Emoji ID. If it has.
-    encode:
+    encode: :class:`str`
         Emoji encode format.
     """
 

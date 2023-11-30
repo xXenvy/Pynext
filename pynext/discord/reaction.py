@@ -46,13 +46,13 @@ class MessageReaction(Generic[MessageT]):
 
     Attributes
     ----------
-    message:
+    message: :class:`typing.TypeVar`
         A message to which the reaction is assigned.
-    emoji:
+    emoji: :class:`Emoji`
         Reaction emoji object.
-    guild:
+    guild: Optional[:class:`Guild`]
         Guild where the reaction is.
-    author_id:
+    author_id: Optional[:class:`int`]
         Reaction author id.
     """
 

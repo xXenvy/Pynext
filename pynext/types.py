@@ -28,14 +28,13 @@ from dataclasses import dataclass
 KeyT = TypeVar("KeyT")
 
 if TYPE_CHECKING:
-
-    from .discord import *
     from .rest import Route
     from .selfbot import SelfBot
+    from .discord import *
 
 
 Message = Union["PrivateMessage", "GuildMessage"]
-Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel"]
+Channel = Union['GuildChannel', 'TextChannel', 'VoiceChannel', 'CategoryChannel']
 
 
 class MessageReference(TypedDict):
@@ -52,6 +51,14 @@ class OverwritePayload(TypedDict):
 
 @dataclass
 class Authorization(Generic[KeyT]):
+    """
+    SelfBot Authorization dataclass.
+
+    Parameters
+    ----------
+    key:
+        Selfbot authorization token.
+    """
     key: KeyT
 
     @property
@@ -61,6 +68,23 @@ class Authorization(Generic[KeyT]):
 
 @dataclass
 class RatelimitPayload:
+    """
+    Dataclass Payload passed in the ``on_http_ratelimit`` event.
+
+    Parameters
+    ----------
+    retry_after:
+        Time in seconds until ratelimit ends.
+
+        .. warning::
+            Time until ratelimit ends is without additional time given in the :class:`PynextClient` class.
+    is_global:
+        Whether ratelimit is global.
+    route:
+        Blocked http route.
+    user:
+        Selfbot that received ratelimit.
+    """
     retry_after: float
     is_global: bool
     route: Route
@@ -69,6 +93,18 @@ class RatelimitPayload:
 
 @dataclass
 class EmojisUpdatePayload:
+    """
+    Dataclass Payload passed in the ``on_guild_emojis_update`` event.
+
+    Parameters
+    ----------
+    guild:
+        Guild on which the payload was received.
+    added_emojis:
+        List with added emojis.
+    deleted_emojis:
+        List with removed emojis.
+    """
     guild: Guild
     added_emojis: list[Emoji]
     deleted_emojis: list[Emoji]

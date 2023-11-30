@@ -44,9 +44,9 @@ class Image:
 
     Attributes
     ----------
-    url:
+    url: :class:`str`
         Image url.
-    animated:
+    animated: :class:`bool`
         Whether the image is a animated (gif).
     """
 

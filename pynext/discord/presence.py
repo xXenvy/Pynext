@@ -49,13 +49,13 @@ class PresenceBuilder:
 
     Attributes
     ----------
-    status:
+    status: :class:`Union[Literal['online', 'dnd', 'idle', 'invisible', 'offline'] | StatusType]`
         Selfbot status.
-    afk:
+    afk: :class:`bool`
         Whether or not the client is afk.
-    since:
+    since: Optional[:class:`int`]
         Unix time (in milliseconds) of when the client went idle, or null if the client is not idle.
-    activities:
+    activities: :class:`list[Activity]`
         User's activities.
 
     Raises

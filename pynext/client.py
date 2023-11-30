@@ -40,8 +40,10 @@ class PynextClient:
     ----------
     request_delay:
         Delay between sending requests to rest api.
+
         .. warning::
             I don't recommend changing this below 0.1s, as Discord may block your account for unnatural behavior.
+
     ratelimit_delay:
         Additional ratelimit delay, which is added when you reach ratelimit.
     chunk_guilds:
@@ -49,8 +51,10 @@ class PynextClient:
         In a large number of servers or selfbots, this can make the startup much longer.
     chunk_channels:
         Whether the client should chunks guild channels.
+
         .. note::
-            This parameter is considered only when chunk_guilds is True.
+            This parameter is considered only when ``chunk_guilds`` is True.
+
     http_timeout:
         Parameter to manage HTTP connection timeout.
     debug_events:
@@ -58,12 +62,12 @@ class PynextClient:
 
     Attributes
     ----------
-    gateway:
+    gateway: :class:`WebSocketConnector`
         Websocket connector used to connect gateway and register events.
-    loop:
+    loop: :class:`asyncio.AbstractEventLoop`
         Client event loop.
-    dispatcher:
-        Major client dispatcher. You can find more information here: <link>.
+    dispatcher: :class:`Dispatcher`
+        Major client dispatcher.
     """
 
     __version__: ClassVar[str] = "1.0.2"
@@ -103,6 +107,7 @@ class PynextClient:
     async def login(self, *auths: str) -> None:
         """
         Method to check the provided tokens and create SelfBot objects.
+
         .. note::
             The method will not connect users to the gateway.
 
@@ -146,7 +151,7 @@ class PynextClient:
 
     def run(self, *tokens: str) -> None:
         """
-        Sync method that runs the <link setup> method in a loop.
+        Sync method that runs the :func:`setup` method in a loop.
 
         Parameters
         ----------

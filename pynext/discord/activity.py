@@ -61,27 +61,27 @@ class Activity:
 
     Attributes
     ----------
-    name:
+    name: :class:`str`
         Activity name.
-    activity_type:
+    activity_type: Union[:class:`pynext.enums.ActivityType`, :class:`int`]
         Type of activity.
-    application_id:
+    application_id: Optional[:class:`int`]
         Application ID for the game
-    details:
+    details: Optional[:class:`str`]
         What the selfbot is currently doing.
-    state:
+    state: Optional[:class:`str`]
         SelfBot's current party status, or text used for a custom status
-    url:
+    url: Optional[:class:`str`]
         Url to stream from youtube or twitch. It only works if the activity type is on 1 (Streaming).
-    emoji_data:
+    emoji_data: Optional[:class:`str`]
         Emoji data used for a custom status.
-    large_image:
+    large_image: Optional[:class:`str`]
         Url to large image.
-    large_text:
+    large_text: Optional[:class:`str`]
         Text displayed when hovering over the large image of the activity.
-    small_image:
+    small_image: Optional[:class:`str`]
         Url to small image.
-    small_text:
+    small_text: Optional[:class:`str`]
         Text displayed when hovering over the small image of the activity.
     """
 

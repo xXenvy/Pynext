@@ -30,7 +30,7 @@ from time import time, perf_counter
 
 from ..utils import json_dumps
 from ..enums import GatewayCodes
-from ..errors import WebsocketNotConnnected
+from ..errors import WebsocketNotConnected
 
 from .response import GatewayResponse
 from .dispatcher import Dispatcher
@@ -58,7 +58,7 @@ class WebSocketConnector:
 
     Attributes
     ----------
-    client:
+    client: :class:`PynextClient`
         Pynext client.
     """
 
@@ -137,6 +137,8 @@ class DiscordWebSocket:
 
     Parameters
     ----------
+    user:
+        Selfbot assigned to the connection.
     client:
         Pynext client.
     chunk_guilds:
@@ -144,19 +146,19 @@ class DiscordWebSocket:
     chunk_channels:
         Whether the client should chunks guild channels.
     debug_events:
-        Whether the client should run debug events such as: on_websocket_raw_receive.
+        Whether the client should run debug events such as: ``on_websocket_raw_receive``.
 
     Attributes
     ----------
-    user:
+    user: :class:`SelfBot`
         Selfbot that is supposed to be connected to the gateway.
-    websocket:
+    websocket: Optional[:class:`aiohttp.ClientWebSocketResponse`]
         Aiohttp websocket connection.
-    dispatcher:
+    dispatcher: :class:`Dispatcher`
         Client master dispatcher.
-    connected:
+    connected: :class:`asyncio.Event`
         Asyncio event that determines whether the selfbot has been connected.
-    latency:
+    latency: :class:`float`
         Websocket latency value.
     """
 
@@ -271,7 +273,7 @@ class DiscordWebSocket:
             Somehow selfbot received a request to send, but there is no connection to the websocket.
         """
         if self.websocket_status is False:
-            raise WebsocketNotConnnected(
+            raise WebsocketNotConnected(
                 "Received request to send, but websocket has no connection to discord!"
             )
 

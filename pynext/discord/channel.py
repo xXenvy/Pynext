@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING, Any
 
 from ..utils import Hashable, snowflake_time
 from ..types import OverwritePayload
-from ..errors import WebsocketNotConnnected, VoiceStateNotFound
+from ..errors import WebsocketNotConnected, VoiceStateNotFound
 from ..enums import ChannelType
 
 from .abc import Messageable
@@ -96,13 +96,13 @@ class DMChannel(BaseChannel, Messageable):
 
     Attributes
     ----------
-    raw_data:
+    raw_data: :class:`dict`
         Channel raw data.
-    target:
+    target: :class:`DiscordUser`
         Related to channel discord user.
-    id:
+    id: :class:`int`
         Channel id.
-    last_message_id:
+    last_message_id: Optional[:class:`int`]
         last message id. If any.
     """
 
@@ -138,21 +138,21 @@ class GuildChannel(BaseChannel):
 
     Attributes
     ----------
-    raw_data:
+    raw_data: :class:`dict`
         Channel raw data.
-    guild:
+    guild: :class:`Guild`
         Guild on which the channel is.
-    name:
+    name: :class:`str`
         Channel name.
-    id:
+    id: :class:`int`
         Id of the channel.
-    position:
+    position: :class:`int`
         Channel position on the guild.
-    flags:
+    flags: :class:`int`
         Channel flags.
-    type:
+    type: :class:`int`
         Channel type.
-    parent_id:
+    parent_id: :class:`int`
         Channel category id.
     """
 
@@ -255,24 +255,26 @@ class CategoryChannel(GuildChannel):
         State object.
     data:
         Channel data.
+    guild:
+        Guild on which the channel is located.
 
     Attributes
     ----------
-    raw_data:
+    raw_data: :class:`dict`
         Channel raw data.
-    guild:
+    guild: :class:`Guild`
         Guild on which the channel is.
-    name:
+    name: :class:`str`
         Channel name.
-    id:
+    id: :class:`int`
         Id of the channel.
-    position:
+    position: :class:`int`
         Channel position on the guild.
-    flags:
+    flags: :class:`int`
         Channel flags.
-    type:
+    type: :class:`int`
         Channel type.
-    parent_id:
+    parent_id: :class:`int`
         Channel category id.
     """
 
@@ -359,30 +361,32 @@ class TextChannel(GuildChannel, Messageable):
         State object.
     data:
         Channel data.
+    guild:
+        Guild on which the channel is located.
 
     Attributes
     ----------
-    raw_data:
+    raw_data: :class:`dict`
         Channel raw data.
-    guild:
+    guild: :class:`Guild`
         Guild on which the channel is.
-    name:
+    name: :class:`str`
         Channel name.
-    id:
+    id: :class:`int`
         Id of the channel.
-    position:
+    position: :class:`int`
         Channel position on the guild.
-    flags:
+    flags: :class:`int`
         Channel flags.
-    type:
+    type: :class:`int`
         Channel type.
-    parent_id:
+    parent_id: :class:`int`
         Channel category id.
-    last_message_id:
+    last_message_id: Optional[:class:`int`]
         last message id. If any.
-    topic:
+    topic: :class:`str`
         Channel topic.
-    nsfw:
+    nsfw: :class:`bool`
         Whether the channel has nsfw feature enabled.
     """
 
@@ -490,28 +494,30 @@ class VoiceChannel(GuildChannel):
         State object.
     data:
         Channel data.
+    guild:
+        Guild on which the channel is located.
 
     Attributes
     ----------
-    raw_data:
+    raw_data: :class:`dict`
         Channel raw data.
-    guild:
+    guild: :class:`Guild`
         Guild on which the channel is.
-    name:
+    name: :class:`str`
         Channel name.
-    id:
+    id: :class:`int`
         Id of the channel.
-    position:
+    position: :class:`int`
         Channel position on the guild.
-    flags:
+    flags: :class:`int`
         Channel flags.
-    type:
+    type: :class:`int`
         Channel type.
-    parent_id:
+    parent_id: :class:`int`
         Channel category id.
-    user_limit:
+    user_limit: Optional[:class:`int`]
         Limit of users on the voice channel.
-    bitrate:
+    bitrate: :class:`int`
         Voice channel bitrate.
     """
 
@@ -550,7 +556,7 @@ class VoiceChannel(GuildChannel):
             SelfBot has no connection to the gateway.
         """
         if not user.gateway:
-            raise WebsocketNotConnnected(
+            raise WebsocketNotConnected(
                 f"SelfBot: {user} has no connection to the gateway."
             )
 
@@ -580,7 +586,7 @@ class VoiceChannel(GuildChannel):
             SelfBot is not connected to any channel on the guild.
         """
         if not user.gateway:
-            raise WebsocketNotConnnected(
+            raise WebsocketNotConnected(
                 f"SelfBot: {user} has no connection to the gateway."
             )
 

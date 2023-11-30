@@ -51,23 +51,23 @@ class GuildMember(DiscordUser):
 
     Attributes
     ----------
-    guild:
+    guild: :class:`Guild`
         Guild on which the member is on.
-    nickname:
+    nickname: Optional[:class:`str`]
         Guild user nickname.
-    communication_disabled_until:
+    communication_disabled_until: Optional[:class:`datetime.datetime`]
         Datetime object until the user is muted. Or None if it is not.
-    global_name:
-        SelfBot global name.
-    username:
-        SelfBot username.
-    discriminator:
+    global_name: Optional[:class:`str`]
+        Member global name.
+    username: :class:`str`
+        Member username.
+    discriminator: :class:`str`
         SelfBot discriminator.
-    avatar_id:
+    avatar_id: Optional[:class:`str`]
         ID of the user avatar.
-    id:
-        SelfBot unique ID.
-    bot:
+    id: :class:`int`
+        Member unique ID.
+    bot: :class:`bool`
         Whether user is classified as a bot.
     """
 

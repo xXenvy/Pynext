@@ -33,7 +33,7 @@ class Permissions(BaseFlags):
     Representation of Permissions object.
     For more details, see: https://discord.com/developers/docs/topics/permissions#permissions
 
-     **Example usage:**
+    **Example usage:**
 
     .. code-block:: python
 
@@ -49,9 +49,9 @@ class Permissions(BaseFlags):
 
     Attributes
     ----------
-    value:
+    value: :class:`int`
         Bitwise value of provided permissions.
-    permission_flags:
+    permission_flags: :class:`dict[PermissionsFlags, bool]`
         Dict with the flag object and its status.
     """
 
@@ -198,7 +198,7 @@ class PermissionOverwrite:
     Parameters
     ----------
     permissions:
-        Permissions with statuses. Use None to set permission default value.
+        Permissions with statuses. Use None to set permission to default value.
     """
 
     __slots__ = ("_allow", "_deny")

@@ -41,17 +41,17 @@ class GatewayResponse:
 
     Attributes
     ----------
-    user:
+    user: :class:`SelfBot`
         Selfbot, which received this response.
-    type:
+    type: :class:`aiohttp.WSMsgType`
         Aiohttp response type.
-    op:
+    op: :class:`int`
         Discord op code.
-    data:
+    data: :class:`dict`
         Raw gateway data.
-    sequence:
+    sequence: Optional[:class:`int`]
         Discord sequence.
-    event_name:
+    event_name: Optional[:class:`str`]
         Name received event.
     """
 

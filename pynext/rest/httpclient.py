@@ -318,7 +318,7 @@ class HTTPClient:
         user:
             Selfbot to make the request.
         user_id:
-            SelfBot id to create a dm channel.
+            User id to create a dm channel.
         """
         route = Route(
             method="POST",
@@ -452,6 +452,7 @@ class HTTPClient:
             id of the channel where you want to fetch messages.
         limit:
             Max number of messages to fetch.
+
             .. note::
                 At one time, you can fetch a total of 100 messages.
         message_id:

@@ -1,0 +1,1479 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
+
+    <!-- Generated with Sphinx 7.0.1 and Furo 2023.09.10 --><title>Index - Pynext 1.0.2 documentation</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Pynext 1.0.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Pynext 1.0.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Faq</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="library/index.html">Library Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Library Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="library/discord.html">Discord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/client.html">Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/selfbot.html">SelfBot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/rest.html">Rest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/gateway.html">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/enums.html">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/state.html">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/utils.html">Utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/events.html">Events Example</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          
+<section class="genindex-section">
+  <h1 id="index">Index</h1>
+  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a> | <a href="#W"><strong>W</strong></a></div>
+</section>
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.PresenceBuilder.activities">activities (pynext.PresenceBuilder attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity">Activity (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.activity_type">activity_type (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions.add_flag">add_flag() (pynext.Permissions method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.add_roles">add_roles() (pynext.GuildMember method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PresenceBuilder.afk">afk (pynext.PresenceBuilder attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.afk_channel">afk_channel (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.afk_channel_id">afk_channel_id (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.afk_timeout">afk_timeout (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions.all">all() (pynext.Permissions class method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite.allow">allow (pynext.PermissionOverwrite property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Emoji.animated">animated (pynext.Emoji attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Image.animated">(pynext.Image attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Activity.application_id">application_id (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.auth">auth (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMessage.author">author (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.PrivateMessage.author">(pynext.PrivateMessage attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.GuildMessage.author_id">author_id (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.MessageReaction.author_id">(pynext.MessageReaction attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.PrivateMessage.author_id">(pynext.PrivateMessage attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/types.html#pynext.Authorization">Authorization (class in pynext)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.authorization">authorization (pynext.SelfBot attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.auto_decompress">auto_decompress (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.avatar">avatar (pynext.DiscordUser property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.avatar_id">avatar_id (pynext.DiscordUser attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.avatar_id">(pynext.GuildMember attribute)</a>
+</li>
+          <li><a href="library/selfbot.html#pynext.SelfBot.avatar_id">(pynext.SelfBot attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/errors.html#pynext.errors.BadRequest">BadRequest</a>
+</li>
+        <li><a href="library/discord.html#pynext.BanEntry">BanEntry (class in pynext)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.VoiceChannel.bitrate">bitrate (pynext.VoiceChannel attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.bot">bot (pynext.DiscordUser attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.bot">(pynext.GuildMember attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/errors.html#pynext.errors.CaptchaRequired">CaptchaRequired</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.category_channels">category_channels (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.CategoryChannel">CategoryChannel (class in pynext)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.change_presence">change_presence() (pynext.DiscordWebSocket method)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.change_presence">(pynext.SelfBot method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.change_voice_state">change_voice_state() (pynext.DiscordWebSocket method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMessage.channel">channel (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.PrivateMessage.channel">(pynext.PrivateMessage attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.GuildMessage.channel_id">channel_id (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.PrivateMessage.channel_id">(pynext.PrivateMessage attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Typing.channel_id">(pynext.Typing attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Guild.channels">channels (pynext.Guild property)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.chunk_guild_channels">chunk_guild_channels() (pynext.State method)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.client">client (pynext.Dispatcher attribute)</a>
+
+        <ul>
+          <li><a href="library/gateway.html#pynext.WebSocketConnector.client">(pynext.WebSocketConnector attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse">ClientResponse (class in pynext.rest)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession">ClientSession (class in pynext.rest)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.close">close() (pynext.rest.ClientSession method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.close">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.closed">closed (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Color">Color (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role.color">color (pynext.Role attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.communication_disabled_until">communication_disabled_until (pynext.GuildMember attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.VoiceChannel.connect">connect() (pynext.VoiceChannel method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.connect_to_gateway">connect_to_gateway() (pynext.rest.HTTPClient method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.connected">connected (pynext.DiscordWebSocket attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.connector">connector (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.connector_owner">connector_owner (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMessage.content">content (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.PrivateMessage.content">(pynext.PrivateMessage attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.cookie_jar">cookie_jar (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.create_category_channel">create_category_channel() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.create_channel">create_channel() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.create_dm">create_dm() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_dm_channel">create_dm_channel() (pynext.State method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_guild">create_guild() (pynext.State method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_guild_channel">create_guild_channel() (pynext.State method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_guild_member">create_guild_member() (pynext.State method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_guild_message">create_guild_message() (pynext.State method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_message_from_data">create_message_from_data() (pynext.State method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_overwrites">create_overwrites() (pynext.State static method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_private_message">create_private_message() (pynext.State method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.create_reaction">create_reaction() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.create_role">create_role() (pynext.Guild method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.create_role">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Guild.create_text_channel">create_text_channel() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.create_user">create_user() (pynext.State method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.create_voice_channel">create_voice_channel() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.created_at">created_at (pynext.DiscordUser property)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Guild.created_at">(pynext.Guild property)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.created_at">(pynext.Role property)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/gateway.html#pynext.GatewayResponse.data">data (pynext.GatewayResponse attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.default_avatar">default_avatar (pynext.DiscordUser property)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.default_headers">default_headers (pynext.rest.HTTPClient property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.default_role">default_role (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildChannel.delete">delete() (pynext.GuildChannel method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.ClientSession.delete">(pynext.rest.ClientSession method)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.delete">(pynext.Role method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.delete_channel">delete_channel() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.delete_message">delete_message() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.delete_role">delete_role() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite.deny">deny (pynext.PermissionOverwrite property)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.detach">detach() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.details">details (pynext.Activity attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.disconnect">disconnect() (pynext.DiscordWebSocket method)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.VoiceChannel.disconnect">(pynext.VoiceChannel method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.DiscordUser">DiscordUser (class in pynext)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket">DiscordWebSocket (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.discriminator">discriminator (pynext.DiscordUser attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.discriminator">(pynext.GuildMember attribute)</a>
+</li>
+          <li><a href="library/selfbot.html#pynext.SelfBot.discriminator">(pynext.SelfBot attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.dispatch">dispatch() (pynext.Dispatcher method)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.Dispatcher">Dispatcher (class in pynext)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.dispatcher">dispatcher (pynext.DiscordWebSocket attribute)</a>
+
+        <ul>
+          <li><a href="library/client.html#pynext.PynextClient.dispatcher">(pynext.PynextClient attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.DiscordUser.display_avatar">display_avatar (pynext.DiscordUser property)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.dm_channels">dm_channels (pynext.SelfBot property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DMChannel">DMChannel (class in pynext)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.CategoryChannel.edit">edit() (pynext.CategoryChannel method)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.edit">(pynext.GuildMember method)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.edit">(pynext.Role method)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.edit">(pynext.TextChannel method)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.edit">(pynext.VoiceChannel method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.edit_channel">edit_channel() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.edit_member">edit_member() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.edit_message">edit_message() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.edit_role">edit_role() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.email">email (pynext.SelfBot attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Emoji">Emoji (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.MessageReaction.emoji">emoji (pynext.MessageReaction attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.emoji_data">emoji_data (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.emojis">emojis (pynext.Guild property)</a>
+</li>
+        <li><a href="library/types.html#pynext.EmojisUpdatePayload">EmojisUpdatePayload (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Emoji.encode">encode (pynext.Emoji attribute)</a>
+</li>
+        <li><a href="library/utils.html#pynext.utils.EqualityComparable">EqualityComparable (class in pynext.utils)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.GatewayResponse.event">event (pynext.GatewayResponse property)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.WebSocketConnector.event">event() (pynext.WebSocketConnector method)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.GatewayResponse.event_name">event_name (pynext.GatewayResponse attribute)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.events">events (pynext.Dispatcher attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Guild.fetch_ban">fetch_ban() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.fetch_bans">fetch_bans() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.fetch_channel">fetch_channel() (pynext.Guild method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_channel">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/state.html#pynext.State.fetch_channel_parent">fetch_channel_parent() (pynext.State method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.fetch_channels">fetch_channels() (pynext.Guild method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_channels">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.DiscordUser.fetch_dm_channel">fetch_dm_channel() (pynext.DiscordUser method)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.fetch_dm_channel">(pynext.SelfBot method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_guild">fetch_guild() (pynext.rest.HTTPClient method)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.fetch_guild">(pynext.SelfBot method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_guild_ban">fetch_guild_ban() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_guild_bans">fetch_guild_bans() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.fetch_guild_owner">fetch_guild_owner() (pynext.State static method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_guild_roles">fetch_guild_roles() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.fetch_member">fetch_member() (pynext.Guild method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_member">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/state.html#pynext.State.fetch_message_from_raw">fetch_message_from_raw() (pynext.State static method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_messages">fetch_messages() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildChannel.fetch_overwrites">fetch_overwrites() (pynext.GuildChannel method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.fetch_roles">fetch_roles() (pynext.Guild method)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.fetch_roles">(pynext.GuildMember method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_user">fetch_user() (pynext.rest.HTTPClient method)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.fetch_user">(pynext.SelfBot method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.fetch_user_profile">fetch_user_profile() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.flags">flags (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildChannel.flags">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Permissions.flags">(pynext.Permissions property)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.flags">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.flags">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/errors.html#pynext.errors.Forbidden">Forbidden</a>
+</li>
+        <li><a href="library/discord.html#pynext.Color.from_hex">from_hex() (pynext.Color class method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Color.from_rgb">from_rgb() (pynext.Color class method)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.FunctionIsNotCoroutine">FunctionIsNotCoroutine</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/client.html#pynext.PynextClient.gateway">gateway (pynext.PynextClient attribute)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.gateway">(pynext.SelfBot attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/gateway.html#pynext.GatewayResponse">GatewayResponse (class in pynext)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.get">get() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite.get_bitwise_by_flags">get_bitwise_by_flags() (pynext.PermissionOverwrite static method)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Permissions.get_bitwise_by_flags">(pynext.Permissions method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Image.get_bytes">get_bytes() (pynext.Image method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.get_channel">get_channel() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.get_dm_channel">get_dm_channel() (pynext.SelfBot method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions.get_flags_by_value">get_flags_by_value() (pynext.Permissions method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.get_guild">get_guild() (pynext.SelfBot method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.get_image_bytes">get_image_bytes() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.get_member">get_member() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.get_reactions">get_reactions() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.get_role">get_role() (pynext.Guild method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.get_user">get_user() (pynext.SelfBot method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.get_voice_state">get_voice_state() (pynext.Guild method)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.get_voice_state">(pynext.SelfBot method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.DiscordUser.global_name">global_name (pynext.DiscordUser attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.global_name">(pynext.GuildMember attribute)</a>
+</li>
+          <li><a href="library/selfbot.html#pynext.SelfBot.global_name">(pynext.SelfBot attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Guild">Guild (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.guild">guild (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildChannel.guild">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildMember.guild">(pynext.GuildMember attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildMessage.guild">(pynext.GuildMessage attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.MessageReaction.guild">(pynext.MessageReaction attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.guild">(pynext.Role attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.guild">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.guild">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.GuildMember.guild_avatar">guild_avatar (pynext.GuildMember property)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.guild_channel_factory">guild_channel_factory() (pynext.State method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.BanEntry.guild_id">guild_id (pynext.BanEntry attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.guild_nickname">guild_nickname (pynext.GuildMember property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildChannel">GuildChannel (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember">GuildMember (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMessage">GuildMessage (class in pynext)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.guilds">guilds (pynext.SelfBot property)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/utils.html#pynext.utils.Hashable">Hashable (class in pynext.utils)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.head">head() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.headers">headers (pynext.rest.ClientSession property)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.Route.headers">(pynext.rest.Route attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse.history">history (pynext.rest.ClientResponse attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Role.hoist">hoist (pynext.Role attribute)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.http">http (pynext.SelfBot property)</a>
+
+        <ul>
+          <li><a href="library/state.html#pynext.State.http">(pynext.State attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient">HTTPClient (class in pynext.rest)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.HTTPException">HTTPException</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.HTTPTimeoutError">HTTPTimeoutError</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Guild.icon">icon (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.icon_id">icon_id (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.id">id (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.DiscordUser.id">(pynext.DiscordUser attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.DMChannel.id">(pynext.DMChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Emoji.id">(pynext.Emoji attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Guild.id">(pynext.Guild attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildChannel.id">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildMember.id">(pynext.GuildMember attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildMessage.id">(pynext.GuildMessage attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.PrivateMessage.id">(pynext.PrivateMessage attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.id">(pynext.Role attribute)</a>
+</li>
+          <li><a href="library/selfbot.html#pynext.SelfBot.id">(pynext.SelfBot attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.id">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.id">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Image">Image (class in pynext)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.is_connected">is_connected() (pynext.DiscordWebSocket method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role.is_default">is_default() (pynext.Role method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.is_muted">is_muted() (pynext.GuildMember method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.is_ready">is_ready() (pynext.SelfBot method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="J" class="genindex-section">
+  <h2>J</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse.json">json() (pynext.rest.ClientResponse method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.json_serialize">json_serialize (pynext.rest.ClientSession property)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Activity.large_image">large_image (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.large_text">large_text (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DMChannel.last_message_id">last_message_id (pynext.DMChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.TextChannel.last_message_id">(pynext.TextChannel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.latency">latency (pynext.DiscordWebSocket attribute)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.latency">(pynext.SelfBot property)</a>
+</li>
+        </ul></li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.listen">listen() (pynext.Dispatcher method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/selfbot.html#pynext.SelfBot.locale">locale (pynext.SelfBot attribute)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.logger">logger (pynext.Dispatcher attribute)</a>
+
+        <ul>
+          <li><a href="library/state.html#pynext.State.logger">(pynext.State attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/client.html#pynext.PynextClient.login">login() (pynext.PynextClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.login_request">login_request() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.loop">loop (pynext.Dispatcher attribute)</a>
+
+        <ul>
+          <li><a href="library/client.html#pynext.PynextClient.loop">(pynext.PynextClient attribute)</a>
+</li>
+          <li><a href="library/rest.html#pynext.rest.ClientSession.loop">(pynext.rest.ClientSession property)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite.make_from_permissions">make_from_permissions() (pynext.PermissionOverwrite class method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite.make_from_value">make_from_value() (pynext.PermissionOverwrite class method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role.managed">managed (pynext.Role attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.members">members (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role.mention">mention (pynext.Role property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role.mentionable">mentionable (pynext.Role attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.MessageReaction.message">message (pynext.MessageReaction attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.MessageReaction">MessageReaction (class in pynext)</a>
+</li>
+        <li><a href="library/types.html#pynext.MessageReference">MessageReference (class in pynext)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.Route.method">method (pynext.rest.Route attribute)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.mfa_enabled">mfa_enabled (pynext.SelfBot attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.move">move() (pynext.GuildMember method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.mute">mute() (pynext.GuildMember method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Activity.name">name (pynext.Activity attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.CategoryChannel.name">(pynext.CategoryChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Emoji.name">(pynext.Emoji attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Guild.name">(pynext.Guild attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildChannel.name">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.name">(pynext.Role attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.name">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.name">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.GuildMember.nickname">nickname (pynext.GuildMember attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions.none">none() (pynext.Permissions class method)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.NotFound">NotFound</a>
+</li>
+        <li><a href="library/discord.html#pynext.TextChannel.nsfw">nsfw (pynext.TextChannel attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse.ok">ok (pynext.rest.ClientResponse property)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_channel_create">on_channel_create() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_channel_delete">on_channel_delete() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_channel_edit">on_channel_edit() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#id0">on_guild_ban_create() (in module pynext)</a>, <a href="library/events.html#pynext.on_guild_ban_create">[1]</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_create">on_guild_create() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_delete">on_guild_delete() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_edit">on_guild_edit() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_emojis_update">on_guild_emojis_update() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_role_create">on_guild_role_create() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_role_delete">on_guild_role_delete() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_guild_role_update">on_guild_role_update() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_http_ratelimit">on_http_ratelimit() (in module pynext)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/events.html#pynext.on_member_update">on_member_update() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_message_create">on_message_create() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_message_delete">on_message_delete() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_message_edit">on_message_edit() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_message_reaction_add">on_message_reaction_add() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_message_reaction_remove">on_message_reaction_remove() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_user_ready">on_user_ready() (in module pynext)</a>
+</li>
+        <li><a href="library/events.html#pynext.on_websocket_raw_receive">on_websocket_raw_receive() (in module pynext)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.GatewayResponse.op">op (pynext.GatewayResponse attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.options">options() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/types.html#pynext.OverwritePayload">OverwritePayload (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildChannel.overwrites">overwrites (pynext.GuildChannel property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.owner">owner (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.owner_id">owner_id (pynext.Guild attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite.pair">pair() (pynext.PermissionOverwrite method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildChannel.parent">parent (pynext.GuildChannel property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.parent_id">parent_id (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildChannel.parent_id">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.parent_id">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.parent_id">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.patch">patch() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions.permission_flags">permission_flags (pynext.Permissions attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PermissionOverwrite">PermissionOverwrite (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions">Permissions (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role.permissions">permissions (pynext.Role attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMessage.pinned">pinned (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.PrivateMessage.pinned">(pynext.PrivateMessage attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.position">position (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildChannel.position">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Role.position">(pynext.Role attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.position">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.position">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.post">post() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.preferred_locale">preferred_locale (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.premium_progress_bar_enabled">premium_progress_bar_enabled (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.premium_tier">premium_tier (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.premium_type">premium_type (pynext.SelfBot attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PresenceBuilder">PresenceBuilder (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.PrivateMessage">PrivateMessage (class in pynext)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.put">put() (pynext.rest.ClientSession method)</a>
+</li>
+        <li><a href="library/client.html#pynext.PynextClient">PynextClient (class in pynext)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.PynextError">PynextError</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.raise_for_status">raise_for_status (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.ratelimit_delay">ratelimit_delay (pynext.rest.HTTPClient property)</a>
+</li>
+        <li><a href="library/types.html#pynext.RatelimitPayload">RatelimitPayload (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.raw_data">raw_data (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.DMChannel.raw_data">(pynext.DMChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildChannel.raw_data">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.raw_data">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.raw_data">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse.read">read() (pynext.rest.ClientResponse method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.BanEntry.reason">reason (pynext.BanEntry attribute)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.Dispatcher.register">register() (pynext.Dispatcher method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.MessageReaction.remove">remove() (pynext.MessageReaction method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.remove_all_reactions">remove_all_reactions() (pynext.rest.HTTPClient method)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.DiscordUser.remove_friend">remove_friend() (pynext.DiscordUser method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.remove_friend">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.remove_reaction">remove_reaction() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMember.remove_roles">remove_roles() (pynext.GuildMember method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.request">request() (pynext.rest.ClientSession method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.request">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.request_delay">request_delay (pynext.rest.HTTPClient property)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.requote_redirect_url">requote_redirect_url (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Role">Role (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.roles">roles (pynext.Guild property)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.roles">(pynext.GuildMember property)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.Route">Route (class in pynext.rest)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.run">run() (pynext.DiscordWebSocket method)</a>
+
+        <ul>
+          <li><a href="library/client.html#pynext.PynextClient.run">(pynext.PynextClient method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Image.save">save() (pynext.Image method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot">SelfBot (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.send">send() (pynext.DiscordUser method)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.send_as_json">send_as_json() (pynext.DiscordWebSocket method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.send_friend_request">send_friend_request() (pynext.DiscordUser method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.send_friend_request">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.send_message">send_message() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.send_typing">send_typing() (pynext.rest.HTTPClient method)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Typing.send_typing">(pynext.Typing method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/gateway.html#pynext.GatewayResponse.sequence">sequence (pynext.GatewayResponse attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.session_status">session_status (pynext.rest.HTTPClient property)</a>
+</li>
+        <li><a href="library/client.html#pynext.PynextClient.setup">setup() (pynext.PynextClient method)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.setup">(pynext.rest.HTTPClient method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.PresenceBuilder.since">since (pynext.PresenceBuilder attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.skip_auto_headers">skip_auto_headers (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.small_image">small_image (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.small_text">small_text (pynext.Activity attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse.start">start() (pynext.rest.ClientResponse method)</a>
+
+        <ul>
+          <li><a href="library/gateway.html#pynext.WebSocketConnector.start">(pynext.WebSocketConnector method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/state.html#pynext.State">State (class in pynext)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.state">state (pynext.Activity attribute)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.state">(pynext.SelfBot attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.PresenceBuilder.status">status (pynext.PresenceBuilder attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.system_channel">system_channel (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.system_channel_id">system_channel_id (pynext.Guild attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.DMChannel.target">target (pynext.DMChannel attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientResponse.text">text() (pynext.rest.ClientResponse method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Guild.text_channels">text_channels (pynext.Guild property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.TextChannel">TextChannel (class in pynext)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.timeout">timeout (pynext.rest.ClientSession property)</a>
+
+        <ul>
+          <li><a href="library/rest.html#pynext.rest.HTTPClient.timeout">(pynext.rest.HTTPClient property)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Activity.to_dict">to_dict() (pynext.Activity method)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Emoji.to_dict">(pynext.Emoji method)</a>
+</li>
+          <li><a href="library/discord.html#pynext.PresenceBuilder.to_dict">(pynext.PresenceBuilder method)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Color.to_hex">to_hex() (pynext.Color method)</a>
+</li>
+        <li><a href="library/state.html#pynext.State.to_overwrite_payload">to_overwrite_payload() (pynext.State static method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Color.to_rgb">to_rgb() (pynext.Color method)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.token">token (pynext.SelfBot property)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.TextChannel.topic">topic (pynext.TextChannel attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.trace_configs">trace_configs (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.trust_env">trust_env (pynext.rest.ClientSession property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.GuildMessage.tts">tts (pynext.GuildMessage attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.PrivateMessage.tts">(pynext.PrivateMessage attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.CategoryChannel.type">type (pynext.CategoryChannel attribute)</a>
+
+        <ul>
+          <li><a href="library/gateway.html#pynext.GatewayResponse.type">(pynext.GatewayResponse attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildChannel.type">(pynext.GuildChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.GuildMessage.type">(pynext.GuildMessage attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.PrivateMessage.type">(pynext.PrivateMessage attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.TextChannel.type">(pynext.TextChannel attribute)</a>
+</li>
+          <li><a href="library/discord.html#pynext.VoiceChannel.type">(pynext.VoiceChannel attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Typing">Typing (class in pynext)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/rest.html#pynext.rest.HTTPClient.unack_message">unack_message() (pynext.rest.HTTPClient method)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.Unauthorized">Unauthorized</a>
+</li>
+        <li><a href="library/discord.html#pynext.BanEntry.unique_id">unique_id (pynext.BanEntry property)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Emoji.unique_id">(pynext.Emoji property)</a>
+</li>
+          <li><a href="library/discord.html#pynext.MessageReaction.unique_id">(pynext.MessageReaction property)</a>
+</li>
+          <li><a href="library/discord.html#pynext.PresenceBuilder.unique_id">(pynext.PresenceBuilder property)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.GuildMember.unmute">unmute() (pynext.GuildMember method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Permissions.update">update() (pynext.Permissions method)</a>
+</li>
+        <li><a href="library/discord.html#pynext.Activity.url">url (pynext.Activity attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Image.url">(pynext.Image attribute)</a>
+</li>
+          <li><a href="library/rest.html#pynext.rest.Route.url">(pynext.rest.Route attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.BanEntry.user">user (pynext.BanEntry attribute)</a>
+
+        <ul>
+          <li><a href="library/gateway.html#pynext.DiscordWebSocket.user">(pynext.DiscordWebSocket attribute)</a>
+</li>
+          <li><a href="library/gateway.html#pynext.GatewayResponse.user">(pynext.GatewayResponse attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.VoiceChannel.user_limit">user_limit (pynext.VoiceChannel attribute)</a>
+</li>
+        <li><a href="library/discord.html#pynext.DiscordUser.username">username (pynext.DiscordUser attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.GuildMember.username">(pynext.GuildMember attribute)</a>
+</li>
+          <li><a href="library/selfbot.html#pynext.SelfBot.username">(pynext.SelfBot attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/client.html#pynext.PynextClient.users">users (pynext.PynextClient property)</a>
+
+        <ul>
+          <li><a href="library/selfbot.html#pynext.SelfBot.users">(pynext.SelfBot property)</a>
+</li>
+          <li><a href="library/discord.html#pynext.Typing.users">(pynext.Typing attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.MessageReaction.users">users() (pynext.MessageReaction method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Color.value">value (pynext.Color attribute)</a>
+
+        <ul>
+          <li><a href="library/discord.html#pynext.Permissions.value">(pynext.Permissions attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="library/discord.html#pynext.Guild.verification_level">verification_level (pynext.Guild attribute)</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.version">version (pynext.rest.ClientSession property)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/discord.html#pynext.Guild.voice_channels">voice_channels (pynext.Guild property)</a>
+</li>
+        <li><a href="library/selfbot.html#pynext.SelfBot.voice_states">voice_states (pynext.SelfBot property)</a>
+</li>
+        <li><a href="library/discord.html#pynext.VoiceChannel">VoiceChannel (class in pynext)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.VoiceStateNotFound">VoiceStateNotFound</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/selfbot.html#pynext.SelfBot.wait_until_ready">wait_until_ready() (pynext.SelfBot method)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.websocket">websocket (pynext.DiscordWebSocket attribute)</a>
+</li>
+        <li><a href="library/gateway.html#pynext.DiscordWebSocket.websocket_status">websocket_status (pynext.DiscordWebSocket property)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="library/gateway.html#pynext.WebSocketConnector">WebSocketConnector (class in pynext)</a>
+</li>
+        <li><a href="library/errors.html#pynext.errors.WebsocketNotConnected">WebsocketNotConnected</a>
+</li>
+        <li><a href="library/rest.html#pynext.rest.ClientSession.ws_connect">ws_connect() (pynext.rest.ClientSession method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, xXenvy
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script src="_static/tabs.js"></script>
+    </body>
+</html>

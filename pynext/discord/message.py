@@ -374,23 +374,23 @@ class PrivateMessage(BaseMessage):
 
     Attributes
     ----------
-    channel:
+    channel: :class:`DMChannel`
         Channel the message is on.
-    author:
+    author: :class:`DiscordUser`
         Message author.
-    type:
+    type: Optional[:class:`int`]
         Message type.
-    id:
+    id: :class:`int`
         Id of the message.
-    content:
+    content: :class:`str`
         Content of the message.
-    pinned:
+    pinned: :class:`bool`
         Whether the message is pinned.
-    author_id:
+    author_id: :class:`int`
         Id of the message author.
-    channel_id:
+    channel_id: :class:`int`
         Id of the message channel.
-    tts:
+    tts: :class:`bool`
         Whether this was a TTS message.
     """
 
@@ -426,25 +426,25 @@ class GuildMessage(BaseMessage):
 
     Attributes
     ----------
-    guild:
+    guild: :class:`Guild`
         Guild on which the message is posted.
-    channel:
+    channel: :class:`TextChannel`
         Channel the message is on.
-    author:
+    author: :class:`GuildMember`
         Message author.
-    type:
+    type: Optional[:class:`int`]
         Message type.
-    id:
+    id: :class:`int`
         Id of the message.
-    content:
+    content: :class:`str`
         Content of the message.
-    pinned:
+    pinned: :class:`bool`
         Whether the message is pinned.
-    author_id:
+    author_id: :class:`int`
         Id of the message author.
-    channel_id:
+    channel_id: :class:`int`
         Id of the message channel.
-    tts:
+    tts: :class:`bool`
         Whether this was a TTS message.
     """
 

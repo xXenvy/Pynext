@@ -75,7 +75,7 @@ class PermissionsFlags(Enum):
     MODERATE_MEMBERS = 1 << 40
 
 
-class GatewayCodes(int, Enum):
+class GatewayCodes(Enum):
     DISPATCH = 0
     HEARTBEAT = 1
     IDENTIFY = 2
@@ -94,16 +94,16 @@ class GatewayCodes(int, Enum):
 class Events(Enum):
     READY = "on_user_ready"
 
+    CHANNEL_DELETE = "on_channel_delete"
+    CHANNEL_CREATE = "on_channel_create"
+    CHANNEL_UPDATE = "on_channel_edit"
+
     MESSAGE_CREATE = "on_message_create"
     MESSAGE_DELETE = "on_message_delete"
     MESSAGE_UPDATE = "on_message_edit"
 
     MESSAGE_REACTION_REMOVE = "on_message_reaction_remove"
     MESSAGE_REACTION_ADD = "on_message_reaction_add"
-
-    CHANNEL_DELETE = "on_channel_delete"
-    CHANNEL_CREATE = "on_channel_create"
-    CHANNEL_UPDATE = "on_channel_edit"
 
     GUILD_CREATE = "on_guild_create"
     GUILD_UPDATE = "on_guild_update"
@@ -148,9 +148,3 @@ class ActivityType(Enum):
     LISTENING = 2
     WATCHING = 3
     COMPETING = 5
-
-    def __str__(self) -> str:
-        return str(self.value)
-
-    def __int__(self) -> int:
-        return self.value

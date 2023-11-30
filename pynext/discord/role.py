@@ -49,23 +49,23 @@ class Role(Hashable):
 
     Attributes
     ----------
-    guild:
+    guild: :class:`Guild`
         Guild on which the role is located.
-    permissions:
+    permissions: :class:`Permissions`
         Role permissions object.
-    id:
+    id: :class:`int`
         Role id.
-    name:
+    name: :class:`str`
         Role name.
-    managed:
+    managed: :class:`bool`
         Whether this role is managed by an integration.
-    position:
+    position: :class:`int`
         Position of this role.
-    hoist:
+    hoist: :class:`bool`
         If this role is pinned in the user listing.
-    mentionable:
+    mentionable: :class:`bool`
         Whether this role is mentionable.
-    color:
+    color: :class:`Color`
         Role color.
     """
 

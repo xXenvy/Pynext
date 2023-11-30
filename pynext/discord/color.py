@@ -21,6 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
+from typing import Any
 
 from ..errors import PynextError
 
@@ -36,11 +37,9 @@ class Color:
 
     Attributes
     ----------
-    value:
+    value: :class:`int`
         Raw integer color value.
     """
-
-    from typing import Any
 
     __slots__ = ("value",)
 

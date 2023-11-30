@@ -31,6 +31,8 @@ from .image import Image
 from .banentry import BanEntry
 
 if TYPE_CHECKING:
+    from datetime import datetime
+
     from .permissions import Permissions
     from .color import Color
     from .member import GuildMember
@@ -53,27 +55,27 @@ class Guild(Hashable):
 
     Attributes
     ----------
-    id:
+    id: :class:`int`
         Guild ID.
-    name:
+    name: :class:`str`
         Guild name.
-    owner_id:
+    owner_id: :class:`int`
         Guild owner id.
-    icon_id:
+    icon_id: Optional[:class:`str`]
         Guild icon id.
-    afk_channel_id:
+    afk_channel_id: Optional[:class:`int`]
         Id of afk channel.
-    afk_timeout:
+    afk_timeout: :class:`int`
         Afk timeout in seconds.
-    system_channel_id:
+    system_channel_id: Optional[:class:`int`]
         Id of the channel where guild notices such as welcome messages and boost events are posted.
-    premium_progress_bar_enabled:
+    premium_progress_bar_enabled: :class:`bool`
         Whether the guild has the boost progress bar enabled.
-    verification_level:
+    verification_level: :class:`int`
         Verification level required for the guild.
-    preferred_locale:
+    preferred_locale: :class:`str`
         The preferred locale of a Community guild.
-    premium_tier:
+    premium_tier: :class:`int`
         Guild boost level.
     """
 

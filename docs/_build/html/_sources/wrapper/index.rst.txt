@@ -1,0 +1,11 @@
+Wrapper Reference
+====================================
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   discord
+   rest
+   gateway
+   errors

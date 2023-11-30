@@ -51,17 +51,17 @@ class DiscordUser(Hashable):
 
     Attributes
     ----------
-    global_name:
-        SelfBot global name.
-    username:
-        SelfBot username.
-    discriminator:
-        SelfBot discriminator.
-    avatar_id:
+    global_name: Optional[:class:`str`]
+        Member global name.
+    username: :class:`str`
+        Member username.
+    discriminator: :class:`str`
+        User discriminator.
+    avatar_id: Optional[:class:`str`]
         ID of the user avatar.
-    id:
-        SelfBot unique ID.
-    bot:
+    id: :class:`int`
+        User unique ID.
+    bot: :class:`bool`
         Whether user is classified as a bot.
     """
 

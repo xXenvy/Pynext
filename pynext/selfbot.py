@@ -28,7 +28,7 @@ from asyncio import Event
 from .types import Authorization
 from .discord import Guild, VoiceChannel, DMChannel, DiscordUser, PresenceBuilder
 
-from .errors import WebsocketNotConnnected
+from .errors import WebsocketNotConnected
 from .state import State
 
 if TYPE_CHECKING:
@@ -51,29 +51,29 @@ class SelfBot(DiscordUser):
 
     Attributes
     ----------
-    gateway:
+    gateway: :class:`DiscordWebSocket`
         SelfBot connection to the discord gateway.
-    state:
+    state: :class:`State`
         Helps creating new objects in fetch methods.
-    authorization:
+    authorization: :class:`Authorization`
         SelfBot authorization object.
-    global_name:
+    global_name: Optional[:class:`str`]
         SelfBot global name.
-    username:
+    username: :class:`str`
         SelfBot username.
-    discriminator:
+    discriminator: :class:`str`
         SelfBot discriminator.
-    id:
+    id: :class:`int`
         SelfBot unique ID.
-    email:
+    email: :class:`str`
         Specifies if the user's email is verified.
-    avatar_id:
+    avatar_id: Optional[:class:`str`]
         ID of the user avatar.
-    mfa_enabled:
+    mfa_enabled: :class:`bool`
         Specifies if the user has MFA turned on.
-    locale:
+    locale: :class:`str`
         The IETF language tag used to identify the language the user is using.
-    premium_type:
+    premium_type: Optional[:class:`int`]
         Type of Nitro subscription on a user's account.
     """
 
@@ -153,9 +153,11 @@ class SelfBot(DiscordUser):
     def guilds(self) -> list[Guild]:
         """
         List of servers on which selfbot is available.
-        .. warning::
-            If <link>chunk_guilds is set to False, the list will be empty.
-            You can call the .fetch_guild method to fetch guild object.
+
+        .. note::
+            If ``chunk_guilds`` in the :class:`PynextClient` is set to False, the list will be empty.
+
+            You can call the :func:`fetch_guild` method to fetch guild object.
         """
         return list(self._guilds.values())
 
@@ -239,9 +241,10 @@ class SelfBot(DiscordUser):
     async def fetch_guild(self, guild_id: int) -> Guild:
         """
         Method to fetch the guild by id.
+
         .. note::
             This method will make the api request.
-            Consider using .get_guild if you have chunked guilds.
+            Consider using :func:`get_guild` if you have chunked guilds.
 
         Parameters
         ----------
@@ -270,6 +273,7 @@ class SelfBot(DiscordUser):
     async def fetch_user(self, user_id: int) -> DiscordUser:
         """
         Method to fetch the user by id.
+
         .. note::
             This method will make the api request.
 
@@ -283,7 +287,7 @@ class SelfBot(DiscordUser):
         HTTPTimeoutError
             Request reached http timeout limit.
         NotFound
-            SelfBot not found.
+            User not found.
         Forbidden
             Selfbot can't access that user.
         HTTPException
@@ -298,6 +302,7 @@ class SelfBot(DiscordUser):
     async def fetch_dm_channel(self, channel_id: int) -> DMChannel:
         """
         Method to fetch the dm channel by id.
+
         .. note::
             This method will make a api request.
 
@@ -328,8 +333,6 @@ class SelfBot(DiscordUser):
     async def change_presence(self, presence: PresenceBuilder):
         """
         Method to update selfbot presence.
-        .. note::
-            The method must be called after connecting to the gateway.
 
         Parameters
         ----------
@@ -342,7 +345,7 @@ class SelfBot(DiscordUser):
             Selfbot has not connection to the gateway.
         """
         if not self.gateway or not self.gateway.websocket_status:
-            raise WebsocketNotConnnected(
+            raise WebsocketNotConnected(
                 f"SelfBot: {self} has no connection to the gateway."
             )
 

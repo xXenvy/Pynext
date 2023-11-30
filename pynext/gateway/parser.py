@@ -47,11 +47,11 @@ class Parser:
 
     Attributes
     ----------
-    chunk_guilds:
+    chunk_guilds: :class:`bool`
         Whether the client should chunk guilds of each selfbot.
-    chunk_channels:
+    chunk_channels: :class:`bool`
         Whether the client should chunks guild channels.
-    loop:
+    loop: :class:`asyncio.AbstractEventLoop`
         Client loop.
     """
 
@@ -223,7 +223,7 @@ class Parser:
         guild_id: int = int(data["id"])
         old_guild: Guild | None = user.get_guild(guild_id)
 
-        data["channels"] = await user.state.http.fetch_channels(
+        data["channels"] = await user.http.fetch_channels(
             user=user, guild_id=guild_id
         )
         new_guild: Guild = await self.chunk_user_guild(

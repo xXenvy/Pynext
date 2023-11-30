@@ -46,13 +46,13 @@ class Dispatcher(Generic[ObjectT]):
 
     Attributes
     ----------
-    client:
+    client: Optional[:class:`ObjectT`]
         Client object.
-    loop:
+    loop: :class:`asyncio.AbstractEventLoop`
         Client loop.
-    events:
+    events: :class:`dict`
         Registered events.
-    logger:
+    logger: :class:`logging.Logger`
         Logger for logging event registrations and running them.
     """
 
@@ -71,12 +71,6 @@ class Dispatcher(Generic[ObjectT]):
     def listen(self, event: str) -> Callable:
         """
         Method that can be used as a decorator to register events.
-
-        **Example usage**
-        .. literalinclude:: ../examples/events.py
-            :lines: 30-42
-            :language: python
-            :dedent: 4
 
         Parameters
         ----------

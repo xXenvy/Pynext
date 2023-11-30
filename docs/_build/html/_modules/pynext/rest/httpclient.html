@@ -1,0 +1,1356 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 7.0.1 and Furo 2023.09.10 -->
+        <title>pynext.rest.httpclient - Pynext 1.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Pynext 1.0.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Pynext 1.0.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq.html">Faq</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../library/index.html">Library Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Library Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/discord.html">Discord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/client.html">Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/selfbot.html">SelfBot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/rest.html">Rest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/gateway.html">Gateway</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/enums.html">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/state.html">State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/utils.html">Utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/events.html">Events</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for pynext.rest.httpclient</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The MIT License (MIT)</span>
+<span class="sd">Copyright (c) 2023-present xXenvy</span>
+
+<span class="sd">Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="sd">copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="sd">to deal in the Software without restriction, including without limitation</span>
+<span class="sd">the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="sd">and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="sd">Software is furnished to do so, subject to the following conditions:</span>
+
+<span class="sd">The above copyright notice and this permission notice shall be included in</span>
+<span class="sd">all copies or substantial portions of the Software.</span>
+
+<span class="sd">THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="sd">OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="sd">FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="sd">AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="sd">LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="sd">FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER</span>
+<span class="sd">DEALINGS IN THE SOFTWARE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">aiohttp</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ClientSession</span><span class="p">,</span>
+    <span class="n">ClientResponse</span><span class="p">,</span>
+    <span class="n">ClientTimeout</span><span class="p">,</span>
+    <span class="n">ClientWebSocketResponse</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span><span class="p">,</span> <span class="n">Logger</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">get_event_loop</span><span class="p">,</span> <span class="ne">TimeoutError</span>
+
+<span class="kn">from</span> <span class="nn">..errors</span> <span class="kn">import</span> <span class="n">Unauthorized</span><span class="p">,</span> <span class="n">HTTPTimeoutError</span>
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">Authorization</span><span class="p">,</span> <span class="n">MessageReference</span><span class="p">,</span> <span class="n">OverwritePayload</span><span class="p">,</span> <span class="n">RatelimitPayload</span>
+<span class="kn">from</span> <span class="nn">..discord</span> <span class="kn">import</span> <span class="n">Permissions</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">GuildMember</span>
+
+<span class="kn">from</span> <span class="nn">.route</span> <span class="kn">import</span> <span class="n">Route</span>
+<span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">RequestManager</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+    <span class="kn">from</span> <span class="nn">..selfbot</span> <span class="kn">import</span> <span class="n">SelfBot</span>
+    <span class="kn">from</span> <span class="nn">..gateway</span> <span class="kn">import</span> <span class="n">Dispatcher</span>
+
+
+<div class="viewcode-block" id="HTTPClient"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient">[docs]</a><span class="k">class</span> <span class="nc">HTTPClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HTTP client functionality representation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    request_delay:</span>
+<span class="sd">        Delay between sending requests to rest api.</span>
+<span class="sd">    ratelimit_delay:</span>
+<span class="sd">        Additional ratelimit delay, which is added when you reach ratelimit.</span>
+<span class="sd">    dispatcher:</span>
+<span class="sd">        Dispatcher to call the HTTP Ratelimit event.</span>
+<span class="sd">    timeout:</span>
+<span class="sd">        Parameter to manage HTTP connection timeout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;_state&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_dispatcher&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_logger&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_session&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_manager&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_request_delay&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;_timeout&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">__version__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1.0.2&quot;</span>
+
+    <span class="n">BASE_URL</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;https://discord.com/api/v10/&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">request_delay</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">ratelimit_delay</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">dispatcher</span><span class="p">:</span> <span class="n">Dispatcher</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">ClientTimeout</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">:</span> <span class="n">ClientSession</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dispatcher</span><span class="p">:</span> <span class="n">Dispatcher</span> <span class="o">=</span> <span class="n">dispatcher</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_request_delay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">request_delay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pynext.rest&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">:</span> <span class="n">ClientTimeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="p">:</span> <span class="n">RequestManager</span> <span class="o">=</span> <span class="n">RequestManager</span><span class="p">(</span>
+            <span class="n">http</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">ratelimit_delay</span><span class="o">=</span><span class="n">ratelimit_delay</span><span class="p">,</span> <span class="n">request_delay</span><span class="o">=</span><span class="n">request_delay</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;HTTPClient(status=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">session_status</span><span class="si">}</span><span class="s2">)&gt;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">())</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">default_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Default headers used for HTTP requests.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;SelfBot-Agent&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Pynext HTTP (v</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;*/*&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;authority&quot;</span><span class="p">:</span> <span class="s2">&quot;discord.com&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Origin&quot;</span><span class="p">:</span> <span class="s2">&quot;https://discord.com&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">request_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specified delay between requests.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">request_delay</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ratelimit_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specified additional ratelimit delay.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span><span class="o">.</span><span class="n">additional_delay</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">session_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether the http session is working.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">closed</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="n">ClientSession</span><span class="p">)</span>
+            <span class="k">else</span> <span class="kc">False</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClientTimeout</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Specified ClientTimeout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+
+<div class="viewcode-block" id="HTTPClient.connect_to_gateway"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.connect_to_gateway">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">connect_to_gateway</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClientWebSocketResponse</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method for connecting to a gateway.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url:</span>
+<span class="sd">            url to connect.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        :exc:`RuntimeError`</span>
+<span class="sd">            HTTP Session is not running.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_status</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Connecting to gateway cannot be done without a working session.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="n">ClientSession</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">ws_connect</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">default_headers</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.setup"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.setup">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to setup HTTP session.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">ClientSession</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;HTTP Session has been created.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.close"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.close">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to close HTTP session.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="n">ClientSession</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Closing session...&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.request"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.request">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">request</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span><span class="p">,</span>
+        <span class="n">json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ClientResponse</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method for sending HTTP requests.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        route:</span>
+<span class="sd">            Request route.</span>
+<span class="sd">        json:</span>
+<span class="sd">            Json request data.</span>
+<span class="sd">        user:</span>
+<span class="sd">            SelfBot to identify ratelimit.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            HTTP Session is not defined.</span>
+<span class="sd">        HTTPTimeoutError</span>
+<span class="sd">            Request reached http timeout limit.</span>
+<span class="sd">        HTTPException</span>
+<span class="sd">            There was an HTTP error.</span>
+<span class="sd">        BadRequest</span>
+<span class="sd">            Request raises BadRequest error.</span>
+<span class="sd">        NotFound</span>
+<span class="sd">            Request raises NotFound error.</span>
+<span class="sd">        Unauthorized</span>
+<span class="sd">            Request raises Unauthorized error.</span>
+<span class="sd">        Forbidden</span>
+<span class="sd">            Request raises Forbidden error.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_manager</span> <span class="k">as</span> <span class="n">request_manager</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="n">ClientSession</span><span class="p">)</span>
+
+            <span class="n">headers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">default_headers</span><span class="p">,</span> <span class="o">**</span><span class="n">route</span><span class="o">.</span><span class="n">headers</span><span class="p">}</span>
+            <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">BASE_URL</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">url</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sending request: </span><span class="si">{</span><span class="n">route</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">route</span><span class="o">.</span><span class="n">headers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+                    <span class="n">method</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">HTTPTimeoutError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reached timeout limit under route: </span><span class="si">{</span><span class="n">route</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">request_manager</span><span class="o">.</span><span class="n">is_ratelimited</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                <span class="n">retry_after</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;retry_after&quot;</span><span class="p">]</span>
+                <span class="n">global_ratelimit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;global&quot;</span><span class="p">]</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Ratelimit reached. Retry after: </span><span class="si">{</span><span class="n">retry_after</span><span class="si">}</span><span class="s2"> |&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; global: </span><span class="si">{</span><span class="n">global_ratelimit</span><span class="si">}</span><span class="s2">. Under route: </span><span class="si">{</span><span class="n">route</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatcher</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span>
+                    <span class="s2">&quot;on_http_ratelimit&quot;</span><span class="p">,</span>
+                    <span class="n">RatelimitPayload</span><span class="p">(</span>
+                        <span class="n">retry_after</span><span class="o">=</span><span class="n">retry_after</span><span class="p">,</span>
+                        <span class="n">is_global</span><span class="o">=</span><span class="n">global_ratelimit</span><span class="p">,</span>
+                        <span class="n">route</span><span class="o">=</span><span class="n">route</span><span class="p">,</span>
+                        <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="n">request_manager</span><span class="o">.</span><span class="n">handle_ratelimit</span><span class="p">(</span>
+                    <span class="n">retry_after</span><span class="p">,</span> <span class="n">route</span><span class="p">,</span> <span class="n">json</span>
+                <span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">request_manager</span><span class="o">.</span><span class="n">handle_errors</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="HTTPClient.get_image_bytes"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.get_image_bytes">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_image_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to get image bytes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url:</span>
+<span class="sd">            image url.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.login_request"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.login_request">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">login_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP Request to check the token and obtain account data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        token:</span>
+<span class="sd">            Selfbot token.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">auth</span><span class="p">:</span> <span class="n">Authorization</span> <span class="o">=</span> <span class="n">Authorization</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">token</span><span class="p">)</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s2">&quot;users/@me&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">auth</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Unauthorized</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_user"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_user">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request that fetches a specified user.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            SelfBot id to fetch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;users/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.create_dm"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.create_dm">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_dm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request that creates a dm channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            User id to create a dm channel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;users/@me/channels&quot;</span><span class="p">,</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+            <span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;recipient_id&quot;</span><span class="p">:</span> <span class="n">user_id</span><span class="p">},</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.send_friend_request"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.send_friend_request">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_friend_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request that sends a friend invite.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            SelfBot id to create a dm channel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;users/@me/relationships/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{},</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.remove_friend"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.remove_friend">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">remove_friend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to remove a friend.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            friend&#39;s id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;users/@me/relationships/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_guild"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_guild">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_guild</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch guild data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the guild to fetch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.send_message"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.send_message">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span>
+        <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">message_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">message_reference</span><span class="p">:</span> <span class="n">MessageReference</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">reply_mention</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to send message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel on which you want to send the message.</span>
+<span class="sd">        message_content:</span>
+<span class="sd">            Content of the message.</span>
+<span class="sd">        message_reference:</span>
+<span class="sd">            MessageReference data with details of which message you are responding to.</span>
+<span class="sd">        reply_mention:</span>
+<span class="sd">            Whether you want to mention the author when replying to a message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">message_content</span><span class="p">,</span>
+            <span class="s2">&quot;message_reference&quot;</span><span class="p">:</span> <span class="n">message_reference</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">message_reference</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;allowed_mentions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;replied_user&quot;</span><span class="p">:</span> <span class="n">reply_mention</span><span class="p">}</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_messages"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_messages">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_messages</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span>
+        <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch messages.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            id of the channel where you want to fetch messages.</span>
+<span class="sd">        limit:</span>
+<span class="sd">            Max number of messages to fetch.</span>
+
+<span class="sd">            .. note::</span>
+<span class="sd">                At one time, you can fetch a total of 100 messages.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            Get messages around this message ID.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;channels/</span><span class="si">{</span><span class="n">channel_id</span><span class="si">}</span><span class="s2">/messages?limit=</span><span class="si">{</span><span class="n">limit</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="n">message_id</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&amp;around=</span><span class="si">{</span><span class="n">message_id</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.delete_message"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.delete_message">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to delete message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            id of the channel the message is on.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            message id to delete.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.edit_message"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.edit_message">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">edit_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to edit message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            id of the channel the message is on.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            message id to edit.</span>
+<span class="sd">        content:</span>
+<span class="sd">            message content to edit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+            <span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">content</span><span class="p">},</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_guild_roles"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_guild_roles">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_guild_roles</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch guild roles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            guild id to fetch roles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/roles&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.edit_role"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.edit_role">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">edit_role</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="n">Role</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to edit role.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            id of the guild where the role is on.</span>
+<span class="sd">        role:</span>
+<span class="sd">            Role to edit.</span>
+<span class="sd">        params:</span>
+<span class="sd">            Parameters for editing the role.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/roles/</span><span class="si">{role_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">role_id</span><span class="o">=</span><span class="n">role</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;permissions&quot;</span><span class="p">),</span> <span class="n">Permissions</span><span class="p">):</span>
+            <span class="n">permissions</span><span class="p">:</span> <span class="n">Permissions</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;permissions&quot;</span><span class="p">]</span>
+
+            <span class="n">role</span><span class="o">.</span><span class="n">permissions</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">permissions</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;permissions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">role</span><span class="o">.</span><span class="n">permissions</span><span class="o">.</span><span class="n">get_bitwise_by_flags</span><span class="p">()</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.delete_role"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.delete_role">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">role_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to delete role.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the guild where the role is on.</span>
+<span class="sd">        role_id:</span>
+<span class="sd">            Role id to delete.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/roles/</span><span class="si">{role_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">role_id</span><span class="o">=</span><span class="n">role_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_channel"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_channel">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch channel data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_channels"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_channels">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_channels</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to guild channels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Guild id to fetch channels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/channels&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.edit_channel"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.edit_channel">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">edit_channel</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to edit channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Channel id to edit.</span>
+<span class="sd">        params:</span>
+<span class="sd">            parameters to edit the channel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overwrites&quot;</span><span class="p">):</span>
+            <span class="n">overwrites_payload</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">OverwritePayload</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">overwrite_data</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;overwrites&quot;</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">target</span><span class="p">,</span> <span class="n">overwrite</span> <span class="ow">in</span> <span class="n">overwrite_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">overwrites_payload</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">OverwritePayload</span><span class="p">(</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="n">target</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                            <span class="nb">type</span><span class="o">=</span><span class="mi">0</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Role</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="n">allow</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">overwrite</span><span class="o">.</span><span class="n">allow</span><span class="o">.</span><span class="n">key</span><span class="p">),</span>
+                            <span class="n">deny</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">overwrite</span><span class="o">.</span><span class="n">deny</span><span class="o">.</span><span class="n">key</span><span class="p">),</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;overwrites&quot;</span><span class="p">]</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;permission_overwrites&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">overwrites_payload</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.delete_channel"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.delete_channel">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to delete channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Channel id to delete.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_member"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_member">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_member</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">member_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch guild member.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the server on which the user is on.</span>
+<span class="sd">        member_id:</span>
+<span class="sd">            Member id to fetch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/members/</span><span class="si">{member_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">member_id</span><span class="o">=</span><span class="n">member_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.edit_member"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.edit_member">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">edit_member</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">member</span><span class="p">:</span> <span class="n">GuildMember</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to edit member.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the server on which the user is on.</span>
+<span class="sd">        member:</span>
+<span class="sd">            Member to edit.</span>
+<span class="sd">        params:</span>
+<span class="sd">            parameters to edit the member.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/members/</span><span class="si">{member_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">member_id</span><span class="o">=</span><span class="n">member</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">member_roles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Role</span><span class="p">]</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">roles</span>
+
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;roles_to_add&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">role_to_add</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles_to_add&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">role_to_add</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">member_roles</span><span class="p">:</span>
+                    <span class="n">member_roles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">role_to_add</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;roles_to_remove&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">role_to_remove</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles_to_remove&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">role_to_remove</span> <span class="ow">in</span> <span class="n">member_roles</span><span class="p">:</span>
+                    <span class="n">member_roles</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">role_to_remove</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;communication_disabled_until&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">time</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;communication_disabled_until&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles_to_add&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles_to_remove&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;voice_channel_id&quot;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;voice_channel_id&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">channel_id</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;channel_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel_id</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">role</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">member_roles</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles&quot;</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;roles&quot;</span><span class="p">]</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_user_profile"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_user_profile">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_user_profile</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch member profile.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            user id to fetch profile.</span>
+<span class="sd">        settings:</span>
+<span class="sd">            Settings for profile fetching.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;users/</span><span class="si">{user_id}</span><span class="s2">/profile?&quot;</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">url</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&amp;&quot;</span>
+
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.create_reaction"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.create_reaction">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_reaction</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">emoji</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to add reaction to message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel on which the message is.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            Id of the message.</span>
+<span class="sd">        emoji:</span>
+<span class="sd">            Emoji to add.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">/reactions/</span><span class="si">{emoji}</span><span class="s2">/@me&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">emoji</span><span class="o">=</span><span class="n">emoji</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.remove_reaction"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.remove_reaction">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">remove_reaction</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">emoji</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to remove reaction from message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel on which the message is.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            Id of the message.</span>
+<span class="sd">        emoji:</span>
+<span class="sd">            Emoji to remove.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            Id of reaction author.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">/reactions/</span><span class="si">{emoji}</span><span class="s2">/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">emoji</span><span class="o">=</span><span class="n">emoji</span><span class="p">,</span>
+            <span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.remove_all_reactions"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.remove_all_reactions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">remove_all_reactions</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to remove all reactions from message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel on which the message is.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            Id of the message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">/reactions&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.get_reactions"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.get_reactions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_reactions</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">emoji</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to get all reactions from message.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel on which the message is.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            Id of the message.</span>
+<span class="sd">        emoji:</span>
+<span class="sd">            Reaction emoji.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">/reactions/</span><span class="si">{emoji}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">emoji</span><span class="o">=</span><span class="n">emoji</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_guild_ban"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_guild_ban">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_guild_ban</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to get ban data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the guild on which the ban is.</span>
+<span class="sd">        user_id:</span>
+<span class="sd">            Id of the banned user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;guilds/</span><span class="si">{</span><span class="n">guild_id</span><span class="si">}</span><span class="s2">/bans/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.fetch_guild_bans"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.fetch_guild_bans">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_guild_bans</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to fetch all guild bans.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the guild.</span>
+<span class="sd">        limit:</span>
+<span class="sd">            Limit of bans.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;guilds/</span><span class="si">{</span><span class="n">guild_id</span><span class="si">}</span><span class="s2">/bans?limit=</span><span class="si">{</span><span class="n">limit</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.send_typing"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.send_typing">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">send_typing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to send typing on channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            Id of the channel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span><span class="p">:</span> <span class="n">Route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/typing&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HTTPClient.create_role"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.create_role">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_role</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to create guild role.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the guild.</span>
+<span class="sd">        params:</span>
+<span class="sd">            Role parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/roles&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.create_channel"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.create_channel">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_channel</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">guild_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to create guild channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        guild_id:</span>
+<span class="sd">            Id of the guild.</span>
+<span class="sd">        params:</span>
+<span class="sd">            Channel parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;guilds/</span><span class="si">{guild_id}</span><span class="s2">/channels&quot;</span><span class="p">,</span>
+            <span class="n">guild_id</span><span class="o">=</span><span class="n">guild_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="p">:</span> <span class="n">ClientResponse</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="HTTPClient.unack_message"><a class="viewcode-back" href="../../../library/rest.html#pynext.rest.HTTPClient.unack_message">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">unack_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">SelfBot</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">message_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        HTTP request to mark a message as unread.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        user:</span>
+<span class="sd">            Selfbot to make the request.</span>
+<span class="sd">        channel_id:</span>
+<span class="sd">            id of the channel where the message is.</span>
+<span class="sd">        message_id:</span>
+<span class="sd">            Id of the message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route</span> <span class="o">=</span> <span class="n">Route</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">url</span><span class="o">=</span><span class="s2">&quot;channels/</span><span class="si">{channel_id}</span><span class="s2">/messages/</span><span class="si">{message_id}</span><span class="s2">/ack&quot;</span><span class="p">,</span>
+            <span class="n">channel_id</span><span class="o">=</span><span class="n">channel_id</span><span class="p">,</span>
+            <span class="n">message_id</span><span class="o">=</span><span class="n">message_id</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;manual&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;mention_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, xXenvy
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/tabs.js"></script>
+    </body>
+</html>

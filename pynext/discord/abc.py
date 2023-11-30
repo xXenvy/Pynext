@@ -49,9 +49,9 @@ class Typing:
 
     Attributes
     ----------
-    users:
+    users: :class:`tuple`
         Tuple with selfbots.
-    channel_id:
+    channel_id: :class:`int`
         Id of the channel.
     """
 

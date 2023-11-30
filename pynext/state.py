@@ -38,7 +38,8 @@ if TYPE_CHECKING:
 
 class State:
     """
-    Class which is a helper of http wrapper. Supports building objects.
+    State is the provider between the HTTP client.
+    It creates objects through data received from the HTTP response.
 
     Parameters
     ----------
@@ -47,9 +48,9 @@ class State:
 
     Attributes
     ----------
-    http:
+    http: :class:`HTTPClient`
         Global HTTPClient object.
-    logger:
+    logger: :class:`logging.Logger`
         State logger.
     """
 

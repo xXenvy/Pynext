@@ -41,12 +41,13 @@ class BanEntry:
 
     Attributes
     ----------
-    guild_id:
+    guild_id: :class:`int`
         id of the guild on where the ban is.
-    user:
+    user: :class:`DiscordUser`
         Discord user object who got banned.
-    reason:
+    reason: Optional[:class:`str`]
         Ban reason. If provided.
+
         .. note::
             BanEntry object passed by discord websocket (event)
             does not contain information about the reason for the ban even if there was one.

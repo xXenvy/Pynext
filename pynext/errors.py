@@ -20,15 +20,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+from typing import Any
 
 
 class PynextError(Exception):
-    """
-    Base exception class for pynext.
-    """
+    """Base exception class for pynext."""
 
     __slots__ = ()
-    from typing import Any
 
     def __init__(self, value: Any):
         super().__init__(value)
@@ -66,7 +64,7 @@ class FunctionIsNotCoroutine(PynextError):
     """Called when we specify a synchronous function to the event."""
 
 
-class WebsocketNotConnnected(PynextError):
+class WebsocketNotConnected(PynextError):
     """Called when user doesn't have connection to the gateway."""
 
 
