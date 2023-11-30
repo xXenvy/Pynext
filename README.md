@@ -2,7 +2,7 @@
 
   <img alt="" src="assets/discordlogo.png" width="200px"/>
   
-  ## Pynext - Discord API Wrapper for selfbots.
+  ## Pynext - Discord API Wrapper for selfbots written from scratch in Python.
   `⚠️ Project only for educational purposes!`
   
   `⚠️ Project is still under development. It may contain bugs, and future updates will bring breaking changes.`
