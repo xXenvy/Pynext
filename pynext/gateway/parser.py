@@ -79,7 +79,7 @@ class Parser:
     async def on_user_ready_args(self, response: GatewayResponse) -> tuple[SelfBot]:
         await self._chunk_user(response.user, data=response.data)
         response.user._ready.set()
-        return response.user,
+        return (response.user,)
 
     @staticmethod
     async def on_message_create_args(
@@ -223,9 +223,7 @@ class Parser:
         guild_id: int = int(data["id"])
         old_guild: Guild | None = user.get_guild(guild_id)
 
-        data["channels"] = await user.http.fetch_channels(
-            user=user, guild_id=guild_id
-        )
+        data["channels"] = await user.http.fetch_channels(user=user, guild_id=guild_id)
         new_guild: Guild = await self.chunk_user_guild(
             user=user, guild_data=data, fetch_only=True
         )

@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 
 Message = Union["PrivateMessage", "GuildMessage"]
-Channel = Union['GuildChannel', 'TextChannel', 'VoiceChannel', 'CategoryChannel']
+Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel"]
 
 
 class MessageReference(TypedDict):
@@ -59,6 +59,7 @@ class Authorization(Generic[KeyT]):
     key:
         Selfbot authorization token.
     """
+
     key: KeyT
 
     @property
@@ -85,6 +86,7 @@ class RatelimitPayload:
     user:
         Selfbot that received ratelimit.
     """
+
     retry_after: float
     is_global: bool
     route: Route
@@ -105,6 +107,7 @@ class EmojisUpdatePayload:
     deleted_emojis:
         List with removed emojis.
     """
+
     guild: Guild
     added_emojis: list[Emoji]
     deleted_emojis: list[Emoji]
