@@ -28,7 +28,7 @@
 pip install -U pynext
 ```
 # 💫 Example
-**See more examples on github:** [JUMP!](https://github.com/xXenvy/pynext/tree/master/examples)
+**See more examples on:** [Github](https://github.com/xXenvy/pynext/tree/master/examples) or [Docs](https://pynext.readthedocs.io/en/latest/).
 ```py
 import pynext
 
