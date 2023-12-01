@@ -13,14 +13,21 @@ LONG_DESCRIPTION = (
     "The library was written mainly for selfbots. It has a structure similar to popular libraries such as discord.py"
 )
 
+extras_require = {
+    "speed": ["orjson", "aiohttp[speedups]"],
+}
+
 setup(
     name="pynext",
     version=VERSION,
     author="xXenvy",
     author_email="<xpimpek01@gmail.com>",
     description=DESCRIPTION,
+    license="MIT",
     long_description_content_type="text/markdown",
     long_description=long_description,
+    extras_require=extras_require,
+    python_requires=">=3.9.0",
     packages=find_packages(),
     install_requires=["colorlog", "aiohttp"],
     keywords=[
@@ -36,9 +43,18 @@ setup(
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Framework :: AsyncIO",
+        "Framework :: aiohttp",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: Libraries :: Python Modules",
         "Operating System :: Unix",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
+        "Typing :: Typed"
     ],
 )
