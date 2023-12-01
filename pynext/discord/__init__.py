@@ -58,5 +58,5 @@ __all__ = (
     "Activity",
     "BanEntry",
     "Messageable",
-    "Typing"
+    "Typing",
 )

@@ -10,4 +10,3 @@ Utils
 .. autoclass:: Hashable
    :members:
    :show-inheritance:
-

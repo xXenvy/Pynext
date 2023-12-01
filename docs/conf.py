@@ -8,12 +8,12 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath(".."))
 
-project = 'Pynext'
-copyright = '2023, xXenvy'
-author = 'xXenvy'
-release = '1.0.3'
+project = "Pynext"
+copyright = "2023, xXenvy"
+author = "xXenvy"
+release = "1.0.3"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -27,12 +27,12 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinxext.opengraph",
     "sphinx_inline_tabs",
-    "enum_tools.autoenum"
+    "enum_tools.autoenum",
 ]
 autodoc_typehints = "both"
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 intersphinx_mapping = {
     "aiohttp": ("https://docs.aiohttp.org/en/stable/", None),
@@ -45,5 +45,5 @@ ogp_site_name = "Pynext Documentation"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 default_dark_mode = True
-html_theme = 'furo'
-html_static_path = ['_static']
+html_theme = "furo"
+html_static_path = ["_static"]

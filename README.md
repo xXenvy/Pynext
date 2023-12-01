@@ -1,12 +1,12 @@
 <div align="center">
 
   <img alt="" src="assets/discordlogo.png" width="200px"/>
-  
+
   ## Pynext - Discord API Wrapper for selfbots written from scratch in Python.
   `⚠️ Project only for educational purposes!`
-  
+
   `⚠️ Project is still under development. It may contain bugs, and future updates will bring breaking changes.`
-  
+
 ![License](https://img.shields.io/github/license/xXenvy/Pynext?style=for-the-badge&color=%2315b328)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pynext?style=for-the-badge&color=%2315b328)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/xXenvy/Pynext?style=for-the-badge&color=%2315b328)

@@ -180,8 +180,8 @@ class BaseMessage(Hashable):
         message_data: dict[str, Any] = await self._state.http.edit_message(
             user, channel_id=self.channel_id, message_id=self.id, content=content
         )
-        if guild := getattr(self, 'guild', None):
-            message_data['guild_id'] = guild.id
+        if guild := getattr(self, "guild", None):
+            message_data["guild_id"] = guild.id
 
         message: GuildMessage | PrivateMessage | None = (
             await self._state.create_message_from_data(user=user, data=message_data)
