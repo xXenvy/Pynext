@@ -23,7 +23,6 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import logging
-from colorlog import ColoredFormatter
 from typing import Literal
 
 
@@ -97,6 +96,8 @@ class DebugLogger:
             handler.setLevel(level)
 
             if colored is True:
+                from colorlog import ColoredFormatter
+
                 handler.setFormatter(
                     ColoredFormatter(
                         "%(log_color)s %(asctime)s | %(name)s | %(levelname)s > %(message)s"

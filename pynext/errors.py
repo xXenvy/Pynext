@@ -26,8 +26,6 @@ from typing import Any
 class PynextError(Exception):
     """Base exception class for pynext."""
 
-    __slots__ = ()
-
     def __init__(self, value: Any):
         super().__init__(value)
 

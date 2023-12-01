@@ -397,7 +397,7 @@ class PrivateMessage(BaseMessage):
         Whether this was a TTS message.
     """
 
-    __slots__ = ("channel", "author")
+    __slots__ = ()
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
@@ -451,7 +451,7 @@ class GuildMessage(BaseMessage):
         Whether this was a TTS message.
     """
 
-    __slots__ = ("author", "guild", "channel")
+    __slots__ = ("guild",)
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
