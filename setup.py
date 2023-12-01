@@ -27,6 +27,11 @@ setup(
     license="MIT",
     long_description_content_type="text/markdown",
     long_description=long_description,
+    url="https://github.com/xxenvy/pynext",
+    project_urls={
+        "Documentation": "https://pynext.readthedocs.io/en/latest/",
+        "Issue tracker": "https://github.com//xxenvy/pynext/issues",
+    },
     extras_require=extras_require,
     python_requires=">=3.9.0",
     packages=find_packages(),
