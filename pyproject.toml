@@ -4,3 +4,9 @@ pythonVersion = "3.9, 3.10, 3.11"
 
 [tool.ruff]
 line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint]
+ignore = ["F403", "F405"]
