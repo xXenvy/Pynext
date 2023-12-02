@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **information**
- - OS: 
+ - OS:
  - Library version:
 > You can check the version of the library using `pip show pynext`
 
