@@ -97,7 +97,7 @@ class Guild(Hashable):
         "_channels",
         "_members",
         "_emojis",
-        "_applications"
+        "_applications",
     )
 
     def __init__(self, state: State, data: dict[str, Any]):
@@ -516,12 +516,14 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        data: list[dict[str, Any]] = await self._state.http.fetch_applications(user, guild_id=self.id)
+        data: list[dict[str, Any]] = await self._state.http.fetch_applications(
+            user, guild_id=self.id
+        )
         self._applications = {}
 
         for app_data in data:
             application: Application = self._state.create_application(
-                guild=self, data=app_data['application']
+                guild=self, data=app_data["application"]
             )
             self._add_application(application)
 

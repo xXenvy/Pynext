@@ -60,5 +60,5 @@ __all__ = (
     "BanEntry",
     "Messageable",
     "Typing",
-    "Application"
+    "Application",
 )

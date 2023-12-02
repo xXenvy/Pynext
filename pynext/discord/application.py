@@ -8,12 +8,10 @@ if TYPE_CHECKING:
 
 
 class Application(DiscordUser):
-
     def __init__(self, guild: Guild, data: dict[str, Any]):
-        super().__init__(guild._state, user_data=data['bot'])
+        super().__init__(guild._state, user_data=data["bot"])
 
         self.guild: Guild = guild
 
     def __repr__(self) -> str:
         return f"<Application(name={self.username}, id={self.id})>"
-
