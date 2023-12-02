@@ -49,8 +49,8 @@ class Application(DiscordUser):
         self.raw_data: dict[str, Any] = data
         self.guild: Guild = guild
 
-        self.name: str = data['name']
-        self.description: str = data['description']
+        self.name: str = data["name"]
+        self.description: str = data["description"]
 
     def __repr__(self) -> str:
         return f"<Application(name={self.username}, id={self.id})>"
