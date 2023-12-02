@@ -90,6 +90,8 @@ class Typing:
 
 
 class Messageable:
+    __slots__ = ()
+
     if TYPE_CHECKING:
         _state: State
         id: int
@@ -176,6 +178,8 @@ class Messageable:
 
 
 class BaseFlags:
+    __slots__ = ()
+
     if TYPE_CHECKING:
         value: int
 

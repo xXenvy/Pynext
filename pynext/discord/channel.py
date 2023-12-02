@@ -64,7 +64,11 @@ class BaseChannel(Hashable):
         id of the channel.
     """
 
-    __slots__ = ("id", "name", "type", "raw_data", "_state", "last_message_id", "guild")
+    __slots__ = (
+        "id",
+        "raw_data",
+        "_state",
+    )
 
     def __init__(self, state: State, data: dict[str, Any]):
         self._state: State = state
@@ -106,7 +110,7 @@ class DMChannel(BaseChannel, Messageable):
         last message id. If any.
     """
 
-    __slots__ = ("target", "_messages")
+    __slots__ = ("target", "_messages", "last_message_id")
 
     def __init__(self, state: State, data: dict[str, Any]):
         super().__init__(state=state, data=data)
@@ -156,7 +160,15 @@ class GuildChannel(BaseChannel):
         Channel category id.
     """
 
-    __slots__ = ("guild", "position", "flags", "type", "parent_id", "_overwrites")
+    __slots__ = (
+        "guild",
+        "name",
+        "position",
+        "flags",
+        "type",
+        "parent_id",
+        "_overwrites",
+    )
 
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state=state, data=data)

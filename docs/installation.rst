@@ -16,3 +16,18 @@ Installation
    .. code-block:: sh
 
       $ pip install -U pynext
+
+Optimization
+------------
+
+.. tab:: Windows
+
+   .. code-block:: powershell
+
+      > pip install -U pynext[speed]
+
+.. tab:: MacOS / Linux
+
+   .. code-block:: sh
+
+      $ pip install -U pynext[speed]

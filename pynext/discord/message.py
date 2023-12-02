@@ -180,6 +180,9 @@ class BaseMessage(Hashable):
         message_data: dict[str, Any] = await self._state.http.edit_message(
             user, channel_id=self.channel_id, message_id=self.id, content=content
         )
+        if guild := getattr(self, "guild", None):
+            message_data["guild_id"] = guild.id
+
         message: GuildMessage | PrivateMessage | None = (
             await self._state.create_message_from_data(user=user, data=message_data)
         )
@@ -394,7 +397,7 @@ class PrivateMessage(BaseMessage):
         Whether this was a TTS message.
     """
 
-    __slots__ = ("channel", "author")
+    __slots__ = ()
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
@@ -448,7 +451,7 @@ class GuildMessage(BaseMessage):
         Whether this was a TTS message.
     """
 
-    __slots__ = ("author", "guild", "channel")
+    __slots__ = ("guild",)
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
