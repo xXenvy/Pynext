@@ -42,7 +42,7 @@ async def on_ready(user: SelfBot):
 
 @client.gateway.event('on_message_create')
 async def on_message(selfbot: SelfBot, message: Union[PrivateMessage, GuildMessage]):
-    if message.content == "?ping" and message.author_id == selfbot.id:
+    if message.content == "?ping":
         await message.reply(selfbot, content=f"**Pong!** {round(selfbot.latency * 1000)}ms")
 
 client.run("TOKEN_1", "TOKEN_2")
