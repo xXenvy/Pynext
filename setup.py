@@ -2,12 +2,14 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
+from pynext import pynext_version
+
 here = os.path.abspath(os.path.dirname(__file__))
 
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = "1.0.3"
+VERSION = pynext_version
 DESCRIPTION = "Library that will allow you to manage selfbots."
 LONG_DESCRIPTION = (
     "The library was written mainly for selfbots. "
@@ -35,7 +37,7 @@ setup(
     extras_require=extras_require,
     python_requires=">=3.9.0",
     packages=find_packages(),
-    install_requires=["colorlog", "aiohttp"],
+    install_requires=["colorlog>=6.7.0", "aiohttp>=3.8.0"],
     keywords=[
         "python",
         "requests",
