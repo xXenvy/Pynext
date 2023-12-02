@@ -30,19 +30,23 @@ pip install -U pynext
 # 💫 Example
 **See more examples on:** [Github](https://github.com/xXenvy/pynext/tree/master/examples) or [Docs](https://pynext.readthedocs.io/en/latest/examples/).
 ```py
-import pynext
+from pynext import PynextClient, SelfBot, GuildMessage, PrivateMessage
+from typing import Union
 
-client = pynext.PynextClient(chunk_guilds=False)
+client = PynextClient(chunk_guilds=False)
 
 @client.gateway.event('on_user_ready')
-async def on_ready(user: pynext.SelfBot):
+async def on_ready(user: SelfBot):
     print("User: {} is ready!".format(user))
 
-    guild: pynext.Guild = await user.fetch_guild(guild_id=123)
-    await guild.owner.send(user, content='Hello owner!')
 
+@client.gateway.event('on_message_create')
+async def on_message(selfbot: SelfBot, message: Union[PrivateMessage, GuildMessage]):
+    if message.content == "?ping" and message.author_id == selfbot.id:
+        await message.reply(selfbot, content=f"**Pong!** {round(selfbot.latency * 1000)}ms")
 
-client.run('TOKEN_1', 'TOKEN_2')
+client.run("TOKEN_1", "TOKEN_2")
+
 ```
 # 🧷 Links
 - [Documentation](https://pynext.readthedocs.io/en/latest/)
