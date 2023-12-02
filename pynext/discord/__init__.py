@@ -35,6 +35,7 @@ from .activity import *
 from .banentry import *
 from .abc import *
 from .emoji import *
+from .application import *
 
 __all__ = (
     "GuildMessage",
@@ -59,4 +60,5 @@ __all__ = (
     "BanEntry",
     "Messageable",
     "Typing",
+    "Application"
 )

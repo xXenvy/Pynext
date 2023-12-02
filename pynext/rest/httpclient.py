@@ -1087,7 +1087,7 @@ class HTTPClient:
         user:
             Selfbot to make the request.
         channel_id:
-            id of the channel where the message is.
+            Id of the channel where the message is.
         message_id:
             Id of the message.
         """
@@ -1102,3 +1102,24 @@ class HTTPClient:
         payload: dict[str, bool | int] = {"manual": True, "mention_count": 0}
 
         await self.request(route, json=payload, user=user)
+
+    async def fetch_applications(self, user: SelfBot, guild_id: int) -> list[dict[str, Any]]:
+        """
+        HTTP request to fetch guild applications.
+
+        Parameters
+        ----------
+        user:
+            Selfbot to make the request.
+        guild_id:
+            Id of the guild.
+        """
+        route = Route(
+            method="GET",
+            url="guilds/{guild_id}/integrations?include_applications=true",
+            guild_id=guild_id,
+            headers=user.authorization.headers,
+        )
+
+        response: ClientResponse = await self.request(route, user=user)
+        return await response.json()

@@ -138,6 +138,20 @@ class State:
         self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
 
+    def create_application(self, guild: Guild, data: dict[str, Any]):
+        """
+        Method to create a application object from a data.
+
+        Parameters
+        ----------
+        guild:
+            Guild to which the created application should belong.
+        data:
+            Required data to create a application object.
+        """
+        self.logger.debug("Creating a application object...")
+        return Application(guild, data)
+
     async def create_message_from_data(
         self, user: SelfBot, data: dict[str, Any]
     ) -> PrivateMessage | GuildMessage | None:
