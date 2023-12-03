@@ -1,15 +1,17 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
-from ..utils import Hashable, snowflake_time
+from ..utils import Hashable, snowflake_time, nonce, create_session
 
 if TYPE_CHECKING:
     from datetime import datetime
 
     from ..state import State
+    from ..selfbot import SelfBot
 
     from .application import Application
     from .guild import Guild
+    from .channel import TextChannel
 
 
 class SlashCommand(Hashable):
@@ -75,3 +77,33 @@ class SlashCommand(Hashable):
         Datetime object of when the command was created.
         """
         return snowflake_time(self.id)
+
+    async def use(self, user: SelfBot, channel: TextChannel, **params) -> None:
+        command_params: list[dict[str, Any]] = []
+
+        for key, value in params.items():
+            command_params.append(
+                {'name': key, 'value': value, 'type': 3}
+            )
+
+        payload: dict[str, Any] = {
+            'type': 2,
+            'application_id': str(self.application.id),
+            'guild_id': str(self.guild.id),
+            'channel_id': str(channel.id),
+            "session_id": create_session(),
+            'data': {
+                **self.to_dict(),
+            }
+        }
+        await self._state.http.use_interaction(
+            user=user, payload=payload
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "id": str(self.id),
+            "version": str(self.version_id),
+            "name": self.name,
+            "type": self.type,
+        }

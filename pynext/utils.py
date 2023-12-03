@@ -23,6 +23,10 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import Any
 
+from time import time
+from random import choice
+from string import ascii_letters, digits
+
 from aiohttp import ClientResponse, client_exceptions
 from datetime import datetime, timezone
 
@@ -110,3 +114,11 @@ def applications_filter(data: dict[str, Any]) -> dict[int, Any]:
             app_commands.append(command_data)
 
     return apps
+
+
+def nonce() -> int:
+    return (int(time()) * 1000 - 1420070400000) * 4194304
+
+
+def create_session(lenght: int = 32) -> str:
+    return "".join(choice(ascii_letters + digits) for _ in range(lenght))

@@ -1123,3 +1123,11 @@ class HTTPClient:
 
         response: ClientResponse = await self.request(route, user=user)
         return await response.json()
+
+    async def use_interaction(self, user: SelfBot, payload: dict[str, Any]) -> None:
+        route = Route(
+            method="POST",
+            url="interactions",
+            headers=user.authorization.headers,
+        )
+        await self.request(route, user=user, json=payload)
