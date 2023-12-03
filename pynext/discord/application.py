@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 from .discorduser import DiscordUser
 
 if TYPE_CHECKING:
-    from ..state import State
 
     from .guild import Guild
     from .slash_command import SlashCommand

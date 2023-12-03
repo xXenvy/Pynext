@@ -81,7 +81,7 @@ __all__: tuple[str, ...] = (
     "Application",
     "SlashCommand",
     "CommandOptionType",
-    "UnSupportedOptionType"
+    "UnSupportedOptionType",
 )
 
 pynext_version: str = PynextClient.__version__

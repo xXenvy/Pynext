@@ -1104,7 +1104,7 @@ class HTTPClient:
         await self.request(route, json=payload, user=user)
 
     async def fetch_applications(
-            self, user: SelfBot, guild_id: int | None = None, channel_id: int | None = None
+        self, user: SelfBot, guild_id: int | None = None, channel_id: int | None = None
     ) -> dict[str, Any]:
         """
         HTTP request to fetch guild applications.

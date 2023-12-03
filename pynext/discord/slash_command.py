@@ -53,7 +53,7 @@ class SlashCommand(Hashable):
         "id",
         "type",
         "version_id",
-        "_option_types"
+        "_option_types",
     )
 
     def __init__(self, application: Application, data: dict[str, Any]):
@@ -98,28 +98,19 @@ class SlashCommand(Hashable):
             value_type, value = self._get_option_type(value)
 
             command_params.append(
-                {
-                    'name': key,
-                    'value': value,
-                    'type': value_type.value
-                }
+                {"name": key, "value": value, "type": value_type.value}
             )
 
         payload: dict[str, Any] = {
-            'type': 2,
-            'application_id': str(self.application.id),
-            'guild_id': str(self.guild.id),
-            'channel_id': str(channel.id),
+            "type": 2,
+            "application_id": str(self.application.id),
+            "guild_id": str(self.guild.id),
+            "channel_id": str(channel.id),
             "session_id": create_session(),
-            'data': {
-                **self.to_dict(),
-                "options": command_params
-            }
+            "data": {**self.to_dict(), "options": command_params},
         }
         print(payload)
-        await self._state.http.use_interaction(
-            user=user, payload=payload
-        )
+        await self._state.http.use_interaction(user=user, payload=payload)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -136,4 +127,6 @@ class SlashCommand(Hashable):
             return CommandOptionType.INTEGER, value
         if isinstance(value, Role):
             return CommandOptionType.ROLE, value.id
-        raise UnSupportedOptionType(f'Command does not support {type(value)} value type.')
+        raise UnSupportedOptionType(
+            f"Command does not support {type(value)} value type."
+        )
