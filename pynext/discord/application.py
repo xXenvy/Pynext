@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 from .discorduser import DiscordUser
 
 if TYPE_CHECKING:
-    from ..selfbot import SelfBot
 
     from .guild import Guild
     from .slash_command import SlashCommand
@@ -56,7 +55,7 @@ class Application(DiscordUser):
         self.description: str = data["description"]
         self._commands: dict[int, SlashCommand] = {}
 
-        for app_command in data['app_commands']:
+        for app_command in data["app_commands"]:
             self._add_command(
                 self._state.create_slash_command(application=self, data=app_command)
             )

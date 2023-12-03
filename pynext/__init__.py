@@ -79,7 +79,7 @@ __all__: tuple[str, ...] = (
     "Messageable",
     "Typing",
     "Application",
-    "SlashCommand"
+    "SlashCommand",
 )
 
 pynext_version: str = PynextClient.__version__

@@ -62,5 +62,5 @@ __all__ = (
     "Messageable",
     "Typing",
     "Application",
-    "SlashCommand"
+    "SlashCommand",
 )
