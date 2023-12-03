@@ -41,18 +41,26 @@ class SlashCommand(Hashable):
         Autoincrementing version identifier updated during substantial record changes.
     """
 
-    __slots__ = ("_state", "application", "name", "description", "id", "type", "version_id")
+    __slots__ = (
+        "_state",
+        "application",
+        "name",
+        "description",
+        "id",
+        "type",
+        "version_id",
+    )
 
     def __init__(self, application: Application, data: dict[str, Any]):
         self._state: State = application._state
         self.application: Application = application
 
-        self.name: str = data['name']
-        self.description: str = data['description']
-        self.id: int = int(data['id'])
+        self.name: str = data["name"]
+        self.description: str = data["description"]
+        self.id: int = int(data["id"])
 
-        self.type: int = int(data['type'])
-        self.version_id: int = int(data['version'])
+        self.type: int = int(data["type"])
+        self.version_id: int = int(data["version"])
 
     def __repr__(self) -> str:
         return f"<SlashCommand(name={self.name}, id={self.id})>"
