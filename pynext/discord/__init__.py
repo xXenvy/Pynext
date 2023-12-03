@@ -63,4 +63,5 @@ __all__ = (
     "Typing",
     "Application",
     "SlashCommand",
+    "SubCommand"
 )

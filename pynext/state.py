@@ -138,7 +138,7 @@ class State:
         self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
 
-    def create_application(self, guild: Guild, data: dict[str, Any]):
+    def create_application(self, guild: Guild, data: dict[str, Any]) -> Application:
         """
         Method to create a application object from a data.
 
@@ -152,7 +152,7 @@ class State:
         self.logger.debug("Creating a application object...")
         return Application(data, guild)
 
-    def create_slash_command(self, application: Application, data: dict[str, Any]):
+    def create_slash_command(self, application: Application, data: dict[str, Any]) -> SlashCommand:
         """
         Method to create a SlashCommand object from a data.
 
@@ -165,6 +165,20 @@ class State:
         """
         self.logger.debug("Creating a SlashCommand object...")
         return SlashCommand(application, data)
+
+    def create_sub_command(self, parent: SlashCommand | SubCommand, data: dict[str, Any]) -> SubCommand:
+        """
+        Method to create a SubCommand object from a data.
+
+        Parameters
+        ----------
+        parent:
+            SlashCommand / SubCommand to which the subcommand is assigned.
+        data:
+            Required data to create a SubCommand object.
+        """
+        self.logger.debug("Creating a SubCommand object...")
+        return SubCommand(parent, data)
 
     async def create_message_from_data(
         self, user: SelfBot, data: dict[str, Any]

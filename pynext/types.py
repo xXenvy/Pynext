@@ -22,6 +22,7 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 from typing import TypedDict, TYPE_CHECKING, Union, TypeVar, Generic
+from typing_extensions import NotRequired
 
 from dataclasses import dataclass
 
@@ -111,3 +112,23 @@ class EmojisUpdatePayload:
     guild: Guild
     added_emojis: list[Emoji]
     deleted_emojis: list[Emoji]
+
+
+@dataclass(repr=False)
+class ApplicationCommandOption:
+    type: int
+    name: str
+    description: str
+    required: bool
+    autocomplete: bool
+    min_value: int | None = None
+    max_value: int | None = None
+    channel_types: list[int] | None = None
+
+    def __repr__(self) -> str:
+        repr_attr: str = ', '.join(
+            f'{key}={value}' for key, value in self.__dict__.items() if value is not None
+        )
+        return f"ApplicationCommandOption({repr_attr})"
+
+
