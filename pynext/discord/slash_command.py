@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
-from ..utils import Hashable, snowflake_time, nonce, create_session
+from ..utils import Hashable, snowflake_time, create_session
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -90,23 +90,19 @@ class SlashCommand(Hashable):
         command_params: list[dict[str, Any]] = []
 
         for key, value in params.items():
-            command_params.append(
-                {'name': key, 'value': value, 'type': 3}
-            )
+            command_params.append({"name": key, "value": value, "type": 3})
 
         payload: dict[str, Any] = {
-            'type': 2,
-            'application_id': str(self.application.id),
-            'guild_id': str(self.guild.id),
-            'channel_id': str(channel.id),
+            "type": 2,
+            "application_id": str(self.application.id),
+            "guild_id": str(self.guild.id),
+            "channel_id": str(channel.id),
             "session_id": create_session(),
-            'data': {
+            "data": {
                 **self.to_dict(),
-            }
+            },
         }
-        await self._state.http.use_interaction(
-            user=user, payload=payload
-        )
+        await self._state.http.use_interaction(user=user, payload=payload)
 
     def to_dict(self) -> dict[str, Any]:
         return {

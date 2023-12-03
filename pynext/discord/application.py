@@ -43,7 +43,14 @@ class Application(DiscordUser):
         Whether user is classified as a bot.
     """
 
-    __slots__ = ("raw_data", "guild", "name", "description", "application_id", "_commands")
+    __slots__ = (
+        "raw_data",
+        "guild",
+        "name",
+        "description",
+        "application_id",
+        "_commands",
+    )
 
     def __init__(self, guild: Guild, data: dict[str, Any]):
         super().__init__(guild._state, user_data=data["bot"])
