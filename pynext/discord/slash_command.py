@@ -40,13 +40,8 @@ class BaseCommand(Hashable):
     type: :class:`int`
         Command Type.
     """
-    __slots__ = (
-        "name",
-        "description",
-        "id",
-        "type",
-        "_sub_commands"
-    )
+
+    __slots__ = ("name", "description", "id", "type", "_sub_commands")
 
     def __init__(self, data: dict[str, Any]):
         self.name: str = data["name"]
@@ -113,7 +108,7 @@ class SlashCommand(BaseCommand):
         "application",
         "options",
         "version_id",
-        "default_member_permissions"
+        "default_member_permissions",
     )
 
     def __init__(self, application: Application, data: dict[str, Any]):
@@ -125,25 +120,22 @@ class SlashCommand(BaseCommand):
         self.version_id: int = int(data["version"])
         self.default_member_permissions: Permissions | None = None
 
-        if permissions := data.get('default_member_permissions'):
+        if permissions := data.get("default_member_permissions"):
             self.default_member_permissions = Permissions(int(permissions))
 
-        for option_data in data.get('options', []):
-            if option_data['type'] == 1:
+        for option_data in data.get("options", []):
+            if option_data["type"] == 1:
                 self._add_sub_command(
-                    self._state.create_sub_command(
-                        parent=self,
-                        data=option_data
-                    )
+                    self._state.create_sub_command(parent=self, data=option_data)
                 )
             else:
                 self.options.append(
                     ApplicationCommandOption(
-                        type=option_data['type'],
-                        name=option_data['name'],
-                        description=option_data['description'],
-                        required=option_data.get('required', False),
-                        autocomplete=option_data.get('autocomplete', False)
+                        type=option_data["type"],
+                        name=option_data["name"],
+                        description=option_data["description"],
+                        required=option_data.get("required", False),
+                        autocomplete=option_data.get("autocomplete", False),
                     )
                 )
 
@@ -233,15 +225,10 @@ class SubCommand(BaseCommand):
         Command permissions.
     """
 
-    __slots__ = (
-        "_state",
-        "application",
-        "options",
-        "parent"
-    )
+    __slots__ = ("_state", "application", "options", "parent")
 
     def __init__(self, parent: SlashCommand | SubCommand, data: dict[str, Any]):
-        data['id'] = parent.id
+        data["id"] = parent.id
         super().__init__(data)
 
         print(data)

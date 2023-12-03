@@ -22,7 +22,6 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 from typing import TypedDict, TYPE_CHECKING, Union, TypeVar, Generic
-from typing_extensions import NotRequired
 
 from dataclasses import dataclass
 
@@ -126,9 +125,9 @@ class ApplicationCommandOption:
     channel_types: list[int] | None = None
 
     def __repr__(self) -> str:
-        repr_attr: str = ', '.join(
-            f'{key}={value}' for key, value in self.__dict__.items() if value is not None
+        repr_attr: str = ", ".join(
+            f"{key}={value}"
+            for key, value in self.__dict__.items()
+            if value is not None
         )
         return f"ApplicationCommandOption({repr_attr})"
-
-

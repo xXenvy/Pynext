@@ -152,7 +152,9 @@ class State:
         self.logger.debug("Creating a application object...")
         return Application(data, guild)
 
-    def create_slash_command(self, application: Application, data: dict[str, Any]) -> SlashCommand:
+    def create_slash_command(
+        self, application: Application, data: dict[str, Any]
+    ) -> SlashCommand:
         """
         Method to create a SlashCommand object from a data.
 
@@ -166,7 +168,9 @@ class State:
         self.logger.debug("Creating a SlashCommand object...")
         return SlashCommand(application, data)
 
-    def create_sub_command(self, parent: SlashCommand | SubCommand, data: dict[str, Any]) -> SubCommand:
+    def create_sub_command(
+        self, parent: SlashCommand | SubCommand, data: dict[str, Any]
+    ) -> SubCommand:
         """
         Method to create a SubCommand object from a data.
 
