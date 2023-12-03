@@ -53,11 +53,11 @@ class Application(DiscordUser):
         "_commands",
     )
 
-    def __init__(self, data: dict[str, Any], guild: Guild | None):
+    def __init__(self, data: dict[str, Any], guild: Guild):
         super().__init__(guild._state, user_data=data["bot"])
 
         self.raw_data: dict[str, Any] = data
-        self.guild: Guild | None = guild
+        self.guild: Guild = guild
 
         self.name: str = data["name"]
         self.description: str = data["description"]
