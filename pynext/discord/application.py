@@ -4,7 +4,10 @@ from typing import TYPE_CHECKING, Any
 from .discorduser import DiscordUser
 
 if TYPE_CHECKING:
+    from ..selfbot import SelfBot
+
     from .guild import Guild
+    from .slash_command import SlashCommand
 
 
 class Application(DiscordUser):
@@ -16,7 +19,7 @@ class Application(DiscordUser):
     guild:
         Guild on which the application is.
     data:
-        Whether the emoji is animated.
+        Application data.
 
     Attributes
     ----------
@@ -42,7 +45,7 @@ class Application(DiscordUser):
         Whether user is classified as a bot.
     """
 
-    __slots__ = ("raw_data", "guild", "name", "description")
+    __slots__ = ("raw_data", "guild", "name", "description", "_commands")
 
     def __init__(self, guild: Guild, data: dict[str, Any]):
         super().__init__(guild._state, user_data=data["bot"])
@@ -51,6 +54,39 @@ class Application(DiscordUser):
 
         self.name: str = data["name"]
         self.description: str = data["description"]
+        self._commands: dict[int, SlashCommand] = {}
+
+        for app_command in data['app_commands']:
+            self._add_command(
+                self._state.create_slash_command(application=self, data=app_command)
+            )
 
     def __repr__(self) -> str:
         return f"<Application(name={self.username}, id={self.id})>"
+
+    @property
+    def commands(self) -> list[SlashCommand]:
+        """
+        Application slash commands.
+        """
+        return list(self._commands.values())
+
+    def get_command_by_id(self, command_id: int) -> SlashCommand | None:
+        """
+        Method to get slash command by id.
+
+        Parameters
+        ----------
+        command_id:
+            Command id.
+        """
+        return self._commands.get(command_id)
+
+    def _add_command(self, slash_command: SlashCommand) -> None:
+        self._commands[slash_command.id] = slash_command
+
+    def _remove_command(self, command_id: int) -> None:
+        try:
+            del self._commands[command_id]
+        except KeyError:
+            pass

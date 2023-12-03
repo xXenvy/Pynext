@@ -23,6 +23,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import AsyncIterable
 
+from ..utils import applications_filter
 from .channel import *
 from .reaction import Emoji
 
@@ -516,14 +517,14 @@ class Guild(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
-        data: list[dict[str, Any]] = await self._state.http.fetch_applications(
+        data: dict[str, Any] = await self._state.http.fetch_applications(
             user, guild_id=self.id
         )
         self._applications = {}
 
-        for app_data in data:
+        for app_data in applications_filter(data).values():
             application: Application = self._state.create_application(
-                guild=self, data=app_data["application"]
+                guild=self, data=app_data
             )
             self._add_application(application)
 

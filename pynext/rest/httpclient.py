@@ -1103,9 +1103,7 @@ class HTTPClient:
 
         await self.request(route, json=payload, user=user)
 
-    async def fetch_applications(
-        self, user: SelfBot, guild_id: int
-    ) -> list[dict[str, Any]]:
+    async def fetch_applications(self, user: SelfBot, guild_id: int) -> dict[str, Any]:
         """
         HTTP request to fetch guild applications.
 
@@ -1118,7 +1116,7 @@ class HTTPClient:
         """
         route = Route(
             method="GET",
-            url="guilds/{guild_id}/integrations?include_applications=true",
+            url="guilds/{guild_id}/application-command-index",
             guild_id=guild_id,
             headers=user.authorization.headers,
         )

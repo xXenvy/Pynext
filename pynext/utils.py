@@ -95,3 +95,18 @@ def str_to_datetime(value: str) -> datetime:
 
     datetime_object: datetime = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
     return datetime_object
+
+
+def applications_filter(data: dict[str, Any]) -> dict[int, Any]:
+    apps: dict[int, dict[str, Any]] = {}
+
+    for app_data in data['applications']:
+        app_data['app_commands'] = []
+        apps[int(app_data['id'])] = app_data
+
+    for command_data in data['application_commands']:
+        if application_data := apps.get(int(command_data['application_id'])):
+            app_commands: list[dict[str, Any]] = application_data['app_commands']
+            app_commands.append(command_data)
+
+    return apps

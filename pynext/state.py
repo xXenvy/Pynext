@@ -152,6 +152,20 @@ class State:
         self.logger.debug("Creating a application object...")
         return Application(guild, data)
 
+    def create_slash_command(self, application: Application, data: dict[str, Any]):
+        """
+        Method to create a SlashCommand object from a data.
+
+        Parameters
+        ----------
+        application:
+            Application to which the command is assigned.
+        data:
+            Required data to create a SlashCommand object.
+        """
+        self.logger.debug("Creating a SlashCommand object...")
+        return SlashCommand(application, data)
+
     async def create_message_from_data(
         self, user: SelfBot, data: dict[str, Any]
     ) -> PrivateMessage | GuildMessage | None:
