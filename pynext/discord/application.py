@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING, Any
 from .discorduser import DiscordUser
 
 if TYPE_CHECKING:
+    from ..state import State
+
     from .guild import Guild
     from .slash_command import SlashCommand
 
@@ -45,10 +47,11 @@ class Application(DiscordUser):
 
     __slots__ = ("raw_data", "guild", "name", "description", "application_id", "_commands")
 
-    def __init__(self, guild: Guild, data: dict[str, Any]):
+    def __init__(self, data: dict[str, Any], guild: Guild | None):
         super().__init__(guild._state, user_data=data["bot"])
+
         self.raw_data: dict[str, Any] = data
-        self.guild: Guild = guild
+        self.guild: Guild | None = guild
 
         self.name: str = data["name"]
         self.description: str = data["description"]

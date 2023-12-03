@@ -1,7 +1,11 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
-from ..utils import Hashable, snowflake_time, nonce, create_session
+from ..utils import Hashable, snowflake_time, create_session
+from ..enums import CommandOptionType
+from ..errors import UnSupportedOptionType
+
+from .role import Role
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -49,6 +53,7 @@ class SlashCommand(Hashable):
         "id",
         "type",
         "version_id",
+        "_option_types"
     )
 
     def __init__(self, application: Application, data: dict[str, Any]):
@@ -90,8 +95,14 @@ class SlashCommand(Hashable):
         command_params: list[dict[str, Any]] = []
 
         for key, value in params.items():
+            value_type, value = self._get_option_type(value)
+
             command_params.append(
-                {'name': key, 'value': value, 'type': 3}
+                {
+                    'name': key,
+                    'value': value,
+                    'type': value_type.value
+                }
             )
 
         payload: dict[str, Any] = {
@@ -102,8 +113,10 @@ class SlashCommand(Hashable):
             "session_id": create_session(),
             'data': {
                 **self.to_dict(),
+                "options": command_params
             }
         }
+        print(payload)
         await self._state.http.use_interaction(
             user=user, payload=payload
         )
@@ -115,3 +128,12 @@ class SlashCommand(Hashable):
             "name": self.name,
             "type": self.type,
         }
+
+    def _get_option_type(self, value: Any) -> tuple[CommandOptionType, Any]:
+        if isinstance(value, str):
+            return CommandOptionType.STRING, value
+        if isinstance(value, int):
+            return CommandOptionType.INTEGER, value
+        if isinstance(value, Role):
+            return CommandOptionType.ROLE, value.id
+        raise UnSupportedOptionType(f'Command does not support {type(value)} value type.')

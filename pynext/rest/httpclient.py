@@ -1103,7 +1103,9 @@ class HTTPClient:
 
         await self.request(route, json=payload, user=user)
 
-    async def fetch_applications(self, user: SelfBot, guild_id: int) -> dict[str, Any]:
+    async def fetch_applications(
+            self, user: SelfBot, guild_id: int | None = None, channel_id: int | None = None
+    ) -> dict[str, Any]:
         """
         HTTP request to fetch guild applications.
 
@@ -1113,11 +1115,17 @@ class HTTPClient:
             Selfbot to make the request.
         guild_id:
             Id of the guild.
+        channel_id:
+            Id of the dm channel.
         """
+        if not guild_id and not channel_id:
+            raise RuntimeError("Missing guild_id or channel_id parameter.")
+
+        start_url: str = f"guilds/{guild_id}" if guild_id else f"channels/{channel_id}"
+
         route = Route(
             method="GET",
-            url="guilds/{guild_id}/application-command-index",
-            guild_id=guild_id,
+            url=f"{start_url}/application-command-index",
             headers=user.authorization.headers,
         )
 

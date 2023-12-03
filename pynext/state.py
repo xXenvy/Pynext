@@ -150,7 +150,7 @@ class State:
             Required data to create a application object.
         """
         self.logger.debug("Creating a application object...")
-        return Application(guild, data)
+        return Application(data, guild)
 
     def create_slash_command(self, application: Application, data: dict[str, Any]):
         """

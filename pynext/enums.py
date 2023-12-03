@@ -148,3 +148,12 @@ class ActivityType(Enum):
     LISTENING = 2
     WATCHING = 3
     COMPETING = 5
+
+
+class CommandOptionType(Enum):
+    STRING = 3
+    INTEGER = 4
+    BOOLEAN = 5
+    USER = 6
+    CHANNEL = 7
+    ROLE = 8

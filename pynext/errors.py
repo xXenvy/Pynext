@@ -68,3 +68,7 @@ class WebsocketNotConnected(PynextError):
 
 class VoiceStateNotFound(PynextError):
     """Called when user has no voice state set for the guild."""
+
+
+class UnSupportedOptionType(PynextError):
+    """Called when the user specifies an unsupported value type in the slash parameter of the command."""

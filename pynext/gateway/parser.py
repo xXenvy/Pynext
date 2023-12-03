@@ -470,7 +470,5 @@ class Parser:
                 await self.chunk_user_guild(user, guild_data=guild_data)
 
         for user_data in data["users"]:
-            discord_user: DiscordUser = DiscordUser(
-                state=user.state, user_data=user_data
-            )
+            discord_user = user.state.create_user(data=user_data)
             user._add_user(discord_user)
