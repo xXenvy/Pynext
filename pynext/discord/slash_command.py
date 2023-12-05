@@ -18,7 +18,6 @@ if TYPE_CHECKING:
     from ..selfbot import SelfBot
 
     from .application import Application
-    from .guild import Guild
 
 
 class BaseCommand(Hashable):
@@ -33,13 +32,15 @@ class BaseCommand(Hashable):
     Attributes
     ----------
     name: :class:`str`
-        Slash command name.
+        Command name.
     description: :class:`str`
-        Slash command description.
+        Command description.
     id: :class:`int`
         Id of the command.
     type: :class:`int`
         Command Type.
+    version_id: :class:`int`
+        Autoincrementing version identifier updated during substantial record changes.
     """
 
     __slots__ = ("name", "description", "id", "type", "version_id", "_sub_commands")
@@ -127,6 +128,10 @@ class SlashCommand(BaseCommand):
 
     Attributes
     ----------
+    application: :class:`Application`
+        SlashCommand application object.
+    options:
+        SubCommand options.
     name: :class:`str`
         Slash command name.
     description: :class:`str`
@@ -143,7 +148,6 @@ class SlashCommand(BaseCommand):
 
     __slots__ = (
         "_state",
-        "_sub_commands",
         "application",
         "options",
         "default_member_permissions",
@@ -186,7 +190,9 @@ class SlashCommand(BaseCommand):
         """
         return snowflake_time(self.version_id)
 
-    async def use(self, user: SelfBot, channel: TextChannel | DMChannel, **params) -> None:
+    async def use(
+        self, user: SelfBot, channel: TextChannel | DMChannel, **params
+    ) -> None:
         command_params: list[dict[str, Any]] = []
 
         for key, value in params.items():
@@ -205,7 +211,7 @@ class SlashCommand(BaseCommand):
         }
 
         if isinstance(channel, TextChannel):
-            payload['guild_id'] = channel.guild.id
+            payload["guild_id"] = channel.guild.id
 
         await self._state.http.use_interaction(user=user, payload=payload)
 
@@ -223,6 +229,12 @@ class SubCommand(BaseCommand):
 
     Attributes
     ----------
+    parent: Union[:class:`SlashCommand`, :class:`SubCommand`]
+        SubCommand parent.
+    application: :class:`Application`
+        SlashCommand application object.
+    options:
+        SubCommand options.
     name: :class:`str`
         SubCommand name.
     description: :class:`str`
@@ -231,7 +243,10 @@ class SubCommand(BaseCommand):
         Id of the command.
     type: :class:`int`
         Command Type.
+    version_id: :class:`int`
+        Autoincrementing version identifier updated during substantial record changes.
     """
+
     __slots__ = ("_state", "application", "options", "parent")
 
     def __init__(self, parent: SlashCommand | SubCommand, data: dict[str, Any]):
@@ -262,20 +277,24 @@ class SubCommand(BaseCommand):
     def __repr__(self) -> str:
         return f"<SubCommand(name={self.name}, id={self.id})>"
 
-    async def use(self, user: SelfBot, channel: TextChannel, **params) -> None:
+    async def use(
+        self, user: SelfBot, channel: TextChannel | DMChannel, **params
+    ) -> None:
         payload: dict[str, Any] = {
             "type": 2,
             "application_id": str(self.application.id),
-            "guild_id": str(self.guild.id),
             "channel_id": str(channel.id),
             "session_id": create_session(),
             "data": self.__format_options_payload(params),
         }
+        if isinstance(channel, TextChannel):
+            payload["guild_id"] = channel.guild.id
+
         await self._state.http.use_interaction(user=user, payload=payload)
 
     def __format_options_payload(self, params: dict[str, Any]) -> dict[str, Any]:
-        sub_commands: list[SubCommand] = [self]
         slash_command: SubCommand | SlashCommand = self
+        sub_commands: list[SubCommand | SlashCommand] = [slash_command]
 
         while True:
             sub_commands.append(slash_command.parent)

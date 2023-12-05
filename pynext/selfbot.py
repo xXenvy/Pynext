@@ -233,17 +233,6 @@ class SelfBot(DiscordUser):
         """
         return self._users.get(user_id)
 
-    def get_application(self, application_id: int) -> Application | None:
-        """
-        Method to get application from cache by id.
-
-        Parameters
-        ----------
-        application_id:
-            Id of the application.
-        """
-        return self._applications.get(application_id)
-
     async def fetch_guild(self, guild_id: int) -> Guild:
         """
         Method to fetch the guild by id.
