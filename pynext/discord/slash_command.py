@@ -18,7 +18,6 @@ if TYPE_CHECKING:
     from ..selfbot import SelfBot
 
     from .application import Application
-    from .guild import Guild
 
 
 class BaseCommand(Hashable):
@@ -186,7 +185,9 @@ class SlashCommand(BaseCommand):
         """
         return snowflake_time(self.version_id)
 
-    async def use(self, user: SelfBot, channel: TextChannel | DMChannel, **params) -> None:
+    async def use(
+        self, user: SelfBot, channel: TextChannel | DMChannel, **params
+    ) -> None:
         command_params: list[dict[str, Any]] = []
 
         for key, value in params.items():
@@ -205,7 +206,7 @@ class SlashCommand(BaseCommand):
         }
 
         if isinstance(channel, TextChannel):
-            payload['guild_id'] = channel.guild.id
+            payload["guild_id"] = channel.guild.id
 
         await self._state.http.use_interaction(user=user, payload=payload)
 
@@ -232,6 +233,7 @@ class SubCommand(BaseCommand):
     type: :class:`int`
         Command Type.
     """
+
     __slots__ = ("_state", "application", "options", "parent")
 
     def __init__(self, parent: SlashCommand | SubCommand, data: dict[str, Any]):
