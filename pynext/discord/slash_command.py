@@ -302,20 +302,20 @@ class SubCommand(BaseCommand):
         for index, cmd in enumerate(reversed(sub_commands)):
             if index == 0:
                 options = {
-                    'type': 1,
-                    'name': cmd.name,
-                    'id': cmd.id,
-                    'version': cmd.version_id,
-                    'options': [{}],
+                    "type": 1,
+                    "name": cmd.name,
+                    "id": cmd.id,
+                    "version": cmd.version_id,
+                    "options": [{}],
                 }
             else:
                 data: dict[str, Any] = options
                 for _ in range(index):
-                    data = data['options'][0]
+                    data = data["options"][0]
 
-                data['type'] = cmd.type
-                data['name'] = cmd.name
-                data['options'] = [{}]
+                data["type"] = cmd.type
+                data["name"] = cmd.name
+                data["options"] = [{}]
 
                 if index == len(sub_commands) - 1:
                     command_params: list[dict[str, Any]] = []
@@ -327,8 +327,7 @@ class SubCommand(BaseCommand):
                             {"name": key, "value": value, "type": value_type.value}
                         )
 
-                    data['options'] = command_params
+                    data["options"] = command_params
 
         print(options)
         return options
-
