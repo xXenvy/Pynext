@@ -138,7 +138,7 @@ class State:
         self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
 
-    def create_application(self, guild: Guild, data: dict[str, Any]) -> Application:
+    def create_application(self, data: dict[str, Any]) -> Application:
         """
         Method to create a application object from a data.
 
@@ -150,7 +150,7 @@ class State:
             Required data to create a application object.
         """
         self.logger.debug("Creating a application object...")
-        return Application(data, guild)
+        return Application(state=self, data=data)
 
     def create_slash_command(
         self, application: Application, data: dict[str, Any]

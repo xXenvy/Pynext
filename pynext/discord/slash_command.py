@@ -9,6 +9,7 @@ from ..types import ApplicationCommandOption
 from .role import Role
 from .permissions import Permissions
 from .discorduser import DiscordUser
+from .channel import TextChannel, DMChannel
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -18,7 +19,6 @@ if TYPE_CHECKING:
 
     from .application import Application
     from .guild import Guild
-    from .channel import TextChannel
 
 
 class BaseCommand(Hashable):
@@ -186,14 +186,7 @@ class SlashCommand(BaseCommand):
         """
         return snowflake_time(self.version_id)
 
-    @property
-    def guild(self) -> Guild:
-        """
-        Guild on which the slash command is.
-        """
-        return self.application.guild
-
-    async def use(self, user: SelfBot, channel: TextChannel, **params) -> None:
+    async def use(self, user: SelfBot, channel: TextChannel | DMChannel, **params) -> None:
         command_params: list[dict[str, Any]] = []
 
         for key, value in params.items():
@@ -206,11 +199,14 @@ class SlashCommand(BaseCommand):
         payload: dict[str, Any] = {
             "type": 2,
             "application_id": str(self.application.id),
-            "guild_id": str(self.guild.id),
             "channel_id": str(channel.id),
             "session_id": create_session(),
             "data": {**self.to_dict(), "options": command_params},
         }
+
+        if isinstance(channel, TextChannel):
+            payload['guild_id'] = channel.guild.id
+
         await self._state.http.use_interaction(user=user, payload=payload)
 
 
@@ -236,7 +232,6 @@ class SubCommand(BaseCommand):
     type: :class:`int`
         Command Type.
     """
-
     __slots__ = ("_state", "application", "options", "parent")
 
     def __init__(self, parent: SlashCommand | SubCommand, data: dict[str, Any]):
@@ -267,26 +262,18 @@ class SubCommand(BaseCommand):
     def __repr__(self) -> str:
         return f"<SubCommand(name={self.name}, id={self.id})>"
 
-    @property
-    def guild(self) -> Guild:
-        """
-        Guild on which the slash command is.
-        """
-        return self.application.guild
-
-    async def use(self, selfbot: SelfBot, channel: TextChannel, **params) -> None:
+    async def use(self, user: SelfBot, channel: TextChannel, **params) -> None:
         payload: dict[str, Any] = {
             "type": 2,
             "application_id": str(self.application.id),
             "guild_id": str(self.guild.id),
             "channel_id": str(channel.id),
             "session_id": create_session(),
-            "data": self.format_options_payload(params),
+            "data": self.__format_options_payload(params),
         }
-        print(payload)
-        await self._state.http.use_interaction(user=selfbot, payload=payload)
+        await self._state.http.use_interaction(user=user, payload=payload)
 
-    def format_options_payload(self, params) -> dict[str, Any]:
+    def __format_options_payload(self, params: dict[str, Any]) -> dict[str, Any]:
         sub_commands: list[SubCommand] = [self]
         slash_command: SubCommand | SlashCommand = self
 
@@ -329,5 +316,4 @@ class SubCommand(BaseCommand):
 
                     data["options"] = command_params
 
-        print(options)
         return options

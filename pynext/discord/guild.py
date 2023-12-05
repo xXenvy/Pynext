@@ -523,9 +523,7 @@ class Guild(Hashable):
         self._applications = {}
 
         for app_data in applications_filter(data).values():
-            application: Application = self._state.create_application(
-                guild=self, data=app_data
-            )
+            application: Application = self._state.create_application(app_data)
             self._add_application(application)
 
         return self.applications

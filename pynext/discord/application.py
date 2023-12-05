@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING, Any
 from .discorduser import DiscordUser
 
 if TYPE_CHECKING:
+    from ..state import State
+
     from .guild import Guild
     from .slash_command import SlashCommand
 
@@ -14,8 +16,8 @@ class Application(DiscordUser):
 
     Parameters
     ----------
-    guild:
-        Guild on which the application is.
+    state:
+        abc
     data:
         Application data.
 
@@ -23,8 +25,6 @@ class Application(DiscordUser):
     ----------
     raw_data: :class:`dict`
         Application raw data.
-    guild: :class:`Guild`
-        Guild on which the application is.
     name: :class:`str`
         Application name.
     description: :class:`str`
@@ -52,11 +52,10 @@ class Application(DiscordUser):
         "_commands",
     )
 
-    def __init__(self, data: dict[str, Any], guild: Guild):
-        super().__init__(guild._state, user_data=data["bot"])
+    def __init__(self, state: State, data: dict[str, Any]):
+        super().__init__(state, user_data=data["bot"])
 
         self.raw_data: dict[str, Any] = data
-        self.guild: Guild = guild
 
         self.name: str = data["name"]
         self.description: str = data["description"]
@@ -87,6 +86,19 @@ class Application(DiscordUser):
             Command id.
         """
         return self._commands.get(command_id)
+
+    def get_command_by_name(self, command_name: str) -> SlashCommand | None:
+        """
+        Method to get slash command by name.
+
+        Parameters
+        ----------
+        command_name:
+            Command name.
+        """
+        for command in self.commands:
+            if command.name == command_name:
+                return command
 
     def _add_command(self, slash_command: SlashCommand) -> None:
         self._commands[slash_command.id] = slash_command
