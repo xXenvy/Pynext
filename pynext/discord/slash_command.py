@@ -8,6 +8,7 @@ from ..types import ApplicationCommandOption
 
 from .role import Role
 from .permissions import Permissions
+from .discorduser import DiscordUser
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -41,15 +42,16 @@ class BaseCommand(Hashable):
         Command Type.
     """
 
-    __slots__ = ("name", "description", "id", "type", "_sub_commands")
+    __slots__ = ("name", "description", "id", "type", "version_id", "_sub_commands")
 
     def __init__(self, data: dict[str, Any]):
         self.name: str = data["name"]
         self.description: str = data["description"]
         self.id: int = int(data["id"])
         self.type: int = int(data["type"])
+        self.version_id: int = int(data["version"])
 
-        self._sub_commands: dict[int, SubCommand] = {}
+        self._sub_commands: dict[str, SubCommand] = {}
 
     @property
     def created_at(self) -> datetime:
@@ -65,14 +67,51 @@ class BaseCommand(Hashable):
         """
         return list(self._sub_commands.values())
 
-    def _add_sub_command(self, subcommand: SubCommand) -> None:
-        self._sub_commands[subcommand.id] = subcommand
+    def get_sub_command(self, name: str) -> SubCommand | None:
+        """
+        Method to get subcommand by name.
 
-    def _remove_sub_command(self, subcommand_id: int) -> None:
+        Parameters
+        ----------
+        name:
+            Subcommand name.
+        """
+        return self._sub_commands.get(name)
+
+    def to_dict(self) -> dict[str, Any]:
+        """
+        Method to convert class attributes to dict.
+        """
+        return {
+            "id": str(self.id),
+            "version": str(self.version_id),
+            "name": self.name,
+            "type": self.type,
+        }
+
+    def _add_sub_command(self, subcommand: SubCommand) -> None:
+        self._sub_commands[subcommand.name] = subcommand
+
+    def _remove_sub_command(self, name: str) -> None:
         try:
-            del self._sub_commands[subcommand_id]
+            del self._sub_commands[name]
         except KeyError:
             pass
+
+    @staticmethod
+    def _get_option_type(value: Any) -> tuple[CommandOptionType, Any]:
+        if isinstance(value, str):
+            return CommandOptionType.STRING, value
+        if isinstance(value, int):
+            return CommandOptionType.INTEGER, value
+        if isinstance(value, Role):
+            return CommandOptionType.ROLE, value.id
+        if isinstance(value, DiscordUser):
+            return CommandOptionType.USER, value.id
+
+        raise UnSupportedOptionType(
+            f"Command does not support {type(value)} value type."
+        )
 
 
 class SlashCommand(BaseCommand):
@@ -107,7 +146,6 @@ class SlashCommand(BaseCommand):
         "_sub_commands",
         "application",
         "options",
-        "version_id",
         "default_member_permissions",
     )
 
@@ -117,14 +155,13 @@ class SlashCommand(BaseCommand):
 
         self.application: Application = application
         self.options: list[ApplicationCommandOption] = []
-        self.version_id: int = int(data["version"])
         self.default_member_permissions: Permissions | None = None
 
         if permissions := data.get("default_member_permissions"):
             self.default_member_permissions = Permissions(int(permissions))
 
         for option_data in data.get("options", []):
-            if option_data["type"] == 1:
+            if option_data["type"] in (1, 2):
                 self._add_sub_command(
                     self._state.create_sub_command(parent=self, data=option_data)
                 )
@@ -176,29 +213,6 @@ class SlashCommand(BaseCommand):
         }
         await self._state.http.use_interaction(user=user, payload=payload)
 
-    def to_dict(self) -> dict[str, Any]:
-        """
-        Method to convert class attributes to dict.
-        """
-        return {
-            "id": str(self.id),
-            "version": str(self.version_id),
-            "name": self.name,
-            "type": self.type,
-        }
-
-    @staticmethod
-    def _get_option_type(value: Any) -> tuple[CommandOptionType, Any]:
-        if isinstance(value, str):
-            return CommandOptionType.STRING, value
-        if isinstance(value, int):
-            return CommandOptionType.INTEGER, value
-        if isinstance(value, Role):
-            return CommandOptionType.ROLE, value.id
-        raise UnSupportedOptionType(
-            f"Command does not support {type(value)} value type."
-        )
-
 
 class SubCommand(BaseCommand):
     """
@@ -221,23 +235,34 @@ class SubCommand(BaseCommand):
         Id of the command.
     type: :class:`int`
         Command Type.
-    default_member_permissions: Optional[:class:`Permissions`]
-        Command permissions.
     """
 
     __slots__ = ("_state", "application", "options", "parent")
 
     def __init__(self, parent: SlashCommand | SubCommand, data: dict[str, Any]):
-        data["id"] = parent.id
         super().__init__(data)
-
-        print(data)
 
         self._state: State = parent._state
 
         self.parent: SlashCommand | SubCommand = parent
         self.application: Application = parent.application
         self.options: list[ApplicationCommandOption] = []
+
+        for option_data in data.get("options", []):
+            if option_data["type"] == 1:
+                self._add_sub_command(
+                    self._state.create_sub_command(parent=self, data=option_data)
+                )
+            else:
+                self.options.append(
+                    ApplicationCommandOption(
+                        type=option_data["type"],
+                        name=option_data["name"],
+                        description=option_data["description"],
+                        required=option_data.get("required", False),
+                        autocomplete=option_data.get("autocomplete", False),
+                    )
+                )
 
     def __repr__(self) -> str:
         return f"<SubCommand(name={self.name}, id={self.id})>"
@@ -248,3 +273,62 @@ class SubCommand(BaseCommand):
         Guild on which the slash command is.
         """
         return self.application.guild
+
+    async def use(self, selfbot: SelfBot, channel: TextChannel, **params) -> None:
+        payload: dict[str, Any] = {
+            "type": 2,
+            "application_id": str(self.application.id),
+            "guild_id": str(self.guild.id),
+            "channel_id": str(channel.id),
+            "session_id": create_session(),
+            "data": self.format_options_payload(params),
+        }
+        print(payload)
+        await self._state.http.use_interaction(user=selfbot, payload=payload)
+
+    def format_options_payload(self, params) -> dict[str, Any]:
+        sub_commands: list[SubCommand] = [self]
+        slash_command: SubCommand | SlashCommand = self
+
+        while True:
+            sub_commands.append(slash_command.parent)
+            slash_command = slash_command.parent
+
+            if isinstance(slash_command, SlashCommand):
+                break
+
+        options: dict[str, Any] = {}
+
+        for index, cmd in enumerate(reversed(sub_commands)):
+            if index == 0:
+                options = {
+                    'type': 1,
+                    'name': cmd.name,
+                    'id': cmd.id,
+                    'version': cmd.version_id,
+                    'options': [{}],
+                }
+            else:
+                data: dict[str, Any] = options
+                for _ in range(index):
+                    data = data['options'][0]
+
+                data['type'] = cmd.type
+                data['name'] = cmd.name
+                data['options'] = [{}]
+
+                if index == len(sub_commands) - 1:
+                    command_params: list[dict[str, Any]] = []
+
+                    for key, value in params.items():
+                        value_type, value = self._get_option_type(value)
+
+                        command_params.append(
+                            {"name": key, "value": value, "type": value_type.value}
+                        )
+
+                    data['options'] = command_params
+
+        print(options)
+        return options
+

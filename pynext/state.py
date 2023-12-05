@@ -182,6 +182,8 @@ class State:
             Required data to create a SubCommand object.
         """
         self.logger.debug("Creating a SubCommand object...")
+        data['id'] = parent.id
+        data['version'] = parent.version_id
         return SubCommand(parent, data)
 
     async def create_message_from_data(
