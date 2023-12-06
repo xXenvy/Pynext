@@ -47,7 +47,7 @@ class BaseCommand(Hashable):
 
     def __init__(self, data: dict[str, Any]):
         self.name: str = data["name"]
-        self.description: str = data["description"]
+        self.description: str | None = data.get("description")
         self.id: int = int(data["id"])
         self.type: int = int(data["type"])
         self.version_id: int = int(data["version"])
