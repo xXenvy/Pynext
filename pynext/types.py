@@ -156,3 +156,21 @@ class ApplicationCommandOption:
             if value is not None
         )
         return f"ApplicationCommandOption({repr_attr})"
+
+
+@dataclass
+class InteractionPayload:
+    """
+    Dataclass Payload passed in the ``on_interaction`` events.
+
+    .. versionadded:: 1.0.6
+
+    Parameters
+    ----------
+    nonce:
+        Interaction nonce.
+    id:
+        Id of the interaction.
+    """
+    nonce: int
+    id: int

@@ -233,7 +233,7 @@ class HTTPClient:
             if request_manager.is_ratelimited(response):
                 data: dict = await response.json()
                 retry_after: float = data["retry_after"]
-                global_ratelimit: bool = data["global"]
+                global_ratelimit: bool = data.get("global", False)
 
                 self._logger.debug(
                     f"Ratelimit reached. Retry after: {retry_after} |"

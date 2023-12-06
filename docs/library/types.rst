@@ -26,3 +26,7 @@ Types
 .. autoclass:: ApplicationCommandOption
     :members:
     :show-inheritance:
+
+.. autoclass:: InteractionPayload
+    :members:
+    :show-inheritance:

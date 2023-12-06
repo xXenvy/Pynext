@@ -27,7 +27,7 @@ from asyncio import AbstractEventLoop, get_event_loop
 
 from ..discord import *
 from ..errors import Forbidden
-from ..types import Message, Channel, EmojisUpdatePayload
+from ..types import Message, Channel, EmojisUpdatePayload, InteractionPayload
 
 if TYPE_CHECKING:
     from ..selfbot import SelfBot
@@ -447,6 +447,21 @@ class Parser:
             )
             message._remove_reaction(message_reaction)
             return response.user, message_reaction
+
+    @staticmethod
+    async def on_interaction_create_args(response: GatewayResponse) -> tuple[SelfBot, InteractionPayload]:
+        data: dict[str, Any] = response.data
+        return response.user, InteractionPayload(int(data['nonce']), int(data['id']))
+
+    @staticmethod
+    async def on_interaction_success_args(response: GatewayResponse) -> tuple[SelfBot, InteractionPayload]:
+        data: dict[str, Any] = response.data
+        return response.user, InteractionPayload(int(data['nonce']), int(data['id']))
+
+    @staticmethod
+    async def on_interaction_failure_args(response: GatewayResponse) -> tuple[SelfBot, InteractionPayload]:
+        data: dict[str, Any] = response.data
+        return response.user, InteractionPayload(int(data['nonce']), int(data['id']))
 
     async def chunk_user_guild(
         self, user: SelfBot, guild_data: dict[str, Any], fetch_only: bool = False
