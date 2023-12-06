@@ -1136,6 +1136,8 @@ class HTTPClient:
         """
         HTTP request to send interaction.
 
+        .. versionadded:: 1.0.6
+
         Parameters
         ----------
         user:
