@@ -7,3 +7,4 @@ Example code snippets showing the feature.
    :caption: Contents:
 
    events
+   slashcommands
