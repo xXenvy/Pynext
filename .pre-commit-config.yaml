@@ -1,20 +1,20 @@
 
 repos:
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 23.11.0
     hooks:
       - id: black
         name: Running black in all files.
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.275
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
         name: Running ruff in all files.
 
   - repo: https://github.com/ariebovenberg/slotscheck
-    rev: v0.16.5
+    rev: v0.17.1
     hooks:
       - id: slotscheck
         name: Running slotscheck in all files.
@@ -22,7 +22,7 @@ repos:
         additional_dependencies: [aiohttp]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.5.0
     hooks:
       - id: check-ast
         name: Check if python files are valid syntax for the ast parser
