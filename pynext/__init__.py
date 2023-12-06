@@ -80,6 +80,7 @@ __all__: tuple[str, ...] = (
     "Typing",
     "Application",
     "SlashCommand",
+    "SubCommand",
     "CommandOptionType",
     "UnSupportedOptionType",
     "ApplicationCommandOption",
