@@ -120,8 +120,8 @@ class Events(Enum):
     GUILD_ROLE_DELETE = "on_guild_role_delete"
 
     INTERACTION_CREATE = "on_interaction_create"
-    INTERACTION_SUCCESS = 'on_interaction_success'
-    INTERACTION_FAILURE = 'on_interaction_failure'
+    INTERACTION_SUCCESS = "on_interaction_success"
+    INTERACTION_FAILURE = "on_interaction_failure"
 
 
 class DefaultAvatar(Enum):

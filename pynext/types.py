@@ -172,5 +172,6 @@ class InteractionPayload:
     id:
         Id of the interaction.
     """
+
     nonce: int
     id: int
