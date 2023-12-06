@@ -71,7 +71,7 @@ class HTTPClient:
         "_request_delay",
         "_timeout",
     )
-    __version__: ClassVar[str] = "1.0.7"
+    __version__: ClassVar[str] = "1.0.8"
 
     BASE_URL: ClassVar[str] = "https://discord.com/api/v10/"
 
@@ -1109,7 +1109,7 @@ class HTTPClient:
         """
         HTTP request to fetch guild applications.
 
-        .. versionadded:: 1.0.6
+        .. versionadded:: 1.0.8
 
         Parameters
         ----------
@@ -1138,7 +1138,7 @@ class HTTPClient:
         """
         HTTP request to send interaction.
 
-        .. versionadded:: 1.0.6
+        .. versionadded:: 1.0.8
 
         Parameters
         ----------

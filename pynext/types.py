@@ -163,7 +163,7 @@ class InteractionPayload:
     """
     Dataclass Payload passed in the ``on_interaction`` events.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.8
 
     Parameters
     ----------

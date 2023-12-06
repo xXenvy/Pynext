@@ -260,7 +260,7 @@ class Guild(Hashable):
         """
         List with applications (bots) on the guild.
 
-        .. versionadded:: 1.0.7
+        .. versionadded:: 1.0.8
         """
         return list(self._applications.values())
 
@@ -268,7 +268,7 @@ class Guild(Hashable):
         """
         Method to get application object by id.
 
-        .. versionadded:: 1.0.7
+        .. versionadded:: 1.0.8
 
         Parameters
         ----------
@@ -505,7 +505,7 @@ class Guild(Hashable):
         """
         Method to fetch guild applications.
 
-        .. versionadded:: 1.0.7
+        .. versionadded:: 1.0.8
 
         Parameters
         ----------

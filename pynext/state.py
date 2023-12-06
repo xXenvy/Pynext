@@ -142,10 +142,10 @@ class State:
         """
         Method to create a application object from a data.
 
+        .. versionadded:: 1.0.8
+
         Parameters
         ----------
-        guild:
-            Guild to which the created application should belong.
         data:
             Required data to create a application object.
         """
@@ -157,6 +157,8 @@ class State:
     ) -> SlashCommand:
         """
         Method to create a SlashCommand object from a data.
+
+        .. versionadded:: 1.0.8
 
         Parameters
         ----------
@@ -173,6 +175,8 @@ class State:
     ) -> SubCommand:
         """
         Method to create a SubCommand object from a data.
+
+        .. versionadded:: 1.0.8
 
         Parameters
         ----------
