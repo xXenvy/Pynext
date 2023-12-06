@@ -71,4 +71,8 @@ class VoiceStateNotFound(PynextError):
 
 
 class UnSupportedOptionType(PynextError):
-    """Called when the user specifies an unsupported value type in the slash parameter of the command."""
+    """
+    Called when the user specifies an unsupported value type in the slash parameter of the command.
+
+    .. versionadded:: 1.0.6
+    """

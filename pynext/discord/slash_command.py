@@ -105,6 +105,10 @@ class BaseCommand(Hashable):
             return CommandOptionType.STRING, value
         if isinstance(value, int):
             return CommandOptionType.INTEGER, value
+        if isinstance(value, float):
+            return CommandOptionType.NUMBER, value
+        if isinstance(value, bool):
+            return CommandOptionType.BOOLEAN, value
         if isinstance(value, Role):
             return CommandOptionType.ROLE, value.id
         if isinstance(value, DiscordUser):
@@ -219,6 +223,8 @@ class SlashCommand(BaseCommand):
             Command not found.
         Forbidden
             Selfbot doesn't have proper permissions.
+        UnSupportedOptionType
+            Command does not support the specified option type.
         """
         command_params: list[dict[str, Any]] = []
 
@@ -331,6 +337,8 @@ class SubCommand(BaseCommand):
             Command not found.
         Forbidden
             Selfbot doesn't have proper permissions.
+        UnSupportedOptionType
+            Command does not support the specified option type.
         """
         payload: dict[str, Any] = {
             "type": 2,

@@ -157,3 +157,4 @@ class CommandOptionType(Enum):
     USER = 6
     CHANNEL = 7
     ROLE = 8
+    NUMBER = 10
