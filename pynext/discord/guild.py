@@ -259,12 +259,16 @@ class Guild(Hashable):
     def applications(self) -> list[Application]:
         """
         List with applications (bots) on the guild.
+
+        .. versionadded:: 1.0.7
         """
         return list(self._applications.values())
 
     def get_application(self, application_id: int) -> Application | None:
         """
         Method to get application object by id.
+
+        .. versionadded:: 1.0.7
 
         Parameters
         ----------
@@ -500,6 +504,8 @@ class Guild(Hashable):
     async def fetch_applications(self, user: SelfBot) -> list[Application]:
         """
         Method to fetch guild applications.
+
+        .. versionadded:: 1.0.7
 
         Parameters
         ----------

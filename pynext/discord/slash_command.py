@@ -125,7 +125,7 @@ class SlashCommand(BaseCommand):
     """
     Represents the SlashCommand object.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.7
 
     Parameters
     ----------
@@ -253,7 +253,7 @@ class SubCommand(BaseCommand):
     """
     Represents the SubCommand object.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.7
 
     Parameters
     ----------

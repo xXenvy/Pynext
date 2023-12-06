@@ -226,7 +226,7 @@ Documentation of all available library events. See how to use them: :ref:`Events
 
     Called when the selfbot will create interaction with the application.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.7
 
     :param selfbot: Selfbot that received an event from the websocket.
     :type selfbot: :class:`SelfBot`
@@ -237,7 +237,7 @@ Documentation of all available library events. See how to use them: :ref:`Events
 
     Called when the application will respond correctly to interaction.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.7
 
     :param selfbot: Selfbot that received an event from the websocket.
     :type selfbot: :class:`SelfBot`
@@ -248,7 +248,7 @@ Documentation of all available library events. See how to use them: :ref:`Events
 
     Called when the application will not respond to interaction.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.7
 
     :param selfbot: Selfbot that received an event from the websocket.
     :type selfbot: :class:`SelfBot`

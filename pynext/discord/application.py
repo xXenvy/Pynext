@@ -13,7 +13,7 @@ class Application(DiscordUser):
     """
     Represents the Application object.
 
-    .. versionadded:: 1.0.6
+    .. versionadded:: 1.0.7
 
     Parameters
     ----------
