@@ -119,6 +119,10 @@ class Events(Enum):
     GUILD_ROLE_UPDATE = "on_guild_role_update"
     GUILD_ROLE_DELETE = "on_guild_role_delete"
 
+    INTERACTION_CREATE = "on_interaction_create"
+    INTERACTION_SUCCESS = "on_interaction_success"
+    INTERACTION_FAILURE = "on_interaction_failure"
+
 
 class DefaultAvatar(Enum):
     blurple = 0
@@ -148,3 +152,13 @@ class ActivityType(Enum):
     LISTENING = 2
     WATCHING = 3
     COMPETING = 5
+
+
+class CommandOptionType(Enum):
+    STRING = 3
+    INTEGER = 4
+    BOOLEAN = 5
+    USER = 6
+    CHANNEL = 7
+    ROLE = 8
+    NUMBER = 10

@@ -137,6 +137,8 @@ class GuildChannel(BaseChannel):
     ----------
     state:
         State object.
+    guild:
+        Guild on which the channel is.
     data:
         Channel data.
 

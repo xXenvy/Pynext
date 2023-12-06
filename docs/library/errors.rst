@@ -46,3 +46,7 @@ Errors
 .. autoexception:: VoiceStateNotFound()
    :members:
    :show-inheritance:
+
+.. autoexception:: UnSupportedOptionType()
+   :members:
+   :show-inheritance:

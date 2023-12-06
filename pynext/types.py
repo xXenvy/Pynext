@@ -111,3 +111,67 @@ class EmojisUpdatePayload:
     guild: Guild
     added_emojis: list[Emoji]
     deleted_emojis: list[Emoji]
+
+
+@dataclass(repr=False)
+class ApplicationCommandOption:
+    """
+    ApplicationCommandOption dataclass.
+
+    .. versionadded:: 1.0.6
+
+    Parameters
+    ----------
+    type:
+        Option type.
+    name:
+        Option name.
+    description:
+        Option description.
+    required:
+        Whether the option is required.
+    autocomplete:
+        If autocomplete are enabled for this option.
+    min_value:
+        Min value of this option.
+    max_value:
+        Max value of this option.
+    channel_types:
+        If the option is a channel type, the channels shown will be restricted to these types.
+    """
+
+    type: int
+    name: str
+    description: str
+    required: bool
+    autocomplete: bool
+    min_value: int | None = None
+    max_value: int | None = None
+    channel_types: list[int] | None = None
+
+    def __repr__(self) -> str:
+        repr_attr: str = ", ".join(
+            f"{key}={value}"
+            for key, value in self.__dict__.items()
+            if value is not None
+        )
+        return f"ApplicationCommandOption({repr_attr})"
+
+
+@dataclass
+class InteractionPayload:
+    """
+    Dataclass Payload passed in the ``on_interaction`` events.
+
+    .. versionadded:: 1.0.6
+
+    Parameters
+    ----------
+    nonce:
+        Interaction nonce.
+    id:
+        Id of the interaction.
+    """
+
+    nonce: int
+    id: int

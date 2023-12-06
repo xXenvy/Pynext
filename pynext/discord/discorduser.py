@@ -52,9 +52,9 @@ class DiscordUser(Hashable):
     Attributes
     ----------
     global_name: Optional[:class:`str`]
-        Member global name.
+        User global name.
     username: :class:`str`
-        Member username.
+        User username.
     discriminator: :class:`str`
         User discriminator.
     avatar_id: Optional[:class:`str`]
