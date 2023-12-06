@@ -22,3 +22,11 @@ Types
 .. autoclass:: EmojisUpdatePayload
    :members:
    :show-inheritance:
+
+.. autoclass:: ApplicationCommandOption
+    :members:
+    :show-inheritance:
+
+.. autoclass:: InteractionPayload
+    :members:
+    :show-inheritance:

@@ -233,7 +233,7 @@ class HTTPClient:
             if request_manager.is_ratelimited(response):
                 data: dict = await response.json()
                 retry_after: float = data["retry_after"]
-                global_ratelimit: bool = data["global"]
+                global_ratelimit: bool = data.get("global", False)
 
                 self._logger.debug(
                     f"Ratelimit reached. Retry after: {retry_after} |"
@@ -1087,7 +1087,7 @@ class HTTPClient:
         user:
             Selfbot to make the request.
         channel_id:
-            id of the channel where the message is.
+            Id of the channel where the message is.
         message_id:
             Id of the message.
         """
@@ -1102,3 +1102,54 @@ class HTTPClient:
         payload: dict[str, bool | int] = {"manual": True, "mention_count": 0}
 
         await self.request(route, json=payload, user=user)
+
+    async def fetch_applications(
+        self, user: SelfBot, guild_id: int | None = None, channel_id: int | None = None
+    ) -> dict[str, Any]:
+        """
+        HTTP request to fetch guild applications.
+
+        .. versionadded:: 1.0.6
+
+        Parameters
+        ----------
+        user:
+            Selfbot to make the request.
+        guild_id:
+            Id of the guild.
+        channel_id:
+            Id of the dm channel.
+        """
+        if not guild_id and not channel_id:
+            raise RuntimeError("Missing guild_id or channel_id parameter.")
+
+        start_url: str = f"guilds/{guild_id}" if guild_id else f"channels/{channel_id}"
+
+        route = Route(
+            method="GET",
+            url=f"{start_url}/application-command-index",
+            headers=user.authorization.headers,
+        )
+
+        response: ClientResponse = await self.request(route, user=user)
+        return await response.json()
+
+    async def use_interaction(self, user: SelfBot, payload: dict[str, Any]) -> None:
+        """
+        HTTP request to send interaction.
+
+        .. versionadded:: 1.0.6
+
+        Parameters
+        ----------
+        user:
+            Selfbot to make the request.
+        payload:
+            Interaction payload.
+        """
+        route = Route(
+            method="POST",
+            url="interactions",
+            headers=user.authorization.headers,
+        )
+        await self.request(route, user=user, json=payload)

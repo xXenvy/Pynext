@@ -44,6 +44,18 @@ Discord objects.
    :members:
    :show-inheritance:
 
+.. autoclass:: Application()
+   :members:
+   :show-inheritance:
+
+.. autoclass:: SlashCommand()
+   :members:
+   :show-inheritance:
+
+.. autoclass:: SubCommand()
+   :members:
+   :show-inheritance:
+
 .. autoclass:: DiscordUser()
    :members:
    :show-inheritance:

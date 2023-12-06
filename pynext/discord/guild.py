@@ -23,6 +23,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import AsyncIterable
 
+from ..utils import applications_filter
 from .channel import *
 from .reaction import Emoji
 
@@ -36,6 +37,7 @@ if TYPE_CHECKING:
     from .permissions import Permissions
     from .color import Color
     from .member import GuildMember
+    from .application import Application
 
     from ..state import State
     from ..selfbot import SelfBot
@@ -84,10 +86,6 @@ class Guild(Hashable):
         "id",
         "name",
         "owner_id",
-        "_roles",
-        "_channels",
-        "_members",
-        "_emojis",
         "icon_id",
         "afk_channel_id",
         "preferred_locale",
@@ -96,6 +94,11 @@ class Guild(Hashable):
         "system_channel_id",
         "afk_timeout",
         "premium_progress_bar_enabled",
+        "_roles",
+        "_channels",
+        "_members",
+        "_emojis",
+        "_applications",
     )
 
     def __init__(self, state: State, data: dict[str, Any]):
@@ -123,6 +126,7 @@ class Guild(Hashable):
         self._channels: dict[int, Channel] = {}
         self._members: dict[int, GuildMember] = {}
         self._emojis: set[Emoji] = set()
+        self._applications: dict[int, Application] = {}
 
         for role_data in data["roles"]:
             role = Role(guild=self, data=role_data)
@@ -250,6 +254,24 @@ class Guild(Hashable):
         List with members on the guild.
         """
         return list(self._members.values())
+
+    @property
+    def applications(self) -> list[Application]:
+        """
+        List with applications (bots) on the guild.
+        """
+        return list(self._applications.values())
+
+    def get_application(self, application_id: int) -> Application | None:
+        """
+        Method to get application object by id.
+
+        Parameters
+        ----------
+        application_id:
+            Id of the application.
+        """
+        return self._applications.get(application_id)
 
     def get_role(self, role_id: int) -> Role | None:
         """
@@ -474,6 +496,37 @@ class Guild(Hashable):
 
         self._add_member(member)
         return member
+
+    async def fetch_applications(self, user: SelfBot) -> list[Application]:
+        """
+        Method to fetch guild applications.
+
+        Parameters
+        ----------
+        user:
+            Selfbot to send request.
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Fetching the applications failed.
+        NotFound
+            Guild not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        """
+        data: dict[str, Any] = await self._state.http.fetch_applications(
+            user, guild_id=self.id
+        )
+        self._applications = {}
+
+        for app_data in applications_filter(data).values():
+            application: Application = self._state.create_application(app_data)
+            self._add_application(application)
+
+        return self.applications
 
     async def create_role(
         self,
@@ -758,3 +811,6 @@ class Guild(Hashable):
             del self._members[member_id]
         except KeyError:
             pass
+
+    def _add_application(self, application: Application) -> None:
+        self._applications[application.id] = application

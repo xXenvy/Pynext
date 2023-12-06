@@ -35,6 +35,8 @@ from .activity import *
 from .banentry import *
 from .abc import *
 from .emoji import *
+from .application import *
+from .slash_command import *
 
 __all__ = (
     "GuildMessage",
@@ -59,4 +61,8 @@ __all__ = (
     "BanEntry",
     "Messageable",
     "Typing",
+    "Application",
+    "SlashCommand",
+    "SubCommand",
+    "ApplicationCommandOption",
 )

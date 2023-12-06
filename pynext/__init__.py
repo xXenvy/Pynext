@@ -78,6 +78,13 @@ __all__: tuple[str, ...] = (
     "HTTPTimeoutError",
     "Messageable",
     "Typing",
+    "Application",
+    "SlashCommand",
+    "SubCommand",
+    "CommandOptionType",
+    "UnSupportedOptionType",
+    "ApplicationCommandOption",
+    "InteractionPayload",
 )
 
 pynext_version: str = PynextClient.__version__
