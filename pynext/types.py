@@ -115,6 +115,30 @@ class EmojisUpdatePayload:
 
 @dataclass(repr=False)
 class ApplicationCommandOption:
+    """
+    ApplicationCommandOption dataclass.
+
+    .. versionadded:: 1.0.6
+
+    Parameters
+    ----------
+    type:
+        Option type.
+    name:
+        Option name.
+    description:
+        Option description.
+    required:
+        Whether the option is required.
+    autocomplete:
+        If autocomplete are enabled for this option.
+    min_value:
+        Min value of this option.
+    max_value:
+        Max value of this option.
+    channel_types:
+        If the option is a channel type, the channels shown will be restricted to these types.
+    """
     type: int
     name: str
     description: str

@@ -13,10 +13,12 @@ class Application(DiscordUser):
     """
     Represents the Application object.
 
+    .. versionadded:: 1.0.6
+
     Parameters
     ----------
     state:
-        abc
+        State object.
     data:
         Application data.
 
