@@ -1133,6 +1133,16 @@ class HTTPClient:
         return await response.json()
 
     async def use_interaction(self, user: SelfBot, payload: dict[str, Any]) -> None:
+        """
+        HTTP request to send interaction.
+
+        Parameters
+        ----------
+        user:
+            Selfbot to make the request.
+        payload:
+            Interaction payload.
+        """
         route = Route(
             method="POST",
             url="interactions",
