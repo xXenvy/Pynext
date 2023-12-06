@@ -1109,6 +1109,8 @@ class HTTPClient:
         """
         HTTP request to fetch guild applications.
 
+        .. versionadded:: 1.0.6
+
         Parameters
         ----------
         user:
