@@ -9,7 +9,7 @@ from ..types import ApplicationCommandOption
 from .role import Role
 from .permissions import Permissions
 from .discorduser import DiscordUser
-from .channel import TextChannel, DMChannel
+from .channel import TextChannel, DMChannel, BaseChannel
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -109,6 +109,8 @@ class BaseCommand(Hashable):
             return CommandOptionType.ROLE, value.id
         if isinstance(value, DiscordUser):
             return CommandOptionType.USER, value.id
+        if isinstance(value, BaseChannel):
+            return CommandOptionType.CHANNEL, value.id
 
         raise UnSupportedOptionType(
             f"Command does not support {type(value)} value type."
@@ -130,7 +132,7 @@ class SlashCommand(BaseCommand):
     ----------
     application: :class:`Application`
         SlashCommand application object.
-    options:
+    options: list[:class:`ApplicationCommandOption`]
         SubCommand options.
     name: :class:`str`
         Slash command name.
@@ -193,6 +195,29 @@ class SlashCommand(BaseCommand):
     async def use(
         self, user: SelfBot, channel: TextChannel | DMChannel, **params
     ) -> None:
+        """
+        Method to use application command.
+
+        Parameters
+        ----------
+        user:
+            Selfbot to use the command.
+        channel:
+            Channel on which the command is supposed to be used.
+        params:
+            Command arguments.
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Using the command failed.
+        NotFound
+            Command not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        """
         command_params: list[dict[str, Any]] = []
 
         for key, value in params.items():
@@ -233,7 +258,7 @@ class SubCommand(BaseCommand):
         SubCommand parent.
     application: :class:`Application`
         SlashCommand application object.
-    options:
+    options: list[:class:`ApplicationCommandOption`]
         SubCommand options.
     name: :class:`str`
         SubCommand name.
@@ -280,6 +305,29 @@ class SubCommand(BaseCommand):
     async def use(
         self, user: SelfBot, channel: TextChannel | DMChannel, **params
     ) -> None:
+        """
+        Method to use application command.
+
+        Parameters
+        ----------
+        user:
+            Selfbot to use the command.
+        channel:
+            Channel on which the command is supposed to be used.
+        params:
+            Command arguments.
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Using the command failed.
+        NotFound
+            Command not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        """
         payload: dict[str, Any] = {
             "type": 2,
             "application_id": str(self.application.id),
@@ -293,6 +341,8 @@ class SubCommand(BaseCommand):
         await self._state.http.use_interaction(user=user, payload=payload)
 
     def __format_options_payload(self, params: dict[str, Any]) -> dict[str, Any]:
+        # Don't ask what's going on here. It just works.
+
         slash_command: SubCommand | SlashCommand = self
         sub_commands: list[SubCommand | SlashCommand] = [slash_command]
 
