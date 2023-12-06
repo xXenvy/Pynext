@@ -16,15 +16,17 @@ async def on_ready(user: SelfBot):
 
     await guild.fetch_applications(user)
 
-    app: Optional[Application] = guild.get_application(application_id=155149108183695360)  # Dyno bot id.
+    app: Optional[Application] = guild.get_application(
+        application_id=155149108183695360
+    )  # Dyno bot id.
     if app is None:
         raise RuntimeError("Application not found.")
 
-    command: Optional[SlashCommand] = app.get_command_by_name('addrole')
+    command: Optional[SlashCommand] = app.get_command_by_name("addrole")
     if command is None:
         raise RuntimeError("Command not found.")
 
-    await command.use(user=user, channel=general_chat, name='rolename123')
+    await command.use(user=user, channel=general_chat, name="rolename123")
     # Argument name is used by slashcommand.
 
 
