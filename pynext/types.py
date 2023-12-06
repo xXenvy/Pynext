@@ -139,6 +139,7 @@ class ApplicationCommandOption:
     channel_types:
         If the option is a channel type, the channels shown will be restricted to these types.
     """
+
     type: int
     name: str
     description: str
