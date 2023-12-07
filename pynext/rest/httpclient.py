@@ -71,7 +71,6 @@ class HTTPClient:
         "_request_delay",
         "_timeout",
     )
-    __version__: ClassVar[str] = "1.0.9"
 
     BASE_URL: ClassVar[str] = "https://discord.com/api/v10/"
 
@@ -105,7 +104,8 @@ class HTTPClient:
         Default headers used for HTTP requests.
         """
         return {
-            "SelfBot-Agent": f"Pynext HTTP (v{self.__version__})",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/120.0.0.0 Safari/537.36",
             "Accept": "*/*",
             "authority": "discord.com",
             "Origin": "https://discord.com",
