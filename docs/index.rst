@@ -15,4 +15,4 @@ Getting started.
 ================
 
 - **First steps:** :ref:`Installation` | :ref:`Examples` | :ref:`Logging`.
-- **Need help?** See :ref:`Faq` or Create an issue on `github. <https://github.com/xXenvy/Pynext>`_
+- **Need help?** See :ref:`Faq` or Create an issue on `github. <https://github.com/xXenvy/Pynext/issues/new/choose>`_
