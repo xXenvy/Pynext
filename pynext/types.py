@@ -60,6 +60,8 @@ class Authorization(Generic[KeyT]):
         Selfbot authorization token.
     cookies:
         Selfbot http cookies.
+
+        .. versionadded:: 1.1.0
     """
 
     key: KeyT
