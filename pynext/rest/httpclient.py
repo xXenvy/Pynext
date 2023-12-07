@@ -31,6 +31,7 @@ from aiohttp import (
 )
 from logging import getLogger, Logger
 from asyncio import get_event_loop, TimeoutError
+from base64 import b64encode
 
 from ..errors import Unauthorized, HTTPTimeoutError
 from ..types import Authorization, MessageReference, OverwritePayload, RatelimitPayload
@@ -109,7 +110,18 @@ class HTTPClient:
             "Accept": "*/*",
             "authority": "discord.com",
             "Origin": "https://discord.com",
+            "Cache-Control": "no-cache",
+            "X-Super-Properties": self.super_properties
         }
+
+    @property
+    def super_properties(self) -> str:
+        properites: dict[str, str | int] = {
+            "os": "Windows",
+            "client_build_number": 252431,
+            "os_version": "10",
+        }
+        return b64encode(str(properites).encode('utf-8')).decode('utf-8')
 
     @property
     def request_delay(self) -> float:
