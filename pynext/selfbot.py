@@ -133,6 +133,13 @@ class SelfBot(DiscordUser):
         return self.authorization.key
 
     @property
+    def cookies(self) -> str | None:
+        """
+        Selfbot http cookies.
+        """
+        return self.authorization.cookies
+
+    @property
     def latency(self) -> float:
         """
         Websocket latency value. (Multiply by 1000 to get the value in milliseconds).

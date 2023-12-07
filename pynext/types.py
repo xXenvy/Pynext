@@ -58,6 +58,8 @@ class Authorization(Generic[KeyT]):
     ----------
     key:
         Selfbot authorization token.
+    cookies:
+        Selfbot http cookies.
     """
 
     key: KeyT
