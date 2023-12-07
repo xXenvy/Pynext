@@ -21,10 +21,10 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Callable, Coroutine, Any, Generic, TypeVar, Awaitable
+from typing import TYPE_CHECKING, Callable, Coroutine, Any, Generic, TypeVar, Awaitable, Union
 
 from logging import Logger, getLogger
-from asyncio import iscoroutinefunction, get_event_loop, Future, CancelledError
+from asyncio import iscoroutinefunction, get_event_loop, Future
 from collections import defaultdict
 
 from ..utils import maybe_coro
@@ -32,6 +32,9 @@ from ..errors import FunctionIsNotCoroutine
 
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
+
+    WaitForCheck = Callable[..., Union[Awaitable[bool], bool]]
+
 
 ObjectT = TypeVar("ObjectT", bound=object)
 
@@ -66,7 +69,7 @@ class Dispatcher(Generic[ObjectT]):
 
         self.events: dict[str, Callable[..., Coroutine]] = {}
         self.logger: Logger = getLogger("pynext.gateway")
-        self._wait_for_futures: dict = defaultdict(list)
+        self._wait_for_futures: dict[str, list[tuple[Future, WaitForCheck | None]]] = defaultdict(list)
 
     def __repr__(self) -> str:
         return f"<Dispatcher(events={len(self.events)})>"
@@ -152,17 +155,27 @@ class Dispatcher(Generic[ObjectT]):
     async def wait_for(
             self,
             event_name: str,
-            check: Callable[..., Awaitable[bool] | bool] | None = None
+            check: WaitForCheck | None = None
     ) -> tuple[Any, ...]:
         """
         Async method to wait until the specified event has been called.
+
+        **Example usage:**
+
+        .. code-block:: python
+
+            selfbot, message = await dispatcher.wait_for(
+                event_name='on_message_create',
+                check=lambda user, msg: msg.content == 'Hello'
+            )
+            await message.reply(selfbot, 'Hi!')
 
         Parameters
         ----------
         event_name:
             Name of the event.
         check:
-            Check which must be True for the event to return a result.
+            Optional check which must be True for the event to return a result.
         """
         event_name = event_name.lower()
         future: Future = Future()
@@ -175,15 +188,15 @@ class Dispatcher(Generic[ObjectT]):
             self,
             event_name: str,
             future: Future,
-            check: Callable[..., Awaitable[bool] | bool] | None,
+            check: WaitForCheck | None,
             *args: Any,
             **kwargs: Any
     ) -> None:
 
         if check is not None:
-            result = await maybe_coro(check, *args, **kwargs)
+            result: bool = await maybe_coro(check, *args, **kwargs)
             if not result:
                 return
 
-        future.set_result(tuple(kwargs.values()) + tuple(args))
+        future.set_result(tuple(args) + tuple(kwargs.values()))
         self._wait_for_futures[event_name].remove((future, check))
