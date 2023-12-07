@@ -24,7 +24,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable, Coroutine, Any, Generic, TypeVar, Awaitable
 
 from logging import Logger, getLogger
-from asyncio import iscoroutinefunction, get_event_loop, Future, CancelledError
+from asyncio import iscoroutinefunction, get_event_loop, Future
 from collections import defaultdict
 
 from ..utils import maybe_coro
@@ -150,9 +150,9 @@ class Dispatcher(Generic[ObjectT]):
                 self.loop.create_task(event(*args, **kwargs))
 
     async def wait_for(
-            self,
-            event_name: str,
-            check: Callable[..., Awaitable[bool] | bool] | None = None
+        self,
+        event_name: str,
+        check: Callable[..., Awaitable[bool] | bool] | None = None,
     ) -> tuple[Any, ...]:
         """
         Async method to wait until the specified event has been called.
@@ -172,14 +172,13 @@ class Dispatcher(Generic[ObjectT]):
         return result
 
     async def _run_future(
-            self,
-            event_name: str,
-            future: Future,
-            check: Callable[..., Awaitable[bool] | bool] | None,
-            *args: Any,
-            **kwargs: Any
+        self,
+        event_name: str,
+        future: Future,
+        check: Callable[..., Awaitable[bool] | bool] | None,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
-
         if check is not None:
             result = await maybe_coro(check, *args, **kwargs)
             if not result:
