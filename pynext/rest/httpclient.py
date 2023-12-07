@@ -112,7 +112,7 @@ class HTTPClient:
             "Origin": "https://discord.com",
             "Cache-Control": "no-cache",
             "Content-Type": "application/json",
-            "X-Super-Properties": self.super_properties
+            "X-Super-Properties": self.super_properties,
         }
 
     @property
@@ -127,7 +127,7 @@ class HTTPClient:
             "client_build_number": 252431,
             "os_version": "10",
         }
-        return b64encode(str(properites).encode('utf-8')).decode('utf-8')
+        return b64encode(str(properites).encode("utf-8")).decode("utf-8")
 
     @property
     def request_delay(self) -> float:
@@ -306,11 +306,11 @@ class HTTPClient:
         except Unauthorized:
             return
 
-        cookies: str = ''
+        cookies: str = ""
         for key, cookie in response.cookies.items():
-            cookies += f'{key}={cookie.value}; '
+            cookies += f"{key}={cookie.value}; "
 
-        data['cookies'] = cookies[0:-2]
+        data["cookies"] = cookies[0:-2]
         return data
 
     async def fetch_user(self, user: SelfBot, user_id: int) -> dict[str, Any]:
