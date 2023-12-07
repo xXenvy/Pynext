@@ -111,17 +111,23 @@ class HTTPClient:
             "authority": "discord.com",
             "Origin": "https://discord.com",
             "Cache-Control": "no-cache",
-            "X-Super-Properties": self.super_properties,
+            "Content-Type": "application/json",
+            "X-Super-Properties": self.super_properties
         }
 
     @property
     def super_properties(self) -> str:
+        """
+        Discord requires the X-Super-Properties HTTP header for some endpoints.
+        This header may be a new deterrent against bots.
+        However, it does not provide personally-identifiable information.
+        """
         properites: dict[str, str | int] = {
             "os": "Windows",
             "client_build_number": 252431,
             "os_version": "10",
         }
-        return b64encode(str(properites).encode("utf-8")).decode("utf-8")
+        return b64encode(str(properites).encode('utf-8')).decode('utf-8')
 
     @property
     def request_delay(self) -> float:
@@ -296,10 +302,16 @@ class HTTPClient:
 
         try:
             response: ClientResponse = await self.request(route)
+            data: dict[str, Any] = await response.json()
         except Unauthorized:
             return
 
-        return await response.json()
+        cookies: str = ''
+        for key, cookie in response.cookies.items():
+            cookies += f'{key}={cookie.value}; '
+
+        data['cookies'] = cookies[0:-2]
+        return data
 
     async def fetch_user(self, user: SelfBot, user_id: int) -> dict[str, Any]:
         """
