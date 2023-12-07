@@ -70,10 +70,7 @@ class Authorization(Generic[KeyT]):
         if self.cookies is None:
             return {"authorization": self.key}
 
-        return {
-            "authorization": self.key,
-            "Cookie": self.cookies
-        }
+        return {"authorization": self.key, "Cookie": self.cookies}
 
 
 @dataclass
