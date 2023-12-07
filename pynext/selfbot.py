@@ -138,6 +138,8 @@ class SelfBot(DiscordUser):
     def cookies(self) -> str | None:
         """
         Selfbot http cookies.
+
+        .. versionadded:: 1.1.0
         """
         return self.authorization.cookies
 

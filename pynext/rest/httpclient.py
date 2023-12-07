@@ -119,8 +119,11 @@ class HTTPClient:
     def super_properties(self) -> str:
         """
         Discord requires the X-Super-Properties HTTP header for some endpoints.
+
         This header may be a new deterrent against bots.
         However, it does not provide personally-identifiable information.
+
+        .. versionadded:: 1.1.0
         """
         properites: dict[str, str | int] = {
             "os": "Windows",
