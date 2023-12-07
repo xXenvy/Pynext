@@ -21,7 +21,16 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Callable, Coroutine, Any, Generic, TypeVar, Awaitable, Union
+from typing import (
+    TYPE_CHECKING,
+    Callable,
+    Coroutine,
+    Any,
+    Generic,
+    TypeVar,
+    Awaitable,
+    Union,
+)
 
 from logging import Logger, getLogger
 from asyncio import iscoroutinefunction, get_event_loop, Future
@@ -69,7 +78,9 @@ class Dispatcher(Generic[ObjectT]):
 
         self.events: dict[str, Callable[..., Coroutine]] = {}
         self.logger: Logger = getLogger("pynext.gateway")
-        self._wait_for_futures: dict[str, list[tuple[Future, WaitForCheck | None]]] = defaultdict(list)
+        self._wait_for_futures: dict[
+            str, list[tuple[Future, WaitForCheck | None]]
+        ] = defaultdict(list)
 
     def __repr__(self) -> str:
         return f"<Dispatcher(events={len(self.events)})>"
@@ -153,9 +164,7 @@ class Dispatcher(Generic[ObjectT]):
                 self.loop.create_task(event(*args, **kwargs))
 
     async def wait_for(
-            self,
-            event_name: str,
-            check: WaitForCheck | None = None
+        self, event_name: str, check: WaitForCheck | None = None
     ) -> tuple[Any, ...]:
         """
         Async method to wait until the specified event has been called.
@@ -185,14 +194,13 @@ class Dispatcher(Generic[ObjectT]):
         return result
 
     async def _run_future(
-            self,
-            event_name: str,
-            future: Future,
-            check: WaitForCheck | None,
-            *args: Any,
-            **kwargs: Any
+        self,
+        event_name: str,
+        future: Future,
+        check: WaitForCheck | None,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
-
         if check is not None:
             result: bool = await maybe_coro(check, *args, **kwargs)
             if not result:
