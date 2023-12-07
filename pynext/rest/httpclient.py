@@ -111,7 +111,7 @@ class HTTPClient:
             "authority": "discord.com",
             "Origin": "https://discord.com",
             "Cache-Control": "no-cache",
-            "X-Super-Properties": self.super_properties
+            "X-Super-Properties": self.super_properties,
         }
 
     @property
@@ -121,7 +121,7 @@ class HTTPClient:
             "client_build_number": 252431,
             "os_version": "10",
         }
-        return b64encode(str(properites).encode('utf-8')).decode('utf-8')
+        return b64encode(str(properites).encode("utf-8")).decode("utf-8")
 
     @property
     def request_delay(self) -> float:
