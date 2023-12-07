@@ -66,7 +66,7 @@ class Authorization(Generic[KeyT]):
     cookies: str | None = None
 
     @property
-    def headers(self) -> dict[str, KeyT]:
+    def headers(self) -> dict[str, KeyT | str]:
         if self.cookies is None:
             return {"authorization": self.key}
 
