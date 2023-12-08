@@ -245,8 +245,6 @@ class HTTPClient:
 
             headers: dict[str, str] = {**self.default_headers, **route.headers}
             url: str = self.BASE_URL + route.url
-            print(headers)
-            print(route)
 
             self._logger.debug(f"Sending request: {route}")
 
