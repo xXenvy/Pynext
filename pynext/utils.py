@@ -21,13 +21,14 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import Any
+from typing import Any, Callable
 
 from time import time
 from random import choice
 from string import ascii_letters, digits
 
 from aiohttp import ClientResponse, client_exceptions
+from asyncio import iscoroutinefunction
 from datetime import datetime, timezone
 
 DISCORD_EPOCH: int = 1420070400000
@@ -122,3 +123,10 @@ def nonce() -> int:
 
 def create_session(lenght: int = 32) -> str:
     return "".join(choice(ascii_letters + digits) for _ in range(lenght))
+
+
+async def maybe_coro(coro: Callable, *args: Any, **kwargs: Any) -> Any:
+    if iscoroutinefunction(coro):
+        return await coro(*args, **kwargs)
+    else:
+        return coro(*args, **kwargs)

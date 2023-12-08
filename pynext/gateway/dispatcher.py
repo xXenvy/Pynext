@@ -21,15 +21,29 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Callable, Coroutine, Any, Generic, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Callable,
+    Coroutine,
+    Any,
+    Generic,
+    TypeVar,
+    Awaitable,
+    Union,
+)
 
 from logging import Logger, getLogger
-from asyncio import iscoroutinefunction, get_event_loop
+from asyncio import iscoroutinefunction, get_event_loop, Future
+from collections import defaultdict
 
+from ..utils import maybe_coro
 from ..errors import FunctionIsNotCoroutine
 
 if TYPE_CHECKING:
     from asyncio import AbstractEventLoop
+
+    WaitForCheck = Callable[..., Union[Awaitable[bool], bool]]
+
 
 ObjectT = TypeVar("ObjectT", bound=object)
 
@@ -56,7 +70,7 @@ class Dispatcher(Generic[ObjectT]):
         Logger for logging event registrations and running them.
     """
 
-    __slots__ = ("client", "loop", "events", "logger")
+    __slots__ = ("client", "loop", "events", "logger", "_wait_for_futures")
 
     def __init__(self, client: ObjectT | None = None) -> None:
         self.client: ObjectT | None = client
@@ -64,6 +78,9 @@ class Dispatcher(Generic[ObjectT]):
 
         self.events: dict[str, Callable[..., Coroutine]] = {}
         self.logger: Logger = getLogger("pynext.gateway")
+        self._wait_for_futures: dict[
+            str, list[tuple[Future, WaitForCheck | None]]
+        ] = defaultdict(list)
 
     def __repr__(self) -> str:
         return f"<Dispatcher(events={len(self.events)})>"
@@ -131,6 +148,13 @@ class Dispatcher(Generic[ObjectT]):
             Event kwargs.
         """
         event_name = event_name.lower()
+        for future, check in self._wait_for_futures.get(event_name, []):
+            self.logger.debug(f"Dispatching an wait_for: {event_name}.")
+
+            self.loop.create_task(
+                self._run_future(event_name, future, check, *args, **kwargs)
+            )
+
         for event in (
             self.events.get(event_name),
             getattr(self.client, event_name, None),
@@ -138,3 +162,49 @@ class Dispatcher(Generic[ObjectT]):
             if event is not None and iscoroutinefunction(event):
                 self.logger.debug(f"Dispatching an event: {event_name}.")
                 self.loop.create_task(event(*args, **kwargs))
+
+    async def wait_for(
+        self, event_name: str, check: WaitForCheck | None = None
+    ) -> tuple[Any, ...]:
+        """
+        Async method to wait until the specified event has been called.
+
+        **Example usage:**
+
+        .. code-block:: python
+
+            selfbot, message = await dispatcher.wait_for(
+                event_name='on_message_create',
+                check=lambda user, msg: msg.content == 'Hello'
+            )
+            await message.reply(selfbot, 'Hi!')
+
+        Parameters
+        ----------
+        event_name:
+            Name of the event.
+        check:
+            Optional check which must be True for the event to return a result.
+        """
+        event_name = event_name.lower()
+        future: Future = Future()
+
+        self._wait_for_futures[event_name].append((future, check))
+        result = await future
+        return result
+
+    async def _run_future(
+        self,
+        event_name: str,
+        future: Future,
+        check: WaitForCheck | None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        if check is not None:
+            result: bool = await maybe_coro(check, *args, **kwargs)
+            if not result:
+                return
+
+        future.set_result(tuple(args) + tuple(kwargs.values()))
+        self._wait_for_futures[event_name].remove((future, check))
