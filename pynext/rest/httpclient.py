@@ -112,7 +112,7 @@ class HTTPClient:
             "Origin": "https://discord.com",
             "Cache-Control": "no-cache",
             "Content-Type": "application/json",
-            **self.super_properties
+            **self.super_properties,
         }
 
     @property
@@ -131,7 +131,9 @@ class HTTPClient:
             "os_version": "10",
         }
         return {
-            "X-Super-Properties": b64encode(str(properites).encode("utf-8")).decode("utf-8")
+            "X-Super-Properties": b64encode(str(properites).encode("utf-8")).decode(
+                "utf-8"
+            )
         }
 
     @property
