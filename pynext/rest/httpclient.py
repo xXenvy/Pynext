@@ -112,11 +112,11 @@ class HTTPClient:
             "Origin": "https://discord.com",
             "Cache-Control": "no-cache",
             "Content-Type": "application/json",
-            "X-Super-Properties": self.super_properties,
+            **self.super_properties
         }
 
     @property
-    def super_properties(self) -> str:
+    def super_properties(self) -> dict[str, str]:
         """
         Discord requires the X-Super-Properties HTTP header for some endpoints.
 
@@ -130,7 +130,9 @@ class HTTPClient:
             "client_build_number": 252431,
             "os_version": "10",
         }
-        return b64encode(str(properites).encode("utf-8")).decode("utf-8")
+        return {
+            "X-Super-Properties": b64encode(str(properites).encode("utf-8")).decode("utf-8")
+        }
 
     @property
     def request_delay(self) -> float:
@@ -241,8 +243,10 @@ class HTTPClient:
 
             headers: dict[str, str] = {**self.default_headers, **route.headers}
             url: str = self.BASE_URL + route.url
+            print(headers)
+            print(route)
 
-            self._logger.debug(f"Sending request: {route} | {route.headers}")
+            self._logger.debug(f"Sending request: {route}")
 
             try:
                 response: ClientResponse = await self._session.request(
