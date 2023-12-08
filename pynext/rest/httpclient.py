@@ -31,6 +31,7 @@ from aiohttp import (
 )
 from logging import getLogger, Logger
 from asyncio import get_event_loop, TimeoutError
+from base64 import b64encode
 
 from ..errors import Unauthorized, HTTPTimeoutError
 from ..types import Authorization, MessageReference, OverwritePayload, RatelimitPayload
@@ -71,7 +72,6 @@ class HTTPClient:
         "_request_delay",
         "_timeout",
     )
-    __version__: ClassVar[str] = "1.0.9"
 
     BASE_URL: ClassVar[str] = "https://discord.com/api/v10/"
 
@@ -105,10 +105,35 @@ class HTTPClient:
         Default headers used for HTTP requests.
         """
         return {
-            "SelfBot-Agent": f"Pynext HTTP (v{self.__version__})",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36",
             "Accept": "*/*",
             "authority": "discord.com",
             "Origin": "https://discord.com",
+            "Cache-Control": "no-cache",
+            "Content-Type": "application/json",
+            **self.super_properties,
+        }
+
+    @property
+    def super_properties(self) -> dict[str, str]:
+        """
+        Discord requires the X-Super-Properties HTTP header for some endpoints.
+
+        This header may be a new deterrent against bots.
+        However, it does not provide personally-identifiable information.
+
+        .. versionadded:: 1.1.0
+        """
+        properites: dict[str, str | int] = {
+            "os": "Windows",
+            "client_build_number": 252431,
+            "os_version": "10",
+        }
+        return {
+            "X-Super-Properties": b64encode(str(properites).encode("utf-8")).decode(
+                "utf-8"
+            )
         }
 
     @property
@@ -220,8 +245,10 @@ class HTTPClient:
 
             headers: dict[str, str] = {**self.default_headers, **route.headers}
             url: str = self.BASE_URL + route.url
+            print(headers)
+            print(route)
 
-            self._logger.debug(f"Sending request: {route} | {route.headers}")
+            self._logger.debug(f"Sending request: {route}")
 
             try:
                 response: ClientResponse = await self._session.request(
@@ -284,10 +311,16 @@ class HTTPClient:
 
         try:
             response: ClientResponse = await self.request(route)
+            data: dict[str, Any] = await response.json()
         except Unauthorized:
             return
 
-        return await response.json()
+        cookies: str = ""
+        for key, cookie in response.cookies.items():
+            cookies += f"{key}={cookie.value}; "
+
+        data["cookies"] = cookies[0:-2]
+        return data
 
     async def fetch_user(self, user: SelfBot, user_id: int) -> dict[str, Any]:
         """

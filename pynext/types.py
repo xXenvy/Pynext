@@ -58,13 +58,21 @@ class Authorization(Generic[KeyT]):
     ----------
     key:
         Selfbot authorization token.
+    cookies:
+        Selfbot http cookies.
+
+        .. versionadded:: 1.1.0
     """
 
     key: KeyT
+    cookies: str | None = None
 
     @property
-    def headers(self) -> dict[str, KeyT]:
-        return {"authorization": self.key}
+    def headers(self) -> dict[str, str | KeyT]:
+        if self.cookies is None:
+            return {"authorization": self.key}
+
+        return {"authorization": self.key, "Cookie": self.cookies}
 
 
 @dataclass

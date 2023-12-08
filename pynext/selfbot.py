@@ -100,7 +100,9 @@ class SelfBot(DiscordUser):
             self._state
         )  # The state for the selfbot should be public, I think.
         self.gateway: DiscordWebSocket | None = None
-        self.authorization: Authorization[str] = Authorization(token)
+        self.authorization: Authorization[str] = Authorization(
+            key=token, cookies=user_data["cookies"]
+        )
 
         self.email: str = user_data["email"]
         self.verified: bool = user_data["verified"]
@@ -131,6 +133,15 @@ class SelfBot(DiscordUser):
         Selfbot authorization token.
         """
         return self.authorization.key
+
+    @property
+    def cookies(self) -> str | None:
+        """
+        Selfbot http cookies.
+
+        .. versionadded:: 1.1.0
+        """
+        return self.authorization.cookies
 
     @property
     def latency(self) -> float:
