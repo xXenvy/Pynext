@@ -204,6 +204,7 @@ class State:
             Required data to create a message object.
         """
         self.logger.debug("Creating a message object...")
+
         if data.get("type") is None:
             guild_id: int = int(data["guild_id"])
             channel_id: int = int(data["channel_id"])
@@ -235,20 +236,12 @@ class State:
 
             author: DiscordUser | None = user.get_user(user_id=author_id)
             if not author:
-                author_data: dict[str, Any] = await self.http.fetch_user(
-                    user, user_id=author_id
-                )
-                author = self.create_user(data=author_data)
-                user._add_user(author)
+                author = await user.fetch_user(author_id)
 
             dm_channel: DMChannel | None = user.get_dm_channel(channel_id=channel_id)
 
             if not isinstance(dm_channel, DMChannel):
-                channel_data: dict[str, Any] = await self.http.fetch_channel(
-                    user, channel_id=channel_id
-                )
-                dm_channel = self.create_dm_channel(data=channel_data)
-                user._add_dm_channel(dm_channel)
+                dm_channel = await user.fetch_dm_channel(channel_id=channel_id)
 
             data["channel"] = dm_channel
             data["user_author"] = author
@@ -268,15 +261,9 @@ class State:
 
         if not isinstance(channel, TextChannel):
             try:
-                channel_data: dict[str, Any] = await self.http.fetch_channel(
-                    user, channel_id=channel_id
-                )
+                channel = await guild.fetch_channel(user=user, channel_id=channel_id)
             except (Forbidden, HTTPException, Unauthorized):
                 return
-
-            channel = self.create_guild_channel(guild=guild, data=channel_data)
-            if isinstance(channel, TextChannel):
-                await channel.fetch_overwrites(user)
 
         data["guild"] = guild
         data["channel"] = channel
