@@ -14,7 +14,7 @@
 </div>
 
 # 💢 Requirements
-> Python 3.9 or newer
+- Python 3.9 or newer.
 
 # 🔧 Pynext Features
 - Modern Pythonic API using `async` and `await`.
