@@ -125,12 +125,12 @@ class BaseCommand(Hashable):
     def _get_option_type(value: Any) -> tuple[CommandOptionType, Any]:
         if isinstance(value, str):
             return CommandOptionType.STRING, value
+        if isinstance(value, bool):
+            return CommandOptionType.BOOLEAN, value
         if isinstance(value, int):
             return CommandOptionType.INTEGER, value
         if isinstance(value, float):
             return CommandOptionType.NUMBER, value
-        if isinstance(value, bool):
-            return CommandOptionType.BOOLEAN, value
         if isinstance(value, Role):
             return CommandOptionType.ROLE, value.id
         if isinstance(value, DiscordUser):
