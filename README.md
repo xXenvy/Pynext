@@ -51,8 +51,3 @@ client.run("TOKEN_1", "TOKEN_2")
 # 🧷 Links
 - [Documentation](https://pynext.readthedocs.io/en/latest/)
 - [Report a bug or feature](https://github.com/xXenvy/pynext/issues/new/choose)
-
-# 📃 Todo
-- [x] Support for multiple accounts.
-- [ ] Discord connection support on the voice channel.
-- [ ] Slash commands and other interaction stuff handling.
