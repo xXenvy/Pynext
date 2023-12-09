@@ -21,7 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import ClassVar, Any
+from typing import ClassVar
 
 from asyncio import AbstractEventLoop, get_event_loop
 from logging import getLogger, Logger
