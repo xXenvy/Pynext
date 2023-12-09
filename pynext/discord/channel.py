@@ -699,11 +699,8 @@ class VoiceChannel(GuildChannel):
 
 
 class ThreadChannel(GuildChannel):
-
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state, guild, data)
 
     def __repr__(self) -> str:
         return f"<ThreadChannel(name={self.name}, id={self.id})>"
-
-
