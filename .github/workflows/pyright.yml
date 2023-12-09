@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
       fail-fast: false
     steps:
       - name: Check out repository
@@ -29,18 +29,14 @@ jobs:
           version: ${{ env.PYRIGHT_VERSION }}
           python-version: ${{ matrix.python-version }}
           python-platform: Linux
-          # only add comments for 3.8
-          no-comments: ${{ matrix.python-version != '3.8' }}
           warnings: true
 
       - name: Run pyright (Windows)
         uses: jakebailey/pyright-action@v1.4.1
-        # run anyway
         if: success() || failure()
         with:
           version: ${{ env.PYRIGHT_VERSION }}
           python-version: ${{ matrix.python-version }}
           python-platform: Windows
-          # only add comments for one platform
           no-comments: true
           warnings: true
