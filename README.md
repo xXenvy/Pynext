@@ -8,7 +8,7 @@
   `⚠️ Project is still under development. It may contain bugs, and future updates will bring breaking changes.`
 
 ![License](https://img.shields.io/github/license/xXenvy/Pynext?style=for-the-badge&color=%2315b328)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/pynext?style=for-the-badge&color=%2315b328)
+![PyPI - Downloads](https://img.shields.io/pypi/dw/pynext?style=for-the-badge&color=%2315b328)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/xXenvy/Pynext?style=for-the-badge&color=%2315b328)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/xXenvy/Pynext/master?style=for-the-badge&color=%2315b328)
 </div>
