@@ -704,16 +704,16 @@ class ThreadChannel(GuildChannel, Messageable):
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state, guild, data)
 
-        meta: dict[str, Any] = data['thread_metadata']
+        meta: dict[str, Any] = data["thread_metadata"]
         # TODO: Add archive_timestamp, create_timestamp attributes
 
-        self.archived: bool = meta['archived']
-        self.auto_archive_duration: int = meta['auto_archive_duration']
-        self.locked: bool = meta['locked']
+        self.archived: bool = meta["archived"]
+        self.auto_archive_duration: int = meta["auto_archive_duration"]
+        self.locked: bool = meta["locked"]
 
-        self.total_message_sent: int = data['total_message_sent']
-        self.member_count: int = data['member_count']
-        self.owner_id: int = int(data['owner_id'])
+        self.total_message_sent: int = data["total_message_sent"]
+        self.member_count: int = data["member_count"]
+        self.owner_id: int = int(data["owner_id"])
 
         if last_message_id := data.get("last_message_id"):
             self.last_message_id: int | None = int(last_message_id)

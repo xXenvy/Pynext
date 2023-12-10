@@ -207,7 +207,7 @@ class State:
 
         channel_id: int = int(data["channel_id"])
 
-        if guild_id := data.get('guild_id'):
+        if guild_id := data.get("guild_id"):
             guild_id: int | None = int(guild_id)
         elif guild_id := data.get("message_reference", {}).get("guild_id"):
             guild_id: int | None = int(guild_id)

@@ -112,9 +112,7 @@ class WebSocketConnector:
                 debug_events=self._debug_events,
             )
 
-            task: Task = self.client.loop.create_task(
-                web_socket.run(self.gateway_url)
-            )
+            task: Task = self.client.loop.create_task(web_socket.run(self.gateway_url))
             tasks.append(task)
 
         await gather(*tasks)

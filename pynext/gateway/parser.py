@@ -88,7 +88,9 @@ class Parser:
         message: Message | None = await response.user.state.create_message_from_data(
             response.user, response.data
         )
-        if message and isinstance(message.channel, (TextChannel, DMChannel, ThreadChannel)):
+        if message and isinstance(
+            message.channel, (TextChannel, DMChannel, ThreadChannel)
+        ):
             message.channel._add_message(message)
             return response.user, message
 
