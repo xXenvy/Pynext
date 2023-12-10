@@ -192,8 +192,10 @@ class GuildChannel(BaseChannel):
         return f"<GuildChannel(name={self.name}, id={self.id}, type={self.type})>"
 
     @property
-    def parent(self) -> CategoryChannel | None:
+    def parent(self) -> CategoryChannel | TextChannel | None:
         """
+        TODO: Add mention about TextChannel
+
         GuildChannel Category.
         """
         if self.parent_id is None:
@@ -201,7 +203,7 @@ class GuildChannel(BaseChannel):
 
         channel = self.guild.get_channel(self.parent_id)
         if channel is not None:
-            assert isinstance(channel, CategoryChannel)
+            assert isinstance(channel, (TextChannel, CategoryChannel))
 
         return channel
 
@@ -698,9 +700,35 @@ class VoiceChannel(GuildChannel):
         return channel
 
 
-class ThreadChannel(GuildChannel):
+class ThreadChannel(GuildChannel, Messageable):
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state, guild, data)
 
+        meta: dict[str, Any] = data['thread_metadata']
+        # TODO: Add archive_timestamp, create_timestamp attributes
+
+        self.archived: bool = meta['archived']
+        self.auto_archive_duration: int = meta['auto_archive_duration']
+        self.locked: bool = meta['locked']
+
+        self.total_message_sent: int = data['total_message_sent']
+        self.member_count: int = data['member_count']
+        self.owner_id: int = int(data['owner_id'])
+
+        if last_message_id := data.get("last_message_id"):
+            self.last_message_id: int | None = int(last_message_id)
+        else:
+            self.last_message_id: int | None = None
+
+        self._messages: dict[int, GuildMessage] = {}
+
     def __repr__(self) -> str:
         return f"<ThreadChannel(name={self.name}, id={self.id})>"
+
+    @property
+    def owner(self) -> GuildMember | None:
+        return self.guild.get_member(self.owner_id)
+
+    @property
+    def creation_message_id(self) -> int:
+        return self.id

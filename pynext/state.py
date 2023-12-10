@@ -205,33 +205,16 @@ class State:
         """
         self.logger.debug("Creating a message object...")
 
-        if data.get("type") is None:
-            guild_id: int = int(data["guild_id"])
-            channel_id: int = int(data["channel_id"])
-            message_id: int = int(data["id"])
-
-            guild: Guild | None = user.get_guild(guild_id)
-            if not guild:
-                guild = await user.fetch_guild(guild_id=guild_id)
-
-            channel = guild.get_channel(channel_id)
-            if channel is None:
-                channel = await guild.fetch_channel(user, channel_id=channel_id)
-
-            assert isinstance(channel, TextChannel)
-
-            message: Message | None = channel.get_message(message_id)
-            if message is None:
-                await channel.fetch_message(user, message_id=message_id)
-
-            return
-
         channel_id: int = int(data["channel_id"])
 
-        if (
-            data.get("guild_id") is None
-            and data.get("message_reference", {}).get("guild_id") is None
-        ):
+        if guild_id := data.get('guild_id'):
+            guild_id: int | None = int(guild_id)
+        elif guild_id := data.get("message_reference", {}).get("guild_id"):
+            guild_id: int | None = int(guild_id)
+        else:
+            guild_id: int | None = None
+
+        if guild_id is None:
             author_id: int = int(data["author"]["id"])
 
             author: DiscordUser | None = user.get_user(user_id=author_id)
@@ -248,18 +231,13 @@ class State:
 
             return self.create_private_message(data=data)
 
-        if data["type"] not in (19, 21):
-            guild_id: int = int(data["guild_id"])
-        else:
-            guild_id: int = int(data["message_reference"]["guild_id"])
-
         guild: Guild | None = user.get_guild(guild_id)
         if not guild:
             guild = await user.fetch_guild(guild_id)
 
         channel = guild.get_channel(channel_id=channel_id)
 
-        if not isinstance(channel, TextChannel):
+        if not isinstance(channel, (TextChannel, ThreadChannel)):
             try:
                 channel = await guild.fetch_channel(user=user, channel_id=channel_id)
             except (Forbidden, HTTPException, Unauthorized):
@@ -368,6 +346,7 @@ class State:
     def guild_channel_factory(self, channel: GuildChannel) -> Channel:
         """
         Method that converts a GuldChannel object to a specific channel type object.
+
         .. warning::
             Method can return GuildChannel once again if we do not yet support the specified channel type.
 
@@ -385,6 +364,8 @@ class State:
             )
         if channel.type == ChannelType.GUILD_TEXT.value:
             return TextChannel(state=self, guild=channel.guild, data=channel.raw_data)
+        if channel.type == ChannelType.PUBLIC_THREAD.value:
+            return ThreadChannel(state=self, guild=channel.guild, data=channel.raw_data)
 
         return channel
 

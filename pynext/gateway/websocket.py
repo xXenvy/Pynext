@@ -104,7 +104,7 @@ class WebSocketConnector:
         )
 
         for user in self.client.users:
-            userWebSocket = DiscordWebSocket(
+            web_socket = DiscordWebSocket(
                 user=user,
                 client=self.client,
                 chunk_guilds=self._chunk_guilds,
@@ -113,7 +113,7 @@ class WebSocketConnector:
             )
 
             task: Task = self.client.loop.create_task(
-                userWebSocket.run(self.gateway_url)
+                web_socket.run(self.gateway_url)
             )
             tasks.append(task)
 
