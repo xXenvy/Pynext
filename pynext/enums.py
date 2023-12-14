@@ -102,6 +102,8 @@ class Events(Enum):
     MESSAGE_DELETE = "on_message_delete"
     MESSAGE_UPDATE = "on_message_edit"
 
+    THREAD_CREATE = "on_thread_create"
+
     MESSAGE_REACTION_REMOVE = "on_message_reaction_remove"
     MESSAGE_REACTION_ADD = "on_message_reaction_add"
 

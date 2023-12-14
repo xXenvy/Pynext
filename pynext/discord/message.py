@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from .member import GuildMember
     from .discorduser import DiscordUser
     from .guild import Guild
-    from .channel import DMChannel, TextChannel
+    from .channel import DMChannel, TextChannel, ThreadChannel
 
 
 class BaseMessage(Hashable):
@@ -457,7 +457,7 @@ class GuildMessage(BaseMessage):
         super().__init__(state=state, data=message_data)
 
         self.guild: Guild = message_data["guild"]
-        self.channel: TextChannel = message_data["channel"]
+        self.channel: TextChannel | ThreadChannel = message_data["channel"]
         self.author: GuildMember = message_data["user_author"]
 
         for reaction_data in message_data.get("reactions", []):

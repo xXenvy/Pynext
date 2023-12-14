@@ -95,9 +95,10 @@ class Parser:
             return response.user, message
 
     @staticmethod
-    async def on_message_edit_args(
-        response: GatewayResponse,
-    ) -> tuple[SelfBot, Message, Message] | None:
+    async def on_message_edit_args(response: GatewayResponse) -> tuple[SelfBot, Message, Message] | None:
+        if response.data['flags'] == 32:
+            return
+
         message: Message | None = await response.user.state.create_message_from_data(
             response.user, response.data
         )
@@ -112,6 +113,29 @@ class Parser:
             return
 
         return response.user, old_message, message
+
+    @staticmethod
+    async def on_thread_create_args(response: GatewayResponse) -> tuple[SelfBot, ThreadChannel] | None:
+        user: SelfBot = response.user
+        data: dict[str, Any] = response.data
+
+        guild_id: int = int(data['guild_id'])
+        channel_id: int = int(data['parent_id'])
+        message_id: int = int(data['id'])
+
+        guild: Guild | None = user.get_guild(guild_id)
+
+        if guild is None:
+            guild = await user.fetch_guild(guild_id)
+
+        channel: TextChannel | None = guild.get_channel(channel_id)
+        if channel is None:
+            channel = await guild.fetch_channel(user, channel_id)
+
+        thread_channel: ThreadChannel = user.state.create_guild_channel(guild, data)
+        channel._add_thread(thread_channel)
+
+        return user, thread_channel
 
     @staticmethod
     async def on_message_delete_args(

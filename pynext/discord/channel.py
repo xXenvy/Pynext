@@ -419,9 +419,14 @@ class TextChannel(GuildChannel, Messageable):
             self.last_message_id: int | None = None
 
         self._messages: dict[int, GuildMessage] = {}
+        self._threads: dict[int, ThreadChannel] = {}
 
     def __repr__(self):
         return f"<TextChannel(name={self.name}, id={self.id})>"
+
+    @property
+    def threads(self) -> list[ThreadChannel]:
+        return list(self._threads.values())
 
     async def edit(
         self,
@@ -498,6 +503,18 @@ class TextChannel(GuildChannel, Messageable):
         channel = self._state.create_guild_channel(guild=self.guild, data=data)
         assert isinstance(channel, TextChannel)
         return channel
+
+    def get_thread(self, message_id: int) -> ThreadChannel | None:
+        return self._threads.get(message_id)
+
+    def _add_thread(self, thread: ThreadChannel) -> None:
+        self._threads[thread.id] = thread
+
+    def _remove_thread(self, message_id: int) -> None:
+        try:
+            del self._threads[message_id]
+        except KeyError:
+            pass
 
 
 class VoiceChannel(GuildChannel):
@@ -732,3 +749,10 @@ class ThreadChannel(GuildChannel, Messageable):
     @property
     def creation_message_id(self) -> int:
         return self.id
+
+    @property
+    def creation_message(self) -> GuildMessage | None:
+        if self.parent is None:
+            return None
+
+        return self.parent.get_message(self.id)

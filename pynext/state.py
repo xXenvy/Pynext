@@ -231,6 +231,9 @@ class State:
 
             return self.create_private_message(data=data)
 
+        if data['type'] == 21:
+            channel_id = int(data['message_reference']['channel_id'])
+
         guild: Guild | None = user.get_guild(guild_id)
         if not guild:
             guild = await user.fetch_guild(guild_id)
@@ -243,10 +246,16 @@ class State:
             except (Forbidden, HTTPException, Unauthorized):
                 return
 
+        if isinstance(channel, TextChannel) and data['type'] == 21:
+            thread_id: int = int(data['channel_id'])
+
+            channel = channel.get_thread(thread_id)
+            if channel is None:
+                channel = await guild.fetch_channel(user=user, channel_id=thread_id)
+
         data["guild"] = guild
         data["channel"] = channel
         data["user_author"] = self.create_guild_member(guild=guild, data=data["author"])
-
         return self.create_guild_message(data=data)
 
     async def create_guild(
