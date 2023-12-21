@@ -86,7 +86,7 @@ __all__: tuple[str, ...] = (
     "ApplicationCommandOption",
     "InteractionPayload",
     "ThreadChannel",
-    "ThreadMembersUpdatePayload"
+    "ThreadMembersUpdatePayload",
 )
 
 pynext_version: str = PynextClient.__version__

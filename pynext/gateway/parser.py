@@ -27,7 +27,13 @@ from asyncio import AbstractEventLoop, get_event_loop
 
 from ..discord import *
 from ..errors import Forbidden
-from ..types import Message, Channel, EmojisUpdatePayload, InteractionPayload, ThreadMembersUpdatePayload
+from ..types import (
+    Message,
+    Channel,
+    EmojisUpdatePayload,
+    InteractionPayload,
+    ThreadMembersUpdatePayload,
+)
 
 if TYPE_CHECKING:
     from ..selfbot import SelfBot
@@ -79,7 +85,7 @@ class Parser:
     async def on_user_ready_args(self, response: GatewayResponse) -> tuple[SelfBot]:
         await self._chunk_user(response.user, data=response.data)
         response.user._ready.set()
-        return response.user,
+        return (response.user,)
 
     @staticmethod
     async def on_message_create_args(
@@ -95,8 +101,10 @@ class Parser:
             return response.user, message
 
     @staticmethod
-    async def on_message_edit_args(response: GatewayResponse) -> tuple[SelfBot, Message, Message] | None:
-        if response.data['flags'] == 32:
+    async def on_message_edit_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, Message, Message] | None:
+        if response.data["flags"] == 32:
             return
 
         message: Message | None = await response.user.state.create_message_from_data(
@@ -115,12 +123,14 @@ class Parser:
         return response.user, old_message, message
 
     @staticmethod
-    async def on_thread_create_args(response: GatewayResponse) -> tuple[SelfBot, ThreadChannel] | None:
+    async def on_thread_create_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, ThreadChannel] | None:
         user: SelfBot = response.user
         data: dict[str, Any] = response.data
 
-        guild_id: int = int(data['guild_id'])
-        channel_id: int = int(data['parent_id'])
+        guild_id: int = int(data["guild_id"])
+        channel_id: int = int(data["parent_id"])
 
         guild: Guild | None = user.get_guild(guild_id)
 
@@ -137,13 +147,15 @@ class Parser:
         return user, thread_channel
 
     @staticmethod
-    async def on_thread_update_args(response: GatewayResponse) -> None | tuple[SelfBot, ThreadChannel, ThreadChannel]:
+    async def on_thread_update_args(
+        response: GatewayResponse,
+    ) -> None | tuple[SelfBot, ThreadChannel, ThreadChannel]:
         user: SelfBot = response.user
         data: dict[str, Any] = response.data
 
-        guild_id: int = int(data['guild_id'])
-        channel_id: int = int(data['parent_id'])
-        thread_id: int = int(data['id'])
+        guild_id: int = int(data["guild_id"])
+        channel_id: int = int(data["parent_id"])
+        thread_id: int = int(data["id"])
 
         guild: Guild | None = user.get_guild(guild_id)
 
@@ -162,19 +174,18 @@ class Parser:
             return user, old_thread, thread_channel
 
     async def on_thread_members_update_args(
-            self, response: GatewayResponse
+        self, response: GatewayResponse
     ) -> tuple[SelfBot, ThreadMembersUpdatePayload] | None:
-
         user: SelfBot = response.user
         data: dict[str, Any] = response.data
 
-        if data.get('member_count') is None:
+        if data.get("member_count") is None:
             # If the data has no member_count it means that the websocket
             # sent the data to the on_thread_member_update event.
             return await self.on_thread_member_update_args(response)
 
-        guild_id: int = int(data['guild_id'])
-        message_id: int = int(data['id'])
+        guild_id: int = int(data["guild_id"])
+        message_id: int = int(data["id"])
 
         guild: Guild | None = user.get_guild(guild_id)
 
@@ -192,19 +203,20 @@ class Parser:
 
         payload: ThreadMembersUpdatePayload = ThreadMembersUpdatePayload(thread, [], [])
 
-        for member_data in data.get('added_members', []):
-
-            user_id: int = int(member_data['user_id'])
+        for member_data in data.get("added_members", []):
+            user_id: int = int(member_data["user_id"])
             member: GuildMember | None = guild.get_member(user_id)
 
             if member is None:
-                member = user.state.create_guild_member(guild, data=member_data['member'])
+                member = user.state.create_guild_member(
+                    guild, data=member_data["member"]
+                )
                 guild._add_member(member)
 
             payload.added_members.append(member)
             thread._add_member(member)
 
-        for removed_member_id in data.get('removed_member_ids', []):
+        for removed_member_id in data.get("removed_member_ids", []):
             removed_member_id: int = int(removed_member_id)
 
             payload.removed_members.append(removed_member_id)
@@ -213,13 +225,15 @@ class Parser:
         return user, payload
 
     @staticmethod
-    async def on_thread_member_update_args(response: GatewayResponse) -> None | tuple[SelfBot, ThreadMembersUpdatePayload]:
+    async def on_thread_member_update_args(
+        response: GatewayResponse,
+    ) -> None | tuple[SelfBot, ThreadMembersUpdatePayload]:
         user: SelfBot = response.user
         data: dict[str, Any] = response.data
 
-        guild_id: int = int(data['guild_id'])
-        message_id: int = int(data['id'])
-        user_id: int = int(data['user_id'])
+        guild_id: int = int(data["guild_id"])
+        message_id: int = int(data["id"])
+        user_id: int = int(data["user_id"])
 
         guild: Guild | None = user.get_guild(guild_id)
 
@@ -234,7 +248,9 @@ class Parser:
                     member = await guild.fetch_member(user, user_id)
 
                 thread._add_member(member)
-                return user, ThreadMembersUpdatePayload(thread, added_members=[member], removed_members=[])
+                return user, ThreadMembersUpdatePayload(
+                    thread, added_members=[member], removed_members=[]
+                )
 
     @staticmethod
     async def on_message_delete_args(
