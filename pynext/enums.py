@@ -103,6 +103,10 @@ class Events(Enum):
     MESSAGE_UPDATE = "on_message_edit"
 
     THREAD_CREATE = "on_thread_create"
+    THREAD_UPDATE = "on_thread_update"
+
+    THREAD_MEMBERS_UPDATE = "on_thread_members_update"
+    THREAD_MEMBER_UPDATE = "on_thread_member_update"
 
     MESSAGE_REACTION_REMOVE = "on_message_reaction_remove"
     MESSAGE_REACTION_ADD = "on_message_reaction_add"

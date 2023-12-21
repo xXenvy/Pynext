@@ -194,9 +194,7 @@ class GuildChannel(BaseChannel):
     @property
     def parent(self) -> CategoryChannel | TextChannel | None:
         """
-        TODO: Add mention about TextChannel
-
-        GuildChannel Category.
+        Channel category. For the ThreadChannel, it's TextChannel.
         """
         if self.parent_id is None:
             return None
@@ -426,6 +424,9 @@ class TextChannel(GuildChannel, Messageable):
 
     @property
     def threads(self) -> list[ThreadChannel]:
+        """
+        List with cached threads on the channel.
+        """
         return list(self._threads.values())
 
     async def edit(
@@ -505,6 +506,9 @@ class TextChannel(GuildChannel, Messageable):
         return channel
 
     def get_thread(self, message_id: int) -> ThreadChannel | None:
+        """
+        Method to get Thread by message id.
+        """
         return self._threads.get(message_id)
 
     def _add_thread(self, thread: ThreadChannel) -> None:
@@ -738,21 +742,53 @@ class ThreadChannel(GuildChannel, Messageable):
             self.last_message_id: int | None = None
 
         self._messages: dict[int, GuildMessage] = {}
+        self._members: dict[int, GuildMember] = {}
 
     def __repr__(self) -> str:
         return f"<ThreadChannel(name={self.name}, id={self.id})>"
 
     @property
+    def members(self) -> list[GuildMember]:
+        """
+        A list with thread members.
+        """
+        return list(self._members.values())
+
+    @property
     def owner(self) -> GuildMember | None:
+        """
+        A Member who created the thread. If cached.
+        """
         return self.guild.get_member(self.owner_id)
 
     @property
     def creation_message_id(self) -> int:
+        """
+        Id of the creation message.
+        """
         return self.id
 
     @property
     def creation_message(self) -> GuildMessage | None:
+        """
+        Creaction message object if cached.
+        """
         if self.parent is None:
             return None
 
         return self.parent.get_message(self.id)
+
+    def get_member(self, member_id: int) -> GuildMember | None:
+        """
+        Method to get thread member by id.
+        """
+        return self._members.get(member_id)
+
+    def _add_member(self, member: GuildMember) -> None:
+        self._members[member.id] = member
+
+    def _remove_member(self, member_id: int) -> None:
+        try:
+            del self._members[member_id]
+        except KeyError:
+            pass

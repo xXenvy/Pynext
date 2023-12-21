@@ -35,15 +35,16 @@ if TYPE_CHECKING:
 
 Message = Union["PrivateMessage", "GuildMessage"]
 Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel"]
+Snowflake = Union[str, int]
 
 
 class MessageReference(TypedDict):
-    channel_id: int | str
-    message_id: int | str
+    channel_id: Snowflake
+    message_id: Snowflake
 
 
 class OverwritePayload(TypedDict):
-    id: int | str
+    id: Snowflake
     type: int
     allow: str
     deny: str
@@ -183,3 +184,10 @@ class InteractionPayload:
 
     nonce: int
     id: int
+
+
+@dataclass
+class ThreadMembersUpdatePayload:
+    thread: ThreadChannel
+    added_members: list[GuildMember]
+    removed_members: list[int]
