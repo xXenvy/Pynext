@@ -41,6 +41,8 @@ class GatewayResponse:
 
     Attributes
     ----------
+    raw_data: :class:`dict`
+        Raw websocket response.
     user: :class:`SelfBot`
         Selfbot, which received this response.
     type: :class:`aiohttp.WSMsgType`
@@ -55,21 +57,21 @@ class GatewayResponse:
         Name received event.
     """
 
-    __slots__ = ("type", "user", "op", "data", "sequence", "event_name", "_raw_data")
+    __slots__ = ("type", "user", "op", "data", "sequence", "event_name", "raw_data")
 
     def __init__(self, response: WSMessage, user: SelfBot):
-        self._raw_data: dict = json_loads(response.data)
+        self.raw_data: dict = json_loads(response.data)
 
         self.user: SelfBot = user
         self.type: WSMsgType = response.type
 
-        self.op: int = self._raw_data["op"]
-        self.data: dict = self._raw_data["d"]
-        self.sequence: int | None = self._raw_data["s"]
-        self.event_name: str | None = self._format_event_name(self._raw_data.get("t"))
+        self.op: int = self.raw_data["op"]
+        self.data: dict = self.raw_data["d"]
+        self.sequence: int | None = self.raw_data["s"]
+        self.event_name: str | None = self._format_event_name(self.raw_data.get("t"))
 
-        if self.event_name == "on_ready":
-            self.event_name = "on_user_ready"
+        if self.event_name == "on_thread_member_update":
+            self.event_name = "on_thread_members_update"
 
     def __repr__(self) -> str:
         return f"GatewayResponse(op={self.op}, sequence={self.sequence})"
@@ -83,8 +85,11 @@ class GatewayResponse:
 
     @staticmethod
     def _format_event_name(event_name: str | None) -> str | None:
+        """
+        Method to format event name.
+        """
         if event_name is None:
             return None
 
         converter: dict[str, str] = {event.name: event.value for event in Events}
-        return converter.get(event_name)
+        return converter.get(event_name, event_name)

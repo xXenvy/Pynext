@@ -23,7 +23,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
-from ..utils import Hashable, snowflake_time
+from ..utils import Hashable, snowflake_time, str_to_datetime
 from ..types import OverwritePayload
 from ..errors import WebsocketNotConnected, VoiceStateNotFound
 from ..enums import ChannelType
@@ -192,16 +192,19 @@ class GuildChannel(BaseChannel):
         return f"<GuildChannel(name={self.name}, id={self.id}, type={self.type})>"
 
     @property
-    def parent(self) -> CategoryChannel | None:
+    def parent(self) -> CategoryChannel | TextChannel | GuildChannel | None:
         """
-        GuildChannel Category.
+        Channel category. For ThreadChannel it's TextChannel.
+
+        .. note::
+            It can also be GuildChannel, since we do not support forum channels yet.
         """
         if self.parent_id is None:
             return None
 
         channel = self.guild.get_channel(self.parent_id)
         if channel is not None:
-            assert isinstance(channel, CategoryChannel)
+            assert isinstance(channel, (TextChannel, CategoryChannel, GuildChannel))
 
         return channel
 
@@ -417,9 +420,17 @@ class TextChannel(GuildChannel, Messageable):
             self.last_message_id: int | None = None
 
         self._messages: dict[int, GuildMessage] = {}
+        self._threads: dict[int, ThreadChannel] = {}
 
     def __repr__(self):
         return f"<TextChannel(name={self.name}, id={self.id})>"
+
+    @property
+    def threads(self) -> list[ThreadChannel]:
+        """
+        List with cached threads on the channel.
+        """
+        return list(self._threads.values())
 
     async def edit(
         self,
@@ -496,6 +507,21 @@ class TextChannel(GuildChannel, Messageable):
         channel = self._state.create_guild_channel(guild=self.guild, data=data)
         assert isinstance(channel, TextChannel)
         return channel
+
+    def get_thread(self, message_id: int) -> ThreadChannel | None:
+        """
+        Method to get Thread by message id.
+        """
+        return self._threads.get(message_id)
+
+    def _add_thread(self, thread: ThreadChannel) -> None:
+        self._threads[thread.id] = thread
+
+    def _remove_thread(self, message_id: int) -> None:
+        try:
+            del self._threads[message_id]
+        except KeyError:
+            pass
 
 
 class VoiceChannel(GuildChannel):
@@ -696,3 +722,197 @@ class VoiceChannel(GuildChannel):
         assert isinstance(channel, VoiceChannel)
 
         return channel
+
+
+class ThreadChannel(GuildChannel, Messageable):
+    """
+    ThreadChannel. A variation of the guild channel.
+
+    Parameters
+    ----------
+    state:
+        State object.
+    data:
+        Channel data.
+    guild:
+        Guild on which the channel is located.
+
+    Attributes
+    ----------
+    raw_data: :class:`dict`
+        Channel raw data.
+    guild: :class:`Guild`
+        Guild on which the channel is.
+    name: :class:`str`
+        Channel name.
+    id: :class:`int`
+        Id of the channel.
+    position: :class:`int`
+        Channel position on the guild.
+    flags: :class:`int`
+        Channel flags.
+    type: :class:`int`
+        Channel type.
+    parent_id: :class:`int`
+        Channel category id.
+    archive_timestamp: :class:`datetime.datetime`
+        When the thread was archived.
+    create_timestamp: :class:`datetime.datetime`
+        When the thread was created.
+    archived: :class:`bool`
+        Whether the thread is archived.
+    auto_archive_duration: :class:`int`
+        Duration in minutes to automatically archive the thread after recent activity.
+    locked: :class:`bool`
+        Whether the thread is locked.
+    total_message_sent: Optional[:class:`int`]
+        Total message sent in the thread.
+    member_count: :class:`int`
+        Total members in the thread.
+    owner_id: :class:`int`
+        Id of the thread owner.
+    last_message_id: Optional[:class:`int`]
+        Id of the last message sent in the thread.
+    """
+
+    __slots__ = (
+        "archive_timestamp",
+        "create_timestamp",
+        "archived",
+        "auto_archive_duration",
+        "locked",
+        "total_message_sent",
+        "member_count",
+        "owner_id",
+        "last_message_id",
+        "_messages",
+        "_members",
+    )
+
+    def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
+        super().__init__(state, guild, data)
+
+        meta: dict[str, Any] = data["thread_metadata"]
+
+        self.archive_timestamp: datetime = str_to_datetime(meta["archive_timestamp"])
+        self.create_timestamp: datetime = str_to_datetime(meta["create_timestamp"])
+
+        self.archived: bool = meta["archived"]
+        self.auto_archive_duration: int = meta["auto_archive_duration"]
+        self.locked: bool = meta["locked"]
+
+        self.total_message_sent: int | None = data.get("total_message_sent")
+        self.member_count: int = data["member_count"]
+        self.owner_id: int = int(data["owner_id"])
+
+        if last_message_id := data.get("last_message_id"):
+            self.last_message_id: int | None = int(last_message_id)
+        else:
+            self.last_message_id: int | None = None
+
+        self._messages: dict[int, GuildMessage] = {}
+        self._members: dict[int, GuildMember] = {}
+
+    def __repr__(self) -> str:
+        return f"<ThreadChannel(name={self.name}, id={self.id})>"
+
+    @property
+    def members(self) -> list[GuildMember]:
+        """
+        A list with thread members.
+        """
+        return list(self._members.values())
+
+    @property
+    def owner(self) -> GuildMember | None:
+        """
+        A Member who created the thread. If cached.
+        """
+        return self.guild.get_member(self.owner_id)
+
+    @property
+    def creation_message_id(self) -> int:
+        """
+        Id of the creation message.
+        """
+        return self.id
+
+    @property
+    def creation_message(self) -> GuildMessage | None:
+        """
+        Creaction message object if cached.
+        """
+        if not isinstance(self.parent, TextChannel):
+            return None
+
+        message = self.parent.get_message(self.id)
+        if isinstance(message, GuildMessage):
+            return message
+
+    def get_member(self, member_id: int) -> GuildMember | None:
+        """
+        Method to get thread member by id.
+        """
+        return self._members.get(member_id)
+
+    async def edit(
+        self, user: SelfBot, name: str | None = None, slowmode: int | None = None
+    ) -> ThreadChannel:
+        """
+        Method to edit thread channel.
+
+        Parameters
+        ----------
+        user:
+            Selfbot required to send request.
+        name:
+            New channel name.
+        slowmode:
+            New channel slowmode.
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Editing the channel failed.
+        NotFound
+            Channel not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        """
+        if name is None and slowmode is None:
+            # If person did not provide any new parameters.
+            # We don't want to send a request.
+            return self
+
+        params: dict[str, Any] = {
+            "name": name,
+            "type": ChannelType.PUBLIC_THREAD.value,
+            "rate_limit_per_user": slowmode,
+        }
+
+        for key, value in params.copy().items():
+            if value is None:
+                """
+                If a parameter has a value of None,
+                we don't want it in the dict because it could overwrite an already set parameter.
+                """
+                del params[key]
+
+        data: dict[str, Any] = await self._state.http.edit_channel(
+            user=user, channel_id=self.id, params=params
+        )
+        channel = self._state.create_guild_channel(guild=self.guild, data=data)
+        assert isinstance(channel, ThreadChannel)
+
+        return channel
+
+    def _add_member(self, member: GuildMember) -> None:
+        self._members[member.id] = member
+
+    def _remove_member(self, member_id: int) -> None:
+        try:
+            del self._members[member_id]
+        except KeyError:
+            pass

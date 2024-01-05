@@ -28,6 +28,10 @@ Discord objects.
    :members:
    :show-inheritance:
 
+.. autoclass:: ThreadChannel()
+   :members:
+   :show-inheritance:
+
 .. autoclass:: GuildChannel()
    :members:
    :show-inheritance:

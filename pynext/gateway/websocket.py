@@ -104,7 +104,7 @@ class WebSocketConnector:
         )
 
         for user in self.client.users:
-            userWebSocket = DiscordWebSocket(
+            web_socket = DiscordWebSocket(
                 user=user,
                 client=self.client,
                 chunk_guilds=self._chunk_guilds,
@@ -112,9 +112,7 @@ class WebSocketConnector:
                 debug_events=self._debug_events,
             )
 
-            task: Task = self.client.loop.create_task(
-                userWebSocket.run(self.gateway_url)
-            )
+            task: Task = self.client.loop.create_task(web_socket.run(self.gateway_url))
             tasks.append(task)
 
         await gather(*tasks)
@@ -308,11 +306,19 @@ class DiscordWebSocket:
                 )
 
             if response.event and response.event_name:
-                event_args: tuple[
-                    Any, ...
-                ] | None = await self._parser.parse_event_args(response)
-                if event_args is not None:
-                    self.dispatcher.dispatch(response.event_name, *event_args)
+                await self.__dispatch_event(response)
+
+    async def __dispatch_event(self, response: GatewayResponse):
+        """
+        Method to dispatch received event from websocket.
+        """
+        assert isinstance(response.event_name, str)
+
+        event_args: tuple[Any, ...] | None = await self._parser.parse_event_args(
+            response
+        )
+        if event_args is not None:
+            self.dispatcher.dispatch(response.event_name, *event_args)
 
     async def __request_loop(self):
         """

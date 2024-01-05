@@ -222,6 +222,49 @@ Documentation of all available library events. See how to use them: :ref:`Events
     :param role: Deleted role.
     :type role: :class:`Role`
 
+.. function:: on_thread_create(selfbot, thread)
+
+    Called when someone creates a new thread.
+
+    .. versionadded:: 1.2.0
+
+    :param selfbot: Selfbot that received an event from the websocket.
+    :type selfbot: :class:`SelfBot`
+    :param thread: Created thread object.
+    :type thread: :class:`ThreadChannel`
+
+.. function:: on_thread_update(selfbot, old, new)
+
+    Called when someone updates a thread channel.
+
+    .. note::
+        If the Thread is not found in the internal cache, then this event will not be called.
+
+    .. versionadded:: 1.2.0
+
+    :param selfbot: Selfbot that received an event from the websocket.
+    :type selfbot: :class:`SelfBot`
+    :param old: Old thread object.
+    :type old: :class:`ThreadChannel`
+    :param new: Updated thread object.
+    :type new: :class:`ThreadChannel`
+
+
+.. function:: on_thread_members_update(selfbot, payload)
+
+    Called when users in the thread are updated.
+
+    .. note::
+        If the Thread is not found in the internal cache, then this event will not be called.
+
+    .. versionadded:: 1.2.0
+
+    :param selfbot: Selfbot that received an event from the websocket.
+    :type selfbot: :class:`SelfBot`
+    :param payload: Thread members payload.
+    :type payload: :class:`ThreadMembersUpdatePayload`
+
+
 .. function:: oo_interaction_create(selfbot, payload)
 
     Called when the selfbot will create interaction with the application.

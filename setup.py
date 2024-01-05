@@ -16,7 +16,7 @@ LONG_DESCRIPTION = (
     "It has a structure similar to popular libraries such as discord.py"
 )
 
-extras_require = {
+extras_require: dict[str, list[str]] = {
     "speed": ["orjson", "aiohttp[speedups]"],
 }
 

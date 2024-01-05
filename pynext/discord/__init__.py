@@ -64,5 +64,5 @@ __all__ = (
     "Application",
     "SlashCommand",
     "SubCommand",
-    "ApplicationCommandOption",
+    "ThreadChannel",
 )
