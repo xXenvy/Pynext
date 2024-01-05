@@ -435,9 +435,11 @@ class Guild(Hashable):
             user, channel_id=channel_id
         )
         channel: Channel = self._state.create_guild_channel(guild=self, data=data)
-        await channel.fetch_overwrites(user)
 
-        self._add_channel(channel)
+        if channel.type != 11:
+            await channel.fetch_overwrites(user)
+            self._add_channel(channel)
+
         return channel
 
     async def fetch_channels(self, user: SelfBot) -> list[Channel]:

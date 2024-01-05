@@ -45,8 +45,7 @@ if TYPE_CHECKING:
 
 class ContextHandler:
     """
-    RequestManager helps the HTTPclient.
-    It supports configured delays, ratelimit and error handling.
+    ContextHandler is a class that handles ratelimit and errors.
 
     Parameters
     ----------
@@ -118,7 +117,7 @@ class ContextHandler:
         if isinstance(data, str):
             return "hcaptcha" in data
 
-        return bool(data.get("captcha_key", False))
+        return bool(data.get("captcha_key", 0))
 
     async def handle_errors(self, response: ClientResponse) -> None:
         """
@@ -152,6 +151,8 @@ class ContextHandler:
             raise error(await text_or_json(response))
 
         if response.status not in (200, 204, 201):
+            # If status is not 200, 204 or 201, we raise HTTPException.
+            # This is because we don't know what error it is.
             raise HTTPException(await text_or_json(response))
 
     async def handle_ratelimit(

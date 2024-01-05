@@ -24,6 +24,10 @@ from enum import Enum
 
 
 class ChannelType(Enum):
+    """
+    Discord channel types.
+    """
+
     DM = 1
     GUILD_TEXT = 0
     GUILD_VOICE = 2
@@ -35,11 +39,19 @@ class ChannelType(Enum):
 
 
 class VideoQuality(Enum):
+    """
+    Discord video qualities.
+    """
+
     AUTO = 1
     FULL = 2
 
 
 class PermissionsFlags(Enum):
+    """
+    Discord permissions flags.
+    """
+
     CREATE_INSTANT_INVITE = 1 << 0
     KICK_MEMBERS = 1 << 1
     BAN_MEMBERS = 1 << 2
@@ -76,6 +88,10 @@ class PermissionsFlags(Enum):
 
 
 class GatewayCodes(Enum):
+    """
+    Discord gateway opcodes.
+    """
+
     DISPATCH = 0
     HEARTBEAT = 1
     IDENTIFY = 2
@@ -92,6 +108,10 @@ class GatewayCodes(Enum):
 
 
 class Events(Enum):
+    """
+    Discord events.
+    """
+
     READY = "on_user_ready"
 
     CHANNEL_DELETE = "on_channel_delete"
@@ -101,6 +121,12 @@ class Events(Enum):
     MESSAGE_CREATE = "on_message_create"
     MESSAGE_DELETE = "on_message_delete"
     MESSAGE_UPDATE = "on_message_edit"
+
+    THREAD_CREATE = "on_thread_create"
+    THREAD_UPDATE = "on_thread_update"
+
+    THREAD_MEMBERS_UPDATE = "on_thread_members_update"
+    THREAD_MEMBER_UPDATE = "on_thread_member_update"
 
     MESSAGE_REACTION_REMOVE = "on_message_reaction_remove"
     MESSAGE_REACTION_ADD = "on_message_reaction_add"
@@ -125,6 +151,10 @@ class Events(Enum):
 
 
 class DefaultAvatar(Enum):
+    """
+    Discord default avatars.
+    """
+
     blurple = 0
     grey = 1
     gray = 1
@@ -139,6 +169,10 @@ class DefaultAvatar(Enum):
 
 
 class StatusType(Enum):
+    """
+    Discord status types.
+    """
+
     ONLINE = "online"
     DND = "dnd"
     IDLE = "idle"
@@ -147,6 +181,10 @@ class StatusType(Enum):
 
 
 class ActivityType(Enum):
+    """
+    Discord activity types.
+    """
+
     GAME = 0
     STREAMING = 1
     LISTENING = 2
@@ -155,6 +193,10 @@ class ActivityType(Enum):
 
 
 class CommandOptionType(Enum):
+    """
+    Discord command option types.
+    """
+
     STRING = 3
     INTEGER = 4
     BOOLEAN = 5

@@ -1184,3 +1184,32 @@ class HTTPClient:
             headers=user.authorization.headers,
         )
         await self.request(route, user=user, json=payload)
+
+    async def start_thread_from_message(
+        self, user: SelfBot, channel_id: int, message_id: int, payload: dict[str, Any]
+    ) -> dict[str, Any]:
+        """
+        HTTP request to start thread from message.
+
+        .. versionadded:: 1.2.0
+
+        Parameters
+        ----------
+        user:
+            Selfbot to make the request.
+        channel_id:
+            Id of the channel where the message is.
+        message_id:
+            Id of the message.
+        payload:
+            Thread payload.
+        """
+        route = Route(
+            method="POST",
+            url=f"channels/{channel_id}/messages/{message_id}/threads",
+            headers=user.authorization.headers,
+            channel_id=channel_id,
+            message_id=message_id,
+        )
+        response: ClientResponse = await self.request(route, user=user, json=payload)
+        return await response.json()

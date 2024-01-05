@@ -27,7 +27,13 @@ from asyncio import AbstractEventLoop, get_event_loop
 
 from ..discord import *
 from ..errors import Forbidden
-from ..types import Message, Channel, EmojisUpdatePayload, InteractionPayload
+from ..types import (
+    Message,
+    Channel,
+    EmojisUpdatePayload,
+    InteractionPayload,
+    ThreadMembersUpdatePayload,
+)
 
 if TYPE_CHECKING:
     from ..selfbot import SelfBot
@@ -88,15 +94,19 @@ class Parser:
         message: Message | None = await response.user.state.create_message_from_data(
             response.user, response.data
         )
-        if message and isinstance(message.channel, (TextChannel, DMChannel)):
+        if message and isinstance(
+            message.channel, (TextChannel, DMChannel, ThreadChannel)
+        ):
             message.channel._add_message(message)
-
             return response.user, message
 
     @staticmethod
     async def on_message_edit_args(
         response: GatewayResponse,
     ) -> tuple[SelfBot, Message, Message] | None:
+        if response.data["flags"] == 32 or response.data.get("type") is None:
+            return
+
         message: Message | None = await response.user.state.create_message_from_data(
             response.user, response.data
         )
@@ -111,6 +121,149 @@ class Parser:
             return
 
         return response.user, old_message, message
+
+    @staticmethod
+    async def on_thread_create_args(
+        response: GatewayResponse,
+    ) -> tuple[SelfBot, ThreadChannel] | None:
+        user: SelfBot = response.user
+        data: dict[str, Any] = response.data
+
+        guild_id: int = int(data["guild_id"])
+        channel_id: int = int(data["parent_id"])
+
+        guild: Guild | None = user.get_guild(guild_id)
+
+        if guild is None:
+            guild = await user.fetch_guild(guild_id)
+
+        channel = guild.get_channel(channel_id)
+        if channel is None:
+            channel = await guild.fetch_channel(user, channel_id)
+
+        thread_channel = user.state.create_guild_channel(guild, data)
+        assert isinstance(thread_channel, ThreadChannel) and isinstance(
+            channel, TextChannel
+        )
+
+        if not isinstance(channel, GuildChannel):
+            # This can happen if the channel is forum channel which is not supported yet.
+            assert isinstance(channel, TextChannel)
+
+            channel._add_thread(thread_channel)
+
+        return user, thread_channel
+
+    @staticmethod
+    async def on_thread_update_args(
+        response: GatewayResponse,
+    ) -> None | tuple[SelfBot, ThreadChannel, ThreadChannel]:
+        user: SelfBot = response.user
+        data: dict[str, Any] = response.data
+
+        guild_id: int = int(data["guild_id"])
+        channel_id: int = int(data["parent_id"])
+        thread_id: int = int(data["id"])
+
+        guild: Guild | None = user.get_guild(guild_id)
+
+        if guild is None:
+            guild = await user.fetch_guild(guild_id)
+
+        channel = guild.get_channel(channel_id)
+        if channel is None:
+            channel = await guild.fetch_channel(user, channel_id)
+
+        thread_channel = user.state.create_guild_channel(guild, data)
+
+        assert isinstance(channel, TextChannel) and isinstance(
+            thread_channel, ThreadChannel
+        )
+
+        old_thread: ThreadChannel | None = channel.get_thread(thread_id)
+        channel._add_thread(thread_channel)
+
+        if old_thread:
+            return user, old_thread, thread_channel
+
+    async def on_thread_members_update_args(
+        self, response: GatewayResponse
+    ) -> tuple[SelfBot, ThreadMembersUpdatePayload] | None:
+        user: SelfBot = response.user
+        data: dict[str, Any] = response.data
+
+        if data.get("member_count") is None:
+            # If the data has no member_count it means that the websocket
+            # sent the data to the on_thread_member_update event.
+            return await self.on_thread_member_update_args(response)
+
+        guild_id: int = int(data["guild_id"])
+        message_id: int = int(data["id"])
+
+        guild: Guild | None = user.get_guild(guild_id)
+
+        if guild is None:
+            guild = await user.fetch_guild(guild_id)
+
+        thread: ThreadChannel | None = None
+
+        for text_channel in guild.text_channels:
+            if thread := text_channel.get_thread(message_id):
+                break
+
+        if thread is None:
+            return
+
+        payload: ThreadMembersUpdatePayload = ThreadMembersUpdatePayload(thread, [], [])
+
+        for member_data in data.get("added_members", []):
+            user_id: int = int(member_data["user_id"])
+            member: GuildMember | None = guild.get_member(user_id)
+
+            if member is None:
+                member = user.state.create_guild_member(
+                    guild, data=member_data["member"]
+                )
+                guild._add_member(member)
+
+            payload.added_members.append(member)
+            thread._add_member(member)
+
+        for removed_member_id in data.get("removed_member_ids", []):
+            removed_member_id: int = int(removed_member_id)
+
+            payload.removed_members.append(removed_member_id)
+            thread._remove_member(removed_member_id)
+
+        return user, payload
+
+    @staticmethod
+    async def on_thread_member_update_args(
+        response: GatewayResponse,
+    ) -> None | tuple[SelfBot, ThreadMembersUpdatePayload]:
+        user: SelfBot = response.user
+        data: dict[str, Any] = response.data
+
+        guild_id: int = int(data["guild_id"])
+        message_id: int = int(data["id"])
+        user_id: int = int(data["user_id"])
+
+        guild: Guild | None = user.get_guild(guild_id)
+
+        if guild is None:
+            guild = await user.fetch_guild(guild_id)
+
+        for text_channel in guild.text_channels:
+            if thread := text_channel.get_thread(message_id):
+                member: GuildMember | None = guild.get_member(user_id)
+
+                if member is None:
+                    member = await guild.fetch_member(user, user_id)
+
+                thread._add_member(member)
+                return user, ThreadMembersUpdatePayload(
+                    thread, added_members=[member], removed_members=[]
+                )
 
     @staticmethod
     async def on_message_delete_args(

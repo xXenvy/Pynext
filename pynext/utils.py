@@ -44,6 +44,9 @@ except ModuleNotFoundError:
 
 
 async def text_or_json(response: ClientResponse) -> dict | str:
+    # Method to get response text or json.
+    # If the response is not json, then the text will be returned.
+
     try:
         return await response.json()
     except client_exceptions.ContentTypeError:
@@ -51,6 +54,10 @@ async def text_or_json(response: ClientResponse) -> dict | str:
 
 
 class EqualityComparable:
+    """
+    Base class for all objects that can be compared by unique ID.
+    """
+
     __slots__ = ()
 
     id: int
@@ -65,6 +72,10 @@ class EqualityComparable:
 
 
 class Hashable(EqualityComparable):
+    """
+    Base class for all objects that have a unique ID value.
+    """
+
     __slots__ = ()
 
     def __hash__(self) -> int:
@@ -72,6 +83,8 @@ class Hashable(EqualityComparable):
 
 
 def json_dumps(value: Any) -> str:
+    # If we have orjson installed, we will use it.
+    # Otherwise, we will use the standard json module.
     if INSTALLED_ORJSON is True:
         assert orjson
         return orjson.dumps(value).decode("utf-8")
@@ -81,6 +94,8 @@ def json_dumps(value: Any) -> str:
 
 
 def json_loads(value: str) -> dict:
+    # If we have orjson installed, we will use it.
+    # Otherwise, we will use the standard json module.
     if INSTALLED_ORJSON is True:
         assert orjson
         return orjson.loads(value)
@@ -90,11 +105,15 @@ def json_loads(value: str) -> dict:
 
 
 def snowflake_time(object_id: int) -> datetime:
+    # https://discord.com/developers/docs/reference#snowflakes
     timestamp = ((object_id >> 22) + DISCORD_EPOCH) / 1000
     return datetime.fromtimestamp(timestamp, tz=timezone.utc)
 
 
 def str_to_datetime(value: str) -> datetime:
+    # Method to convert string to datetime object.
+    # Example: 2021-08-28T15:00:00.000000+00:00
+
     tuple_data: tuple[str, ...] = value.partition("T")
     datetime_str: str = f"{tuple_data[0]} {tuple_data[2][0:8]}"
 
@@ -103,6 +122,10 @@ def str_to_datetime(value: str) -> datetime:
 
 
 def applications_filter(data: dict[str, Any]) -> dict[int, Any]:
+    # Method to filter applications and application commands.
+    # Example: {"applications": [...], "application_commands": [...]}
+    # Return: {application_id: {"app_commands": [...], ...}, ...}
+
     apps: dict[int, dict[str, Any]] = {}
 
     for app_data in data["applications"]:
@@ -118,14 +141,18 @@ def applications_filter(data: dict[str, Any]) -> dict[int, Any]:
 
 
 def nonce() -> int:
+    # Method to generate nonce.
     return (int(time()) * 1000 - 1420070400000) * 4194304
 
 
 def create_session(lenght: int = 32) -> str:
+    # Method to generate fake sesssion.
     return "".join(choice(ascii_letters + digits) for _ in range(lenght))
 
 
 async def maybe_coro(coro: Callable, *args: Any, **kwargs: Any) -> Any:
+    # If function is coroutine, then we will await it.
+    # Otherwise, we will just call it.
     if iscoroutinefunction(coro):
         return await coro(*args, **kwargs)
     else:

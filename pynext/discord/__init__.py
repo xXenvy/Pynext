@@ -67,4 +67,5 @@ __all__ = (
     "SubCommand",
     "ApplicationCommandOption",
     "Attachment"
+    "ThreadChannel",
 )
