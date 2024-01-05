@@ -468,3 +468,58 @@ class GuildMessage(BaseMessage):
 
     def __repr__(self) -> str:
         return f"<GuildMessage(id={self.id}, author_id={self.author_id})>"
+
+    async def start_thread(
+            self,
+            user: SelfBot,
+            name: str,
+            auto_archive_duration: int | None = None,
+            slowmode: int | None = None) -> ThreadChannel:
+        """
+        Method to create thread from message.
+
+        Parameters
+        ----------
+        user:
+            Selfbot to send request.
+        name:
+            Thread name.
+        auto_archive_duration:
+            Thread auto archive duration.
+        slowmode:
+            Amount of seconds a user has to wait before sending another message (0-21600)
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Creating thread failed.
+        NotFound
+            Message not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        """
+        if self.channel.type in (11, 12):
+            raise Forbidden("You can't create thread from thread.")
+
+        payload: dict[str, Any] = {
+            "name": name,
+            "auto_archive_duration": auto_archive_duration,
+            "rate_limit_per_user": slowmode,
+        }
+
+        for key, value in payload.copy().items():
+            if value is None:
+                del payload[key]
+
+        thread_data: dict[str, Any] = await self._state.http.start_thread_from_message(
+            user=user,
+            channel_id=self.channel_id,
+            message_id=self.id,
+            payload=payload
+        )
+        thread: ThreadChannel = self._state.create_guild_channel(data=thread_data, guild=self.guild)
+        self.channel._add_thread(thread=thread)
+
+        return thread

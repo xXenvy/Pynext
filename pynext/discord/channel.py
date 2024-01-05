@@ -725,6 +725,70 @@ class VoiceChannel(GuildChannel):
 
 
 class ThreadChannel(GuildChannel, Messageable):
+    """
+    ThreadChannel. A variation of the guild channel.
+
+    Parameters
+    ----------
+    state:
+        State object.
+    data:
+        Channel data.
+    guild:
+        Guild on which the channel is located.
+
+    Attributes
+    ----------
+    raw_data: :class:`dict`
+        Channel raw data.
+    guild: :class:`Guild`
+        Guild on which the channel is.
+    name: :class:`str`
+        Channel name.
+    id: :class:`int`
+        Id of the channel.
+    position: :class:`int`
+        Channel position on the guild.
+    flags: :class:`int`
+        Channel flags.
+    type: :class:`int`
+        Channel type.
+    parent_id: :class:`int`
+        Channel category id.
+    archive_timestamp: :class:`datetime.datetime`
+        When the thread was archived.
+    create_timestamp: :class:`datetime.datetime`
+        When the thread was created.
+    archived: :class:`bool`
+        Whether the thread is archived.
+    auto_archive_duration: :class:`int`
+        Duration in minutes to automatically archive the thread after recent activity.
+    locked: :class:`bool`
+        Whether the thread is locked.
+    total_message_sent: Optional[:class:`int`]
+        Total message sent in the thread.
+    member_count: :class:`int`
+        Total members in the thread.
+    owner_id: :class:`int`
+        Id of the thread owner.
+    last_message_id: Optional[:class:`int`]
+        Id of the last message sent in the thread.
+    """
+
+    __slots__ = (
+        "archive_timestamp",
+        "create_timestamp",
+        "archived",
+        "auto_archive_duration",
+        "locked",
+        "total_message_sent",
+        "member_count",
+        "owner_id",
+        "last_message_id",
+        "_messages",
+        "_members",
+    )
+
     def __init__(self, state: State, guild: Guild, data: dict[str, Any]):
         super().__init__(state, guild, data)
 
