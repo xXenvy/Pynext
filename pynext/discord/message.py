@@ -517,9 +517,10 @@ class GuildMessage(BaseMessage):
         thread_data: dict[str, Any] = await self._state.http.start_thread_from_message(
             user=user, channel_id=self.channel_id, message_id=self.id, payload=payload
         )
-        thread: ThreadChannel = self._state.create_guild_channel(
+        thread: ThreadChannel = self._state.create_guild_channel(  # type: ignore
             data=thread_data, guild=self.guild
         )
-        self.channel._add_thread(thread=thread)
+
+        self.channel._add_thread(thread=thread)  # type: ignore
 
         return thread
