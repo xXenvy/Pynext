@@ -730,8 +730,8 @@ class ThreadChannel(GuildChannel, Messageable):
 
         meta: dict[str, Any] = data["thread_metadata"]
 
-        self.archive_timestamp: datetime = str_to_datetime(meta['archive_timestamp'])
-        self.create_timestamp: datetime = str_to_datetime(meta['create_timestamp'])
+        self.archive_timestamp: datetime = str_to_datetime(meta["archive_timestamp"])
+        self.create_timestamp: datetime = str_to_datetime(meta["create_timestamp"])
 
         self.archived: bool = meta["archived"]
         self.auto_archive_duration: int = meta["auto_archive_duration"]
@@ -790,10 +790,8 @@ class ThreadChannel(GuildChannel, Messageable):
         return self._members.get(member_id)
 
     async def edit(
-            self,
-            user: SelfBot,
-            name: str | None = None,
-            slowmode: int | None = None) -> ThreadChannel:
+        self, user: SelfBot, name: str | None = None, slowmode: int | None = None
+    ) -> ThreadChannel:
         """
         Method to edit thread channel.
 

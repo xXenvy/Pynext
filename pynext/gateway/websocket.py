@@ -312,7 +312,9 @@ class DiscordWebSocket:
         """
         Method to dispatch received event from websocket.
         """
-        event_args: tuple[Any, ...] | None = await self._parser.parse_event_args(response)
+        event_args: tuple[Any, ...] | None = await self._parser.parse_event_args(
+            response
+        )
         if event_args is not None:
             self.dispatcher.dispatch(response.event_name, *event_args)
 

@@ -60,6 +60,7 @@ class EqualityComparable:
     """
     Base class for all objects that can be compared by unique ID.
     """
+
     __slots__ = ()
 
     id: int
@@ -77,6 +78,7 @@ class Hashable(EqualityComparable):
     """
     Base class for all objects that have a unique ID value.
     """
+
     __slots__ = ()
 
     def __hash__(self) -> int:
@@ -151,7 +153,9 @@ def create_session(lenght: int = 32) -> str:
     return "".join(choice(ascii_letters + digits) for _ in range(lenght))
 
 
-async def maybe_coro(coro: Callable[[P], Awaitable[ReturnT]], *args: P.args, **kwargs: P.kwargs) -> ReturnT:
+async def maybe_coro(
+    coro: Callable[[P], Awaitable[ReturnT]], *args: P.args, **kwargs: P.kwargs
+) -> ReturnT:
     # If function is coroutine, then we will await it.
     # Otherwise, we will just call it.
     if iscoroutinefunction(coro):

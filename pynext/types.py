@@ -202,6 +202,7 @@ class ThreadMembersUpdatePayload:
     removed_members:
         List with removed members.
     """
+
     thread: ThreadChannel
     added_members: list[GuildMember]
     removed_members: list[int]
