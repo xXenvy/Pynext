@@ -57,4 +57,5 @@ client.run("TOKEN_1", "TOKEN_2")
 - [ ] Message components (Buttons, Select Menus).
 - [ ] Official support for context commands.
 - [ ] Support for voice messages.
+- [ ] Extensions (Cogs).
 - [ ] Full api covarage.
