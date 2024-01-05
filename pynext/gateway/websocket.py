@@ -306,11 +306,15 @@ class DiscordWebSocket:
                 )
 
             if response.event and response.event_name:
-                event_args: tuple[
-                    Any, ...
-                ] | None = await self._parser.parse_event_args(response)
-                if event_args is not None:
-                    self.dispatcher.dispatch(response.event_name, *event_args)
+                await self.__dispatch_event(response)
+
+    async def __dispatch_event(self, response: GatewayResponse):
+        """
+        Method to dispatch received event from websocket.
+        """
+        event_args: tuple[Any, ...] | None = await self._parser.parse_event_args(response)
+        if event_args is not None:
+            self.dispatcher.dispatch(response.event_name, *event_args)
 
     async def __request_loop(self):
         """

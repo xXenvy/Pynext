@@ -85,6 +85,9 @@ class GatewayResponse:
 
     @staticmethod
     def _format_event_name(event_name: str | None) -> str | None:
+        """
+        Method to format event name.
+        """
         if event_name is None:
             return None
 

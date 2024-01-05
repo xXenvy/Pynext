@@ -188,6 +188,20 @@ class InteractionPayload:
 
 @dataclass
 class ThreadMembersUpdatePayload:
+    """
+    Dataclass Payload passed in the ``on_thread_members_update`` event.
+
+    .. versionadded:: 1.2.0
+
+    Parameters
+    ----------
+    thread:
+        Thread on which the payload was received.
+    added_members:
+        List with added members.
+    removed_members:
+        List with removed members.
+    """
     thread: ThreadChannel
     added_members: list[GuildMember]
     removed_members: list[int]

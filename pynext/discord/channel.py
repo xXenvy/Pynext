@@ -23,7 +23,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
-from ..utils import Hashable, snowflake_time
+from ..utils import Hashable, snowflake_time, str_to_datetime
 from ..types import OverwritePayload
 from ..errors import WebsocketNotConnected, VoiceStateNotFound
 from ..enums import ChannelType
@@ -192,16 +192,19 @@ class GuildChannel(BaseChannel):
         return f"<GuildChannel(name={self.name}, id={self.id}, type={self.type})>"
 
     @property
-    def parent(self) -> CategoryChannel | TextChannel | None:
+    def parent(self) -> CategoryChannel | TextChannel | GuildChannel | None:
         """
-        Channel category. For the ThreadChannel, it's TextChannel.
+        Channel category. For ThreadChannel it's TextChannel.
+
+        .. note::
+            It can also be GuildChannel, since we do not support forum channels yet.
         """
         if self.parent_id is None:
             return None
 
         channel = self.guild.get_channel(self.parent_id)
         if channel is not None:
-            assert isinstance(channel, (TextChannel, CategoryChannel))
+            assert isinstance(channel, (TextChannel, CategoryChannel, GuildChannel))
 
         return channel
 
@@ -726,13 +729,15 @@ class ThreadChannel(GuildChannel, Messageable):
         super().__init__(state, guild, data)
 
         meta: dict[str, Any] = data["thread_metadata"]
-        # TODO: Add archive_timestamp, create_timestamp attributes
+
+        self.archive_timestamp: datetime = str_to_datetime(meta['archive_timestamp'])
+        self.create_timestamp: datetime = str_to_datetime(meta['create_timestamp'])
 
         self.archived: bool = meta["archived"]
         self.auto_archive_duration: int = meta["auto_archive_duration"]
         self.locked: bool = meta["locked"]
 
-        self.total_message_sent: int = data["total_message_sent"]
+        self.total_message_sent: int | None = data.get("total_message_sent")
         self.member_count: int = data["member_count"]
         self.owner_id: int = int(data["owner_id"])
 
@@ -783,6 +788,61 @@ class ThreadChannel(GuildChannel, Messageable):
         Method to get thread member by id.
         """
         return self._members.get(member_id)
+
+    async def edit(
+            self,
+            user: SelfBot,
+            name: str | None = None,
+            slowmode: int | None = None) -> ThreadChannel:
+        """
+        Method to edit thread channel.
+
+        Parameters
+        ----------
+        user:
+            Selfbot required to send request.
+        name:
+            New channel name.
+        slowmode:
+            New channel slowmode.
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Editing the channel failed.
+        NotFound
+            Channel not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        """
+        if name is None and slowmode is None:
+            # If person did not provide any new parameters.
+            # We don't want to send a request.
+            return self
+
+        params: dict[str, Any] = {
+            "name": name,
+            "type": ChannelType.PUBLIC_THREAD.value,
+            "rate_limit_per_user": slowmode,
+        }
+
+        for key, value in params.copy().items():
+            if value is None:
+                """
+                If a parameter has a value of None,
+                we don't want it in the dict because it could overwrite an already set parameter.
+                """
+                del params[key]
+
+        data: dict[str, Any] = await self._state.http.edit_channel(
+            user=user, channel_id=self.id, params=params
+        )
+        channel = self._state.create_guild_channel(guild=self.guild, data=data)
+        assert isinstance(channel, ThreadChannel)
+
+        return channel
 
     def _add_member(self, member: GuildMember) -> None:
         self._members[member.id] = member

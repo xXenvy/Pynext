@@ -104,7 +104,7 @@ class Parser:
     async def on_message_edit_args(
         response: GatewayResponse,
     ) -> tuple[SelfBot, Message, Message] | None:
-        if response.data["flags"] == 32:
+        if response.data["flags"] == 32 or response.data.get('type') is None:
             return
 
         message: Message | None = await response.user.state.create_message_from_data(
@@ -123,9 +123,7 @@ class Parser:
         return response.user, old_message, message
 
     @staticmethod
-    async def on_thread_create_args(
-        response: GatewayResponse,
-    ) -> tuple[SelfBot, ThreadChannel] | None:
+    async def on_thread_create_args(response: GatewayResponse) -> tuple[SelfBot, ThreadChannel] | None:
         user: SelfBot = response.user
         data: dict[str, Any] = response.data
 
@@ -142,7 +140,12 @@ class Parser:
             channel = await guild.fetch_channel(user, channel_id)
 
         thread_channel: ThreadChannel = user.state.create_guild_channel(guild, data)
-        channel._add_thread(thread_channel)
+
+        if not isinstance(channel, GuildChannel):
+            # This can happen if the channel is forum channel which is not supported yet.
+            assert isinstance(channel, TextChannel)
+
+            channel._add_thread(thread_channel)
 
         return user, thread_channel
 
@@ -176,6 +179,7 @@ class Parser:
     async def on_thread_members_update_args(
         self, response: GatewayResponse
     ) -> tuple[SelfBot, ThreadMembersUpdatePayload] | None:
+
         user: SelfBot = response.user
         data: dict[str, Any] = response.data
 
