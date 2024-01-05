@@ -373,7 +373,10 @@ class State:
             )
         if channel.type == ChannelType.GUILD_TEXT.value:
             return TextChannel(state=self, guild=channel.guild, data=channel.raw_data)
-        if channel.type in (ChannelType.PUBLIC_THREAD.value, ChannelType.PRIVATE_THREAD.value):
+        if channel.type in (
+            ChannelType.PUBLIC_THREAD.value,
+            ChannelType.PRIVATE_THREAD.value,
+        ):
             return ThreadChannel(state=self, guild=channel.guild, data=channel.raw_data)
 
         return channel

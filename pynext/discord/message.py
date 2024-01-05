@@ -470,11 +470,12 @@ class GuildMessage(BaseMessage):
         return f"<GuildMessage(id={self.id}, author_id={self.author_id})>"
 
     async def start_thread(
-            self,
-            user: SelfBot,
-            name: str,
-            auto_archive_duration: int | None = None,
-            slowmode: int | None = None) -> ThreadChannel:
+        self,
+        user: SelfBot,
+        name: str,
+        auto_archive_duration: int | None = None,
+        slowmode: int | None = None,
+    ) -> ThreadChannel:
         """
         Method to create thread from message.
 
@@ -514,12 +515,11 @@ class GuildMessage(BaseMessage):
                 del payload[key]
 
         thread_data: dict[str, Any] = await self._state.http.start_thread_from_message(
-            user=user,
-            channel_id=self.channel_id,
-            message_id=self.id,
-            payload=payload
+            user=user, channel_id=self.channel_id, message_id=self.id, payload=payload
         )
-        thread: ThreadChannel = self._state.create_guild_channel(data=thread_data, guild=self.guild)
+        thread: ThreadChannel = self._state.create_guild_channel(
+            data=thread_data, guild=self.guild
+        )
         self.channel._add_thread(thread=thread)
 
         return thread
