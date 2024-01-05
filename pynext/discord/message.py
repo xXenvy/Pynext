@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from .member import GuildMember
     from .discorduser import DiscordUser
     from .guild import Guild
-    
+
     from .channel import DMChannel, TextChannel, ThreadChannel
     from .attachment import Attachment
 
@@ -414,8 +414,10 @@ class PrivateMessage(BaseMessage):
             )
             self._reactions[reaction.unique_id] = reaction
 
-        for attachment_data in message_data.get('attachments', []):
-            attachment: Attachment[PrivateMessage] = self._state.create_attachment(message=self, data=attachment_data)
+        for attachment_data in message_data.get("attachments", []):
+            attachment: Attachment[PrivateMessage] = self._state.create_attachment(
+                message=self, data=attachment_data
+            )
             self.attachments.append(attachment)
 
     def __repr__(self) -> str:
@@ -474,8 +476,10 @@ class GuildMessage(BaseMessage):
             )
             self._reactions[reaction.unique_id] = reaction
 
-        for attachment_data in message_data.get('attachments', []):
-            attachment: Attachment[GuildMessage] = self._state.create_attachment(message=self, data=attachment_data)
+        for attachment_data in message_data.get("attachments", []):
+            attachment: Attachment[GuildMessage] = self._state.create_attachment(
+                message=self, data=attachment_data
+            )
             self.attachments.append(attachment)
 
     def __repr__(self) -> str:

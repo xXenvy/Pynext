@@ -140,7 +140,9 @@ class State:
         self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
 
-    def create_attachment(self, message: MessageT, data: dict[str, Any]) -> Attachment[MessageT]:
+    def create_attachment(
+        self, message: MessageT, data: dict[str, Any]
+    ) -> Attachment[MessageT]:
         """
         Method to create a attachment object from a data.
 

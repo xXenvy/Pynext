@@ -85,8 +85,7 @@ __all__: tuple[str, ...] = (
     "UnSupportedOptionType",
     "ApplicationCommandOption",
     "InteractionPayload",
-    "Attachment"
-    "ThreadChannel",
+    "Attachment" "ThreadChannel",
     "ThreadMembersUpdatePayload",
 )
 
