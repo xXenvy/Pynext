@@ -85,6 +85,7 @@ __all__: tuple[str, ...] = (
     "UnSupportedOptionType",
     "ApplicationCommandOption",
     "InteractionPayload",
+    "Attachment"
 )
 
 pynext_version: str = PynextClient.__version__

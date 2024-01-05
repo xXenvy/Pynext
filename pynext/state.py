@@ -21,7 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, AsyncIterable, Any
+from typing import TYPE_CHECKING, AsyncIterable, Any, TypeVar
 
 from logging import Logger, getLogger
 
@@ -34,6 +34,8 @@ if TYPE_CHECKING:
     from .rest import HTTPClient
     from .selfbot import SelfBot
     from .types import Channel, Message
+
+MessageT = TypeVar("MessageT", GuildMessage, PrivateMessage)
 
 
 class State:
@@ -137,6 +139,20 @@ class State:
         """
         self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
+
+    def create_attachment(self, message: MessageT, data: dict[str, Any]) -> Attachment[MessageT]:
+        """
+        Method to create a attachment object from a data.
+
+        Parameters
+        ----------
+        message:
+            Message to which the created attachment should belong.
+        data:
+            Required data to create a attachment object.
+        """
+        self.logger.debug("Creating a attachment object...")
+        return Attachment(data=data, message=message)
 
     def create_application(self, data: dict[str, Any]) -> Application:
         """
