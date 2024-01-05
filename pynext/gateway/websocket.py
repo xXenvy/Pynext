@@ -312,6 +312,8 @@ class DiscordWebSocket:
         """
         Method to dispatch received event from websocket.
         """
+        assert isinstance(response.event_name, str)
+
         event_args: tuple[Any, ...] | None = await self._parser.parse_event_args(
             response
         )

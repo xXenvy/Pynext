@@ -137,11 +137,12 @@ class Parser:
         if guild is None:
             guild = await user.fetch_guild(guild_id)
 
-        channel: TextChannel | None = guild.get_channel(channel_id)
+        channel = guild.get_channel(channel_id)
         if channel is None:
             channel = await guild.fetch_channel(user, channel_id)
 
-        thread_channel: ThreadChannel = user.state.create_guild_channel(guild, data)
+        thread_channel = user.state.create_guild_channel(guild, data)
+        assert isinstance(thread_channel, ThreadChannel) and isinstance(channel, TextChannel)
 
         if not isinstance(channel, GuildChannel):
             # This can happen if the channel is forum channel which is not supported yet.
@@ -167,14 +168,17 @@ class Parser:
         if guild is None:
             guild = await user.fetch_guild(guild_id)
 
-        channel: TextChannel | None = guild.get_channel(channel_id)
+        channel = guild.get_channel(channel_id)
         if channel is None:
             channel = await guild.fetch_channel(user, channel_id)
 
-        thread_channel: ThreadChannel = user.state.create_guild_channel(guild, data)
+        thread_channel = user.state.create_guild_channel(guild, data)
+
+        assert isinstance(channel, TextChannel) and isinstance(thread_channel, ThreadChannel)
 
         old_thread: ThreadChannel | None = channel.get_thread(thread_id)
         channel._add_thread(thread_channel)
+
         if old_thread:
             return user, old_thread, thread_channel
 

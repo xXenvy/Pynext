@@ -778,10 +778,12 @@ class ThreadChannel(GuildChannel, Messageable):
         """
         Creaction message object if cached.
         """
-        if self.parent is None:
+        if not isinstance(self.parent, TextChannel):
             return None
 
-        return self.parent.get_message(self.id)
+        message = self.parent.get_message(self.id)
+        if isinstance(message, GuildMessage):
+            return message
 
     def get_member(self, member_id: int) -> GuildMember | None:
         """

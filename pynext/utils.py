@@ -21,7 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import Any, Callable, TypeVar, Awaitable, ParamSpec
+from typing import Any, Callable
 
 from time import time
 from random import choice
@@ -32,9 +32,6 @@ from asyncio import iscoroutinefunction
 from datetime import datetime, timezone
 
 DISCORD_EPOCH: int = 1420070400000
-
-ReturnT = TypeVar("ReturnT")
-P = ParamSpec("P")
 
 try:
     import orjson  # pyright: ignore[reportMissingImports]
@@ -153,9 +150,7 @@ def create_session(lenght: int = 32) -> str:
     return "".join(choice(ascii_letters + digits) for _ in range(lenght))
 
 
-async def maybe_coro(
-    coro: Callable[[P], Awaitable[ReturnT]], *args: P.args, **kwargs: P.kwargs
-) -> ReturnT:
+async def maybe_coro(coro: Callable, *args: Any, **kwargs: Any) -> Any:
     # If function is coroutine, then we will await it.
     # Otherwise, we will just call it.
     if iscoroutinefunction(coro):

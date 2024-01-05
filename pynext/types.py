@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 
 Message = Union["PrivateMessage", "GuildMessage"]
-Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel"]
+Channel = Union["GuildChannel", "TextChannel", "VoiceChannel", "CategoryChannel", "ThreadChannel"]
 Snowflake = Union[str, int]
 
 
