@@ -416,6 +416,8 @@ class PrivateMessage(BaseMessage):
         Whether this was a TTS message.
     attachments: List[:class:`Attachment`]
         List with all message attachments.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = ("attachments",)
@@ -479,6 +481,8 @@ class GuildMessage(BaseMessage):
         Whether this was a TTS message.
     attachments: List[:class:`Attachment`]
         List with all message attachments.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = ("guild", "attachments")
@@ -516,7 +520,7 @@ class GuildMessage(BaseMessage):
         """
         Method to create thread from message.
 
-        ..versionadded:: 1.2.0
+        .. versionadded:: 1.2.0
 
         Parameters
         ----------

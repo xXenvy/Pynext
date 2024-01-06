@@ -66,8 +66,8 @@ __all__ = (
     "Application",
     "SlashCommand",
     "SubCommand",
-    "ApplicationCommandOption",
     "Attachment",
     "ThreadChannel",
     "File",
+    "BaseMessage"
 )

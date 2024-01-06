@@ -72,6 +72,10 @@ Discord objects.
    :members:
    :show-inheritance:
 
+.. autoclass:: BaseMessage()
+   :members:
+   :show-inheritance:
+
 .. autoclass:: GuildMessage()
    :members:
    :show-inheritance:
