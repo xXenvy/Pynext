@@ -203,7 +203,6 @@ class Messageable:
                     "file_size": file.size,
                     "filename": file.name,
                     "id": str(index),
-                    "is_clip": False,
                 }
             )
 
