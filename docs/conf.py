@@ -7,14 +7,12 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
-from pynext import pynext_version
 
 sys.path.append(os.path.abspath(".."))
 
 project = "Pynext"
 copyright = "2023, xXenvy"
 author = "xXenvy"
-release = pynext_version
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

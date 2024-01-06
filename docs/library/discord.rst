@@ -80,6 +80,14 @@ Discord objects.
    :members:
    :show-inheritance:
 
+.. autoclass:: Attachment()
+   :members:
+   :show-inheritance:
+
+.. autoclass:: File()
+   :members:
+   :show-inheritance:
+
 .. autoclass:: MessageReaction()
    :members:
    :show-inheritance:
