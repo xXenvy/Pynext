@@ -7,14 +7,12 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
-from pynext import pynext_version
 
 sys.path.append(os.path.abspath(".."))
 
 project = "Pynext"
 copyright = "2023, xXenvy"
 author = "xXenvy"
-release = pynext_version
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -48,3 +46,4 @@ ogp_site_name = "Pynext Documentation"
 default_dark_mode = True
 html_theme = "furo"
 html_static_path = ["_static"]
+html_css_files = ["style.css"]
