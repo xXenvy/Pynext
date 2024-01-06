@@ -473,7 +473,9 @@ class HTTPClient:
         response: ClientResponse = await self.request(route, payload, user)
         return await response.json()
 
-    async def upload_attachments(self, user: SelfBot, channel_id: int, files: list[dict[str, Any]]) -> dict[str, Any]:
+    async def upload_attachments(
+        self, user: SelfBot, channel_id: int, files: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """
         HTTP request to upload attachments.
 
@@ -582,12 +584,12 @@ class HTTPClient:
         await self.request(route, user=user)
 
     async def edit_message(
-            self,
-            user: SelfBot,
-            channel_id: int,
-            message_id: int,
-            content: str | None,
-            attachments: list[dict[str, Any]] | None = None,
+        self,
+        user: SelfBot,
+        channel_id: int,
+        message_id: int,
+        content: str | None,
+        attachments: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         """
         HTTP request to edit message.
@@ -620,9 +622,7 @@ class HTTPClient:
             message_id=message_id,
         )
 
-        response: ClientResponse = await self.request(
-            route, json=payload, user=user
-        )
+        response: ClientResponse = await self.request(route, json=payload, user=user)
 
         return await response.json()
 

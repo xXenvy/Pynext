@@ -158,10 +158,11 @@ class BaseMessage(Hashable):
         await self._state.http.delete_message(user, self.channel_id, self.id)
 
     async def edit(
-            self,
-            user: SelfBot,
-            content: str | None = None,
-            attachments: list[Attachment] | None = None) -> GuildMessage | PrivateMessage:
+        self,
+        user: SelfBot,
+        content: str | None = None,
+        attachments: list[Attachment] | None = None,
+    ) -> GuildMessage | PrivateMessage:
         """
         Method to edit message.
 
@@ -196,7 +197,7 @@ class BaseMessage(Hashable):
             channel_id=self.channel_id,
             message_id=self.id,
             content=content,
-            attachments=attachments_data or None
+            attachments=attachments_data or None,
         )
         if guild := getattr(self, "guild", None):
             message_data["guild_id"] = guild.id

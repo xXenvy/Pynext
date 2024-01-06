@@ -69,5 +69,5 @@ __all__ = (
     "ApplicationCommandOption",
     "Attachment",
     "ThreadChannel",
-    "File"
+    "File",
 )

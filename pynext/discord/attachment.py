@@ -52,6 +52,7 @@ class Attachment(Hashable, Generic[MessageT]):
     flags: Optional[int]
         The attachment's flags.
     """
+
     def __init__(self, data: dict[str, Any], message: MessageT):
         self.message: MessageT = message
         self.id: int = int(data["id"])

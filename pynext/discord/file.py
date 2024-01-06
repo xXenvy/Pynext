@@ -39,12 +39,12 @@ class File:
     """
 
     def __init__(
-            self,
-            fp: PathLike | str | bytes | bytearray,
-            name: str,
-            spoiler: bool = False,
-            description: str | None = None):
-
+        self,
+        fp: PathLike | str | bytes | bytearray,
+        name: str,
+        spoiler: bool = False,
+        description: str | None = None,
+    ):
         self.fp: PathLike | str | bytes = fp
         self.name: str = name
         self.spoiler: bool = spoiler
@@ -62,7 +62,11 @@ class File:
         return f"<File(name={self.name}, spoiler={self.spoiler})>"
 
     def __eq__(self, other: File) -> bool:
-        return isinstance(other, File) and other.name == self.name and other.size == self.size
+        return (
+            isinstance(other, File)
+            and other.name == self.name
+            and other.size == self.size
+        )
 
     def __ne__(self, other: File) -> bool:
         return not self.__eq__(other)

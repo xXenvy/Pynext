@@ -107,14 +107,20 @@ class Messageable:
         return Typing(channel_id=self.id, users=users)
 
     @overload
-    async def send(self, user: SelfBot, content: str, files: list[File] | None) -> PrivateMessage:
+    async def send(
+        self, user: SelfBot, content: str, files: list[File] | None
+    ) -> PrivateMessage:
         ...
 
     @overload
-    async def send(self, user: SelfBot, content: str, files: list[File] | None) -> GuildMessage:
+    async def send(
+        self, user: SelfBot, content: str, files: list[File] | None
+    ) -> GuildMessage:
         ...
 
-    async def send(self, user: SelfBot, content: str, files: list[File] | None = None) -> GuildMessage | PrivateMessage:
+    async def send(
+        self, user: SelfBot, content: str, files: list[File] | None = None
+    ) -> GuildMessage | PrivateMessage:
         attachments: list[dict[str, Any]] = []
 
         if files is not None:
@@ -122,7 +128,10 @@ class Messageable:
                 attachments.append(attachment_data)
 
         message_data: dict[str, Any] = await self._state.http.send_message(
-            user, channel_id=self.id, message_content=content, attachments=attachments or None
+            user,
+            channel_id=self.id,
+            message_content=content,
+            attachments=attachments or None,
         )
 
         if getattr(self, "guild", None):
@@ -183,7 +192,9 @@ class Messageable:
         except KeyError:
             pass
 
-    async def _upload_files(self, user: SelfBot, files: list[File]) -> AsyncIterable[dict[str, str | int]]:
+    async def _upload_files(
+        self, user: SelfBot, files: list[File]
+    ) -> AsyncIterable[dict[str, str | int]]:
         attachments_data: list[dict[str, Any]] = []
 
         for index, file in enumerate(files):
@@ -200,16 +211,20 @@ class Messageable:
             user=user, channel_id=self.id, files=attachments_data
         )
 
-        for key, attachment in enumerate(response['attachments']):
-            upload_url: str = attachment['upload_url']
-            upload_id: int = attachment['id']
-            upload_filename: str = attachment['upload_filename']
+        for key, attachment in enumerate(response["attachments"]):
+            upload_url: str = attachment["upload_url"]
+            upload_id: int = attachment["id"]
+            upload_filename: str = attachment["upload_filename"]
 
             file: File = files[key]
 
             await self._state.http.upload_file(upload_url, file.bytes)
 
-            yield {"uploaded_filename": upload_filename, "filename": file.name, "id": upload_id}
+            yield {
+                "uploaded_filename": upload_filename,
+                "filename": file.name,
+                "id": upload_id,
+            }
 
 
 class BaseFlags:
