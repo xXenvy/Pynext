@@ -518,6 +518,8 @@ class HTTPClient:
         if not self.session_status:
             raise RuntimeError("HTTP Session is not running.")
 
+        assert isinstance(self._session, ClientSession)
+
         await self._session.put(url=upload_url, data=file_bytes)
 
     async def fetch_messages(
