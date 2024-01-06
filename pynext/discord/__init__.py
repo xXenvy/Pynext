@@ -69,5 +69,5 @@ __all__ = (
     "Attachment",
     "ThreadChannel",
     "File",
-    "BaseMessage"
+    "BaseMessage",
 )
