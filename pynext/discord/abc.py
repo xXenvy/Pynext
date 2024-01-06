@@ -21,7 +21,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, overload, Any
+from typing import TYPE_CHECKING, overload, Any, AsyncIterable
 
 from asyncio import get_event_loop, AbstractEventLoop, Task, sleep
 
@@ -31,6 +31,7 @@ from ..errors import HTTPException
 
 if TYPE_CHECKING:
     from .guild import Guild
+    from .file import File
 
     from ..selfbot import SelfBot
     from ..state import State
@@ -106,16 +107,22 @@ class Messageable:
         return Typing(channel_id=self.id, users=users)
 
     @overload
-    async def send(self, user: SelfBot, content: str) -> PrivateMessage:
+    async def send(self, user: SelfBot, content: str, files: list[File] | None) -> PrivateMessage:
         ...
 
     @overload
-    async def send(self, user: SelfBot, content: str) -> GuildMessage:
+    async def send(self, user: SelfBot, content: str, files: list[File] | None) -> GuildMessage:
         ...
 
-    async def send(self, user: SelfBot, content: str) -> GuildMessage | PrivateMessage:
+    async def send(self, user: SelfBot, content: str, files: list[File] | None = None) -> GuildMessage | PrivateMessage:
+        attachments: list[dict[str, Any]] = []
+
+        if files is not None:
+            async for attachment_data in self._upload_files(user, files):
+                attachments.append(attachment_data)
+
         message_data: dict[str, Any] = await self._state.http.send_message(
-            user, channel_id=self.id, message_content=content
+            user, channel_id=self.id, message_content=content, attachments=attachments or None
         )
 
         if getattr(self, "guild", None):
@@ -175,6 +182,34 @@ class Messageable:
             del self._messages[message_id]
         except KeyError:
             pass
+
+    async def _upload_files(self, user: SelfBot, files: list[File]) -> AsyncIterable[dict[str, str | int]]:
+        attachments_data: list[dict[str, Any]] = []
+
+        for index, file in enumerate(files):
+            attachments_data.append(
+                {
+                    "file_size": file.size,
+                    "filename": file.name,
+                    "id": str(index),
+                    "is_clip": False,
+                }
+            )
+
+        response: dict[str, Any] = await self._state.http.upload_attachments(
+            user=user, channel_id=self.id, files=attachments_data
+        )
+
+        for key, attachment in enumerate(response['attachments']):
+            upload_url: str = attachment['upload_url']
+            upload_id: int = attachment['id']
+            upload_filename: str = attachment['upload_filename']
+
+            file: File = files[key]
+
+            await self._state.http.upload_file(upload_url, file.bytes)
+
+            yield {"uploaded_filename": upload_filename, "filename": file.name, "id": upload_id}
 
 
 class BaseFlags:

@@ -157,7 +157,11 @@ class BaseMessage(Hashable):
 
         await self._state.http.delete_message(user, self.channel_id, self.id)
 
-    async def edit(self, user: SelfBot, content: str) -> GuildMessage | PrivateMessage:
+    async def edit(
+            self,
+            user: SelfBot,
+            content: str | None = None,
+            attachments: list[Attachment] | None = None) -> GuildMessage | PrivateMessage:
         """
         Method to edit message.
 
@@ -167,6 +171,10 @@ class BaseMessage(Hashable):
             Selfbot to send request.
         content:
             New message content.
+        attachments:
+            Asigned attachments to message.
+
+            .. versionadded:: 1.2.0
 
         Raises
         ------
@@ -179,8 +187,16 @@ class BaseMessage(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
+        attachments_data: list[dict[str, Any]] = []
+        if attachments:
+            attachments_data = [attachment.to_dict() for attachment in attachments]
+
         message_data: dict[str, Any] = await self._state.http.edit_message(
-            user, channel_id=self.channel_id, message_id=self.id, content=content
+            user,
+            channel_id=self.channel_id,
+            message_id=self.id,
+            content=content,
+            attachments=attachments_data or None
         )
         if guild := getattr(self, "guild", None):
             message_data["guild_id"] = guild.id
@@ -397,6 +413,8 @@ class PrivateMessage(BaseMessage):
         Id of the message channel.
     tts: :class:`bool`
         Whether this was a TTS message.
+    attachments: List[:class:`Attachment`]
+        List with all message attachments.
     """
 
     __slots__ = ("attachments",)
@@ -458,6 +476,8 @@ class GuildMessage(BaseMessage):
         Id of the message channel.
     tts: :class:`bool`
         Whether this was a TTS message.
+    attachments: List[:class:`Attachment`]
+        List with all message attachments.
     """
 
     __slots__ = ("guild", "attachments")
@@ -494,6 +514,8 @@ class GuildMessage(BaseMessage):
     ) -> ThreadChannel:
         """
         Method to create thread from message.
+
+        ..versionadded:: 1.2.0
 
         Parameters
         ----------
