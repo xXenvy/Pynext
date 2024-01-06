@@ -52,6 +52,10 @@ Discord objects.
    :members:
    :show-inheritance:
 
+.. autoclass:: BaseCommand()
+   :members:
+   :show-inheritance:
+
 .. autoclass:: SlashCommand()
    :members:
    :show-inheritance:
@@ -77,6 +81,14 @@ Discord objects.
    :show-inheritance:
 
 .. autoclass:: PrivateMessage()
+   :members:
+   :show-inheritance:
+
+.. autoclass:: Attachment()
+   :members:
+   :show-inheritance:
+
+.. autoclass:: File()
    :members:
    :show-inheritance:
 

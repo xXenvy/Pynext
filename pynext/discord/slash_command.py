@@ -45,7 +45,6 @@ if TYPE_CHECKING:
 class BaseCommand(Hashable):
     """
     Represents the BaseCommand object.
-    TODO: Add BaseCommand to docs. Missing subcommands annotations!
 
     Parameters
     ----------
