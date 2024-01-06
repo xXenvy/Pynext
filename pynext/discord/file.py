@@ -39,12 +39,12 @@ class File:
     """
 
     def __init__(
-        self,
-        fp: PathLike | str | bytes | bytearray,
-        name: str,
-        spoiler: bool = False,
-        description: str | None = None,
-    ):
+            self,
+            fp: PathLike | str | bytes | bytearray,
+            name: str,
+            spoiler: bool = False,
+            description: str | None = None):
+
         self.fp: PathLike | str | bytes = fp
         self.name: str = name
         self.spoiler: bool = spoiler
@@ -58,18 +58,17 @@ class File:
 
         self.size: int = len(self.bytes)
 
+        if spoiler and not self.name.startswith("SPOILER_"):
+            self.name = "SPOILER_" + self.name
+
     def __repr__(self) -> str:
         return f"<File(name={self.name}, spoiler={self.spoiler})>"
 
     def __eq__(self, other: File) -> bool:
-        return (
-            isinstance(other, File)
-            and other.name == self.name
-            and other.size == self.size
-        )
+        return isinstance(other, File) and other.name == self.name and other.bytes == self.bytes
 
     def __ne__(self, other: File) -> bool:
         return not self.__eq__(other)
 
     def __hash__(self) -> int:
-        return hash((self.name, self.size, self.spoiler, self.description))
+        return hash((self.name, self.bytes, self.spoiler, self.description))

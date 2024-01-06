@@ -108,13 +108,13 @@ class Messageable:
 
     @overload
     async def send(
-        self, user: SelfBot, content: str, files: list[File] | None
+        self, user: SelfBot, content: str, files: list[File] | None = None
     ) -> PrivateMessage:
         ...
 
     @overload
     async def send(
-        self, user: SelfBot, content: str, files: list[File] | None
+        self, user: SelfBot, content: str, files: list[File] | None = None
     ) -> GuildMessage:
         ...
 
