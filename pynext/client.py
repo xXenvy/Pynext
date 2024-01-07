@@ -68,10 +68,12 @@ class PynextClient:
         Client event loop.
     dispatcher: :class:`Dispatcher`
         Major client dispatcher.
+    http: :class:`HTTPClient`
+        HTTP client used to send requests to rest api.
     """
 
     __version__: ClassVar[str] = "1.1.0"
-    __slots__ = ("gateway", "loop", "dispatcher", "_http", "_users", "_logger")
+    __slots__ = ("gateway", "loop", "dispatcher", "http", "_users", "_logger")
 
     def __init__(
         self,
@@ -88,12 +90,13 @@ class PynextClient:
             chunk_channels=chunk_channels,
             debug_events=debug_events,
         )
+
         self.loop: AbstractEventLoop = get_event_loop()
         self.dispatcher: Dispatcher[PynextClient] = Dispatcher(client=self)
-
-        self._http: HTTPClient = HTTPClient(
+        self.http: HTTPClient = HTTPClient(
             request_delay, ratelimit_delay, self.dispatcher, http_timeout
         )
+
         self._logger: Logger = getLogger("pynext.common")
         self._users: set[SelfBot] = set()
 
