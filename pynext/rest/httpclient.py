@@ -427,6 +427,7 @@ class HTTPClient:
         user: SelfBot,
         channel_id: int,
         message_content: str,
+        attachments: list[dict[str, Any]] | None = None,
         message_reference: MessageReference | None = None,
         reply_mention: bool = True,
     ) -> dict[str, Any]:
@@ -441,6 +442,8 @@ class HTTPClient:
             Id of the channel on which you want to send the message.
         message_content:
             Content of the message.
+        attachments:
+            List of attachments to send.
         message_reference:
             MessageReference data with details of which message you are responding to.
         reply_mention:
@@ -459,11 +462,65 @@ class HTTPClient:
             "message_reference": message_reference,
         }
 
+        if attachments:
+            payload["attachments"] = attachments
+
         if message_reference:
             payload["allowed_mentions"] = {"replied_user": reply_mention}
 
+        print(payload)
+
         response: ClientResponse = await self.request(route, payload, user)
         return await response.json()
+
+    async def upload_attachments(
+        self, user: SelfBot, channel_id: int, files: list[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """
+        HTTP request to upload attachments.
+
+        .. versionadded:: 1.2.0
+
+        Parameters
+        ----------
+        user:
+            Selfbot to make the request.
+        channel_id:
+            Id of the channel on which you want to send the message.
+        files:
+            List of files to upload.
+        """
+        route = Route(
+            method="POST",
+            url="channels/{channel_id}/attachments",
+            headers=user.authorization.headers,
+            channel_id=channel_id,
+        )
+
+        payload: dict[str, Any] = {"files": files}
+
+        response: ClientResponse = await self.request(route, payload, user)
+        return await response.json()
+
+    async def upload_file(self, upload_url: str, file_bytes: bytes) -> None:
+        """
+        HTTP request to upload file.
+
+        .. versionadded:: 1.2.0
+
+        Parameters
+        ----------
+        upload_url:
+            Url to upload file.
+        file_bytes:
+            Bytes of file to upload.
+        """
+        if not self.session_status:
+            raise RuntimeError("HTTP Session is not running.")
+
+        assert isinstance(self._session, ClientSession)
+
+        await self._session.put(url=upload_url, data=file_bytes)
 
     async def fetch_messages(
         self,
@@ -529,7 +586,12 @@ class HTTPClient:
         await self.request(route, user=user)
 
     async def edit_message(
-        self, user: SelfBot, channel_id: int, message_id: int, content: str
+        self,
+        user: SelfBot,
+        channel_id: int,
+        message_id: int,
+        content: str | None,
+        attachments: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         """
         HTTP request to edit message.
@@ -544,7 +606,16 @@ class HTTPClient:
             message id to edit.
         content:
             message content to edit.
+        attachments:
+            attachments to edit.
         """
+        payload: dict[str, Any] = {}
+        if content:
+            payload["content"] = content
+
+        if attachments:
+            payload["attachments"] = attachments
+
         route = Route(
             method="PATCH",
             url="channels/{channel_id}/messages/{message_id}",
@@ -553,9 +624,7 @@ class HTTPClient:
             message_id=message_id,
         )
 
-        response: ClientResponse = await self.request(
-            route, json={"content": content}, user=user
-        )
+        response: ClientResponse = await self.request(route, json=payload, user=user)
 
         return await response.json()
 

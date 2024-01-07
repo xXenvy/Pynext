@@ -37,6 +37,8 @@ from .abc import *
 from .emoji import *
 from .application import *
 from .slash_command import *
+from .attachment import *
+from .file import *
 
 __all__ = (
     "GuildMessage",
@@ -64,6 +66,9 @@ __all__ = (
     "Application",
     "SlashCommand",
     "SubCommand",
+    "Attachment",
     "ThreadChannel",
+    "File",
+    "BaseMessage",
     "BaseCommand",
 )

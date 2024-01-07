@@ -38,8 +38,10 @@ if TYPE_CHECKING:
     from .member import GuildMember
     from .discorduser import DiscordUser
     from .guild import Guild
+    from .file import File
 
     from .channel import DMChannel, TextChannel, ThreadChannel
+    from .attachment import Attachment
 
 
 class BaseMessage(Hashable):
@@ -171,7 +173,8 @@ class BaseMessage(Hashable):
     async def edit(
         self,
         user: SelfBot,
-        content: str,
+        content: str | None = None,
+        attachments: list[Attachment] | None = None,
     ) -> GuildMessage | PrivateMessage:
         """
         Method to edit message.
@@ -182,6 +185,10 @@ class BaseMessage(Hashable):
             Selfbot to send request.
         content:
             New message content.
+        attachments:
+            Asigned attachments to message.
+
+            .. versionadded:: 1.2.0
 
         Raises
         ------
@@ -194,11 +201,16 @@ class BaseMessage(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
+        attachments_data: list[dict[str, Any]] = []
+        if attachments:
+            attachments_data = [attachment.to_dict() for attachment in attachments]
+
         message_data: dict[str, Any] = await self._state.http.edit_message(
             user,
             channel_id=self.channel_id,
             message_id=self.id,
             content=content,
+            attachments=attachments_data or None,
         )
         if guild := getattr(self, "guild", None):
             message_data["guild_id"] = guild.id
@@ -305,7 +317,11 @@ class BaseMessage(Hashable):
         )
 
     async def reply(
-        self, user: SelfBot, content: str, reply_mention: bool = True
+        self,
+        user: SelfBot,
+        content: str,
+        files: list[File] | None = None,
+        reply_mention: bool = True,
     ) -> PrivateMessage | GuildMessage:
         """
         Method to reply message.
@@ -316,6 +332,8 @@ class BaseMessage(Hashable):
             Selfbot to send request.
         content:
             Message content.
+        files:
+            Message attachments.
         reply_mention:
             Whether to mention the author of the message to which you are responding.
 
@@ -330,6 +348,12 @@ class BaseMessage(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
+        attachments: list[dict[str, Any]] = []
+
+        if files is not None:
+            async for attachment_data in self.channel._upload_files(user, files):
+                attachments.append(attachment_data)
+
         message_reference: MessageReference = MessageReference(
             channel_id=self.channel_id, message_id=self.id
         )
@@ -339,6 +363,7 @@ class BaseMessage(Hashable):
             channel_id=self.channel_id,
             message_content=content,
             message_reference=message_reference,
+            attachments=attachments or None,
             reply_mention=reply_mention,
         )
         message: PrivateMessage | GuildMessage | None = (
@@ -415,21 +440,32 @@ class PrivateMessage(BaseMessage):
         Id of the message channel.
     tts: :class:`bool`
         Whether this was a TTS message.
+    attachments: List[:class:`Attachment`]
+        List with all message attachments.
+
+        .. versionadded:: 1.2.0
     """
 
-    __slots__ = ()
+    __slots__ = ("attachments",)
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
 
         self.channel: DMChannel = message_data["channel"]
         self.author: DiscordUser = message_data["user_author"]
+        self.attachments: list[Attachment] = []
 
         for reaction_data in message_data.get("reactions", []):
             reaction: MessageReaction[PrivateMessage] = MessageReaction(
                 message=self, data=reaction_data
             )
             self._reactions[reaction.unique_id] = reaction
+
+        for attachment_data in message_data.get("attachments", []):
+            attachment: Attachment[PrivateMessage] = self._state.create_attachment(
+                message=self, data=attachment_data
+            )
+            self.attachments.append(attachment)
 
     def __repr__(self) -> str:
         return f"<PrivateMessage(id={self.id}, author_id={self.author_id})>"
@@ -482,9 +518,13 @@ class GuildMessage(BaseMessage):
         Id of the message channel.
     tts: :class:`bool`
         Whether this was a TTS message.
+    attachments: List[:class:`Attachment`]
+        List with all message attachments.
+
+        .. versionadded:: 1.2.0
     """
 
-    __slots__ = ("guild",)
+    __slots__ = ("guild", "attachments")
 
     def __init__(self, state: State, message_data: dict[str, Any]):
         super().__init__(state=state, data=message_data)
@@ -492,12 +532,19 @@ class GuildMessage(BaseMessage):
         self.guild: Guild = message_data["guild"]
         self.channel: TextChannel | ThreadChannel = message_data["channel"]
         self.author: GuildMember = message_data["user_author"]
+        self.attachments: list[Attachment] = []
 
         for reaction_data in message_data.get("reactions", []):
             reaction: MessageReaction[GuildMessage] = MessageReaction(
                 message=self, data=reaction_data
             )
             self._reactions[reaction.unique_id] = reaction
+
+        for attachment_data in message_data.get("attachments", []):
+            attachment: Attachment[GuildMessage] = self._state.create_attachment(
+                message=self, data=attachment_data
+            )
+            self.attachments.append(attachment)
 
     def __repr__(self) -> str:
         return f"<GuildMessage(id={self.id}, author_id={self.author_id})>"
