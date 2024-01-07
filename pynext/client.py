@@ -125,8 +125,8 @@ class PynextClient:
             HTTP Session is not defined.
         """
         for token in set(auths):
-            if data := await self._http.login_request(token):
-                user: SelfBot = SelfBot(token=token, user_data=data, http=self._http)
+            if data := await self.http.login_request(token):
+                user: SelfBot = SelfBot(token=token, user_data=data, http=self.http)
 
                 self._users.add(user)
                 self._logger.info(f"Connected to the account: {user}.")
@@ -146,7 +146,7 @@ class PynextClient:
         """
         self._logger.info(f"Running client, {len(set(tokens))} tokens loaded.")
 
-        await self._http.setup()
+        await self.http.setup()
         await self.login(*tokens)
         await self.gateway.start()
 
