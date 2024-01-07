@@ -113,12 +113,7 @@ def snowflake_time(object_id: int) -> datetime:
 def str_to_datetime(value: str) -> datetime:
     # Method to convert string to datetime object.
     # Example: 2021-08-28T15:00:00.000000+00:00
-
-    tuple_data: tuple[str, ...] = value.partition("T")
-    datetime_str: str = f"{tuple_data[0]} {tuple_data[2][0:8]}"
-
-    datetime_object: datetime = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-    return datetime_object
+    return datetime.fromisoformat(value)
 
 
 def applications_filter(data: dict[str, Any]) -> dict[int, Any]:
