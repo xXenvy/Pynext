@@ -82,7 +82,7 @@ class WebSocketConnector:
         chunk_guilds: bool,
         chunk_channels: bool,
         debug_events: bool,
-        reconnect: bool
+        reconnect: bool,
     ):
         self.client: PynextClient = client
 

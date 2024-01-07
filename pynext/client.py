@@ -90,7 +90,7 @@ class PynextClient:
             chunk_guilds=chunk_guilds,
             chunk_channels=chunk_channels,
             debug_events=debug_events,
-            reconnect=reconnect
+            reconnect=reconnect,
         )
         self.loop: AbstractEventLoop = get_event_loop()
         self.dispatcher: Dispatcher[PynextClient] = Dispatcher(client=self)
