@@ -74,6 +74,10 @@ class BaseMessage(Hashable):
         Id of the message channel.
     tts:
         Whether this was a TTS message.
+    reference:
+        Message reference.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = (
