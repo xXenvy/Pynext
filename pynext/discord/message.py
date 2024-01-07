@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from .member import GuildMember
     from .discorduser import DiscordUser
     from .guild import Guild
+    from .file import File
 
     from .channel import DMChannel, TextChannel, ThreadChannel
     from .attachment import Attachment
@@ -304,7 +305,11 @@ class BaseMessage(Hashable):
         )
 
     async def reply(
-        self, user: SelfBot, content: str, reply_mention: bool = True
+            self,
+            user: SelfBot,
+            content: str,
+            files: list[File] | None = None,
+            reply_mention: bool = True
     ) -> PrivateMessage | GuildMessage:
         """
         Method to reply message.
@@ -315,6 +320,8 @@ class BaseMessage(Hashable):
             Selfbot to send request.
         content:
             Message content.
+        files:
+            Message attachments.
         reply_mention:
             Whether to mention the author of the message to which you are responding.
 
@@ -329,6 +336,12 @@ class BaseMessage(Hashable):
         Forbidden
             Selfbot doesn't have proper permissions.
         """
+        attachments: list[dict[str, Any]] = []
+
+        if files is not None:
+            async for attachment_data in self.channel._upload_files(user, files):
+                attachments.append(attachment_data)
+
         message_reference: MessageReference = MessageReference(
             channel_id=self.channel_id, message_id=self.id
         )
@@ -338,6 +351,7 @@ class BaseMessage(Hashable):
             channel_id=self.channel_id,
             message_content=content,
             message_reference=message_reference,
+            attachments=attachments or None,
             reply_mention=reply_mention,
         )
         message: PrivateMessage | GuildMessage | None = (
