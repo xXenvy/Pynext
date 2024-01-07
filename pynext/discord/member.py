@@ -23,7 +23,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Iterable
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from ..utils import str_to_datetime
 
@@ -137,7 +137,7 @@ class GuildMember(DiscordUser):
         if self.communication_disabled_until is None:
             return False
 
-        return self.communication_disabled_until > datetime.utcnow()
+        return self.communication_disabled_until > datetime.now(timezone.utc)
 
     async def fetch_roles(self, user: SelfBot) -> list[Role]:
         """
