@@ -52,6 +52,10 @@ Discord objects.
    :members:
    :show-inheritance:
 
+.. autoclass:: BaseCommand()
+   :members:
+   :show-inheritance:
+
 .. autoclass:: SlashCommand()
    :members:
    :show-inheritance:

@@ -70,4 +70,5 @@ __all__ = (
     "ThreadChannel",
     "File",
     "BaseMessage",
+    "BaseCommand",
 )

@@ -180,11 +180,11 @@ class Messageable:
         )
         return messages[0]
 
-    def _add_message(self, message: GuildMessage | PrivateMessage) -> None:
-        self._messages[message.id] = message
-
     def get_message(self, message_id: int) -> GuildMessage | PrivateMessage | None:
         return self._messages.get(message_id)
+
+    def _add_message(self, message: GuildMessage | PrivateMessage) -> None:
+        self._messages[message.id] = message
 
     def _remove_message(self, message_id: int) -> None:
         try:

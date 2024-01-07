@@ -51,3 +51,11 @@ client.run("TOKEN_1", "TOKEN_2")
 # 🧷 Links
 - [Documentation](https://pynext.readthedocs.io/en/latest/)
 - [Report a bug or feature](https://github.com/xXenvy/pynext/issues/new/choose)
+
+# 📋 Todo
+- [ ] Voice Support.
+- [ ] Message components (Buttons, Select Menus).
+- [ ] Official support for context commands.
+- [ ] Support for voice messages.
+- [ ] Extensions (Cogs).
+- [ ] Full api covarage.
