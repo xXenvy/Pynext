@@ -70,6 +70,8 @@ class PynextClient:
         Major client dispatcher.
     http: :class:`HTTPClient`
         HTTP client used to send requests to rest api.
+
+        .. versionadded:: 1.2.0
     """
 
     __version__: ClassVar[str] = "1.1.0"
