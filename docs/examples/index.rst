@@ -8,3 +8,4 @@ Example code snippets showing the feature.
 
    events
    slashcommands
+   sending_files
