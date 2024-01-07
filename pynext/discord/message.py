@@ -167,7 +167,7 @@ class BaseMessage(Hashable):
     async def edit(
         self,
         user: SelfBot,
-        content: str | None = None,
+        content: str,
     ) -> GuildMessage | PrivateMessage:
         """
         Method to edit message.
@@ -442,7 +442,9 @@ class PrivateMessage(BaseMessage):
         .. versionadded:: 1.2.0
         """
         if self.reference:
-            return self.channel.get_message(self.reference["message_id"])
+            message = self.channel.get_message(int(self.reference["message_id"]))
+            if isinstance(message, PrivateMessage):
+                return message
 
 
 class GuildMessage(BaseMessage):
@@ -508,7 +510,9 @@ class GuildMessage(BaseMessage):
         .. versionadded:: 1.2.0
         """
         if self.reference:
-            return self.channel.get_message(self.reference["message_id"])
+            message = self.channel.get_message(int(self.reference["message_id"]))
+            if isinstance(message, GuildMessage):
+                return message
 
     async def start_thread(
         self,
