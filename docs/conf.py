@@ -48,3 +48,4 @@ ogp_site_name = "Pynext Documentation"
 default_dark_mode = True
 html_theme = "furo"
 html_static_path = ["_static"]
+html_css_files = ["style.css"]
