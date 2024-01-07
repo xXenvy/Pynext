@@ -55,6 +55,8 @@ class WebSocketConnector:
         Whether the client should chunks guild channels.
     debug_events:
         Whether the client should run debug events such as: on_websocket_raw_receive.
+    reconnect:
+        Whether the client should reconnect to the gateway after losing connection.
 
     Attributes
     ----------
@@ -69,6 +71,7 @@ class WebSocketConnector:
         "_chunk_guilds",
         "_chunk_channels",
         "_debug_events",
+        "_reconnect",
     )
 
     gateway_url: ClassVar[str] = "wss://gateway.discord.gg/?v=10&encoding=json"
@@ -79,23 +82,20 @@ class WebSocketConnector:
         chunk_guilds: bool,
         chunk_channels: bool,
         debug_events: bool,
+        reconnect: bool
     ):
         self.client: PynextClient = client
 
         self._chunk_guilds: bool = chunk_guilds
         self._chunk_channels: bool = chunk_channels
         self._debug_events: bool = debug_events
+        self._reconnect: bool = reconnect
 
         self._logger: Logger = getLogger("pynext.gateway")
 
-    async def start(self, reconnect: bool = False):
+    async def start(self):
         """
         Asynchronous method to connect selfbots to gateway.
-
-        Parameters
-        ----------
-        reconnect:
-            Whether websocket should reconnect if the connection breaks.
         """
         tasks: list[Task] = []
 
