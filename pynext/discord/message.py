@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from .member import GuildMember
     from .discorduser import DiscordUser
     from .guild import Guild
+
     from .channel import DMChannel, TextChannel, ThreadChannel
 
 
@@ -73,6 +74,10 @@ class BaseMessage(Hashable):
         Id of the message channel.
     tts:
         Whether this was a TTS message.
+    reference:
+        Message reference.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = (
@@ -87,12 +92,14 @@ class BaseMessage(Hashable):
         "author_id",
         "channel_id",
         "tts",
+        "reference",
     )
 
     def __init__(self, state: State, data: dict[str, Any]):
         self._state: State = state
         self._reactions: dict[int, MessageReaction] = {}
 
+        self.reference: MessageReference | None = None
         self.channel: DMChannel | TextChannel = data["channel"]
         self.author: DiscordUser | GuildMember = data["user_author"]
 
@@ -104,6 +111,12 @@ class BaseMessage(Hashable):
         self.author_id: int = int(data["author"]["id"])
         self.channel_id: int = int(data["channel_id"])
         self.tts: bool = data["tts"]
+
+        if reference := data.get("message_reference"):
+            self.reference = MessageReference(
+                channel_id=int(reference["channel_id"]),
+                message_id=int(reference["message_id"]),
+            )
 
     @property
     def created_at(self) -> datetime:
@@ -155,7 +168,11 @@ class BaseMessage(Hashable):
 
         await self._state.http.delete_message(user, self.channel_id, self.id)
 
-    async def edit(self, user: SelfBot, content: str) -> GuildMessage | PrivateMessage:
+    async def edit(
+        self,
+        user: SelfBot,
+        content: str,
+    ) -> GuildMessage | PrivateMessage:
         """
         Method to edit message.
 
@@ -178,7 +195,10 @@ class BaseMessage(Hashable):
             Selfbot doesn't have proper permissions.
         """
         message_data: dict[str, Any] = await self._state.http.edit_message(
-            user, channel_id=self.channel_id, message_id=self.id, content=content
+            user,
+            channel_id=self.channel_id,
+            message_id=self.id,
+            content=content,
         )
         if guild := getattr(self, "guild", None):
             message_data["guild_id"] = guild.id
@@ -414,6 +434,19 @@ class PrivateMessage(BaseMessage):
     def __repr__(self) -> str:
         return f"<PrivateMessage(id={self.id}, author_id={self.author_id})>"
 
+    @property
+    def reference_message(self) -> PrivateMessage | None:
+        """
+        Message object to which the message is responding.
+        None if the message is not a response.
+
+        .. versionadded:: 1.2.0
+        """
+        if self.reference:
+            message = self.channel.get_message(int(self.reference["message_id"]))
+            if isinstance(message, PrivateMessage):
+                return message
+
 
 class GuildMessage(BaseMessage):
     """
@@ -469,6 +502,19 @@ class GuildMessage(BaseMessage):
     def __repr__(self) -> str:
         return f"<GuildMessage(id={self.id}, author_id={self.author_id})>"
 
+    @property
+    def reference_message(self) -> GuildMessage | None:
+        """
+        Message object to which the message is responding.
+        None if the message is not a response.
+
+        .. versionadded:: 1.2.0
+        """
+        if self.reference:
+            message = self.channel.get_message(int(self.reference["message_id"]))
+            if isinstance(message, GuildMessage):
+                return message
+
     async def start_thread(
         self,
         user: SelfBot,
@@ -478,6 +524,8 @@ class GuildMessage(BaseMessage):
     ) -> ThreadChannel:
         """
         Method to create thread from message.
+
+        .. versionadded:: 1.2.0
 
         Parameters
         ----------
