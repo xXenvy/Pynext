@@ -29,4 +29,5 @@ async def on_ready(user: SelfBot):
 
     await channel.send(user, content="Hello!", files=[discord_logo_2, discord_logo])
 
+
 client.run("TOKEN_1", "TOKEN_2")
