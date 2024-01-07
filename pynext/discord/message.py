@@ -301,10 +301,7 @@ class BaseMessage(Hashable):
         )
 
     async def reply(
-            self,
-            user: SelfBot,
-            content: str,
-            reply_mention: bool = True
+        self, user: SelfBot, content: str, reply_mention: bool = True
     ) -> PrivateMessage | GuildMessage:
         """
         Method to reply message.
