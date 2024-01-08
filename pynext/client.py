@@ -74,7 +74,7 @@ class PynextClient:
         .. versionadded:: 1.2.0
     """
 
-    __version__: ClassVar[str] = "1.1.0"
+    __version__: ClassVar[str] = "1.2.0"
     __slots__ = ("gateway", "loop", "dispatcher", "http", "_users", "_logger")
 
     def __init__(
