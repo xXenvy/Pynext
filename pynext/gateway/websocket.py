@@ -24,7 +24,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, ClassVar, Callable
 
 from logging import Logger, getLogger
-from aiohttp import ClientWebSocketResponse
+from aiohttp import ClientWebSocketResponse, ClientConnectorError
 
 from asyncio import gather, Queue, Task, sleep, create_task, Event
 from time import time, perf_counter
@@ -57,6 +57,10 @@ class WebSocketConnector:
         Whether the client should chunks guild channels.
     debug_events:
         Whether the client should run debug events such as: on_websocket_raw_receive.
+    reconnect:
+        Whether the client should reconnect to the gateway after disconnecting.
+
+        .. versionadded:: 1.2.0
 
     Attributes
     ----------
@@ -74,10 +78,15 @@ class WebSocketConnector:
         Whether the client should run debug events such as: on_websocket_raw_receive.
 
         .. versionadded:: 1.2.0
+    reconnect: :class:`bool`
+        Whether the client should reconnect to the gateway after disconnecting.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = (
         "client",
+        "reconnect",
         "chunk_guilds",
         "chunk_channels",
         "debug_events",
@@ -93,8 +102,11 @@ class WebSocketConnector:
         chunk_guilds: bool,
         chunk_channels: bool,
         debug_events: bool,
+        reconnect: bool,
     ):
         self.client: PynextClient = client
+        self.reconnect: bool = reconnect
+
         self.chunk_guilds: bool = chunk_guilds
         self.chunk_channels: bool = chunk_channels
         self.debug_events: bool = debug_events
@@ -138,17 +150,13 @@ class WebSocketConnector:
         try:
             del self._websockets[websocket.user]
             websocket.connected.clear()
+            websocket.user.gateway = None
         except KeyError:
             pass
 
-    async def start(self, reconnect: bool = False):
+    async def start(self):
         """
         Asynchronous method to connect selfbots to gateway.
-
-        Parameters
-        ----------
-        reconnect:
-            Whether websocket should reconnect if the connection breaks.
         """
         tasks: list[Task] = []
 
@@ -162,6 +170,23 @@ class WebSocketConnector:
             tasks.append(task)
 
         await gather(*tasks)
+
+    async def reconnect_websocket(self, selfbot: SelfBot) -> None:
+        """
+        Asynchronous method to reconnect websocket to gateway.
+
+        Parameters
+        ----------
+        selfbot:
+            Selfbot to reconnect.
+        """
+        self._logger.info(f"Reconnecting: {selfbot} to the gateway...")
+
+        if selfbot.gateway is not None:
+            self.remove_websocket(selfbot.gateway)
+
+        websocket: DiscordWebSocket = DiscordWebSocket(user=selfbot, connector=self)
+        await self.client.loop.create_task(websocket.run(self.gateway_url))
 
     def event(self, event_name: str) -> Callable:
         """
@@ -203,6 +228,14 @@ class DiscordWebSocket:
         Asyncio event that determines whether the selfbot has been connected.
     latency: :class:`float`
         Websocket latency value.
+    connector: :class:`WebSocketConnector`
+        Websocket connector.
+
+        .. versionadded:: 1.2.0
+    last_sequence: Optional[:class:`int`]
+        Last sequence number received from the gateway.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = (
@@ -212,10 +245,10 @@ class DiscordWebSocket:
         "connected",
         "latency",
         "connector",
+        "last_sequence",
         "_request_queue",
         "_last_send",
         "_client",
-        "_last_sequence",
         "_pulse",
         "_logger",
         "_parser",
@@ -234,6 +267,7 @@ class DiscordWebSocket:
         self.connector: WebSocketConnector = connector
         self.dispatcher: Dispatcher[PynextClient] = connector.client.dispatcher
         self.latency: float = 0.0
+        self.last_sequence: int | None = None
 
         self._parser: Parser = Parser(
             chunk_guilds=connector.chunk_guilds, chunk_channels=connector.chunk_channels
@@ -245,9 +279,6 @@ class DiscordWebSocket:
         self._logger: Logger = getLogger("pynext.gateway")
         self._pulse: int = 10
         self._last_send: float = perf_counter()
-        self._last_sequence: int | None = None
-        # For now, we are not using last_sequence,
-        # however we will need it to resume the connection to the gateway in the future.
 
     @property
     def websocket_status(self) -> bool:
@@ -286,9 +317,16 @@ class DiscordWebSocket:
         gateway_url:
             Url to connect gateway.
         """
-        self.websocket = await self.user.http.connect_to_gateway(url=gateway_url)
-        self.connector.add_websocket(self)
+        try:
+            self.websocket = await self.user.http.connect_to_gateway(url=gateway_url)
+        except Exception as e:
+            if isinstance(e, ClientConnectorError) and self.connector.reconnect:
+                await sleep(5)
+                self._logger.error("Failed to connect to the gateway. Reconnecting...")
+                await self.connector.reconnect_websocket(self.user)
+                return
 
+        self.connector.add_websocket(self)
         self._logger.info(f"Connected {self.user} to the discord gateway.")
 
         tasks = [
@@ -335,7 +373,7 @@ class DiscordWebSocket:
             self._logger.debug(f"Websocket received response: {response} | {self.user}")
 
             if response.sequence:
-                self._last_sequence = response.sequence
+                self.last_sequence = response.sequence
 
             if response.op == GatewayCodes.HELLO.value:
                 self._pulse = response.data["heartbeat_interval"] / 1000
@@ -351,6 +389,10 @@ class DiscordWebSocket:
 
             if response.event and response.event_name:
                 await self.__dispatch_event(response)
+
+        self._logger.error(f"Websocket connection for {self.user} has been closed.")
+        if self.connector.reconnect is True:
+            await self.connector.reconnect_websocket(self.user)
 
     async def __dispatch_event(self, response: GatewayResponse):
         """
@@ -384,8 +426,8 @@ class DiscordWebSocket:
                 "op": GatewayCodes.HEARTBEAT.value,
                 "d": int(time()),
             }
-            await self._request_queue.put(request)
 
+            await self._request_queue.put(request)
             await sleep(self._pulse)
 
     async def _send_identify(self):
