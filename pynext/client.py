@@ -63,7 +63,7 @@ class PynextClient:
     Attributes
     ----------
     gateway: :class:`WebSocketConnector`
-        Websocket connector used to connect gateway and register events.
+        Websocket connector used to connect gateway.
     loop: :class:`asyncio.AbstractEventLoop`
         Client event loop.
     dispatcher: :class:`Dispatcher`

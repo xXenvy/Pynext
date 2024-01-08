@@ -158,7 +158,7 @@ class WebSocketConnector:
         event_name:
             Event name to register.
 
-        # TODO: Remove this method in the future and change 'gateway' attribute to 'connector' in Selfbot.
+        # TODO: Remove this method in the future and change 'gateway' attribute to 'connector' in PynextClient.
         """
         warn(
             "Using client.gateway.event is deprecated. Use client.dispatcher.listen instead.",
