@@ -128,6 +128,11 @@ class WebSocketConnector:
         Method to get websocket connection for user.
 
         .. versionadded:: 1.2.0
+
+        Parameters
+        ----------
+        user:
+            Selfbot to get websocket connection.
         """
         return self._websockets.get(user)
 
@@ -136,6 +141,11 @@ class WebSocketConnector:
         Method to add websocket to the connector.
 
         .. versionadded:: 1.2.0
+
+        Parameters
+        ----------
+        websocket:
+            Websocket to add.
         """
         websocket.connected.set()
         websocket.user.gateway = websocket
@@ -146,6 +156,11 @@ class WebSocketConnector:
         Method to remove websocket from the connector.
 
         .. versionadded:: 1.2.0
+
+        Parameters
+        ----------
+        websocket:
+            Websocket to remove.
         """
         try:
             del self._websockets[websocket.user]
@@ -196,9 +211,9 @@ class WebSocketConnector:
         ----------
         event_name:
             Event name to register.
-
-        # TODO: Remove this method in the future and change 'gateway' attribute to 'connector' in PynextClient.
         """
+        # TODO: Remove this method in the future and change 'gateway' attribute to 'connector' in PynextClient.
+
         warn(
             "Using client.gateway.event is deprecated. Use client.dispatcher.listen instead.",
             DeprecationWarning,

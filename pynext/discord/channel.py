@@ -429,6 +429,8 @@ class TextChannel(GuildChannel, Messageable):
     def threads(self) -> list[ThreadChannel]:
         """
         List with cached threads on the channel.
+
+        .. versionadded:: 1.2.0
         """
         return list(self._threads.values())
 
@@ -511,6 +513,13 @@ class TextChannel(GuildChannel, Messageable):
     def get_thread(self, message_id: int) -> ThreadChannel | None:
         """
         Method to get Thread by message id.
+
+        Parameters
+        ----------
+        message_id:
+            Id of the message that started the thread.
+
+        .. versionadded:: 1.2.0
         """
         return self._threads.get(message_id)
 
