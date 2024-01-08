@@ -228,6 +228,14 @@ class DiscordWebSocket:
         Asyncio event that determines whether the selfbot has been connected.
     latency: :class:`float`
         Websocket latency value.
+    connector: :class:`WebSocketConnector`
+        Websocket connector.
+
+        .. versionadded:: 1.2.0
+    last_sequence: Optional[:class:`int`]
+        Last sequence number received from the gateway.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = (
