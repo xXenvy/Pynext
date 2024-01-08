@@ -64,10 +64,16 @@ class WebSocketConnector:
         Pynext client.
     chunk_guilds: :class:`bool`
         Whether the client should chunk guilds of each selfbot.
+
+        .. versionadded:: 1.2.0
     chunk_channels: :class:`bool`
         Whether the client should chunks guild channels.
+
+        .. versionadded:: 1.2.0
     debug_events: :class:`bool`
         Whether the client should run debug events such as: on_websocket_raw_receive.
+
+        .. versionadded:: 1.2.0
     """
 
     __slots__ = (
