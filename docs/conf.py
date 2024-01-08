@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
-from pynext import pynext_version
+from pynext import __version__ as pynext_version
 
 sys.path.append(os.path.abspath(".."))
 
