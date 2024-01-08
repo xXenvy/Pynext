@@ -93,4 +93,4 @@ __all__: tuple[str, ...] = (
     "BaseCommand",
 )
 
-pynext_version: str = PynextClient.__version__
+__version__: str = PynextClient.__version__
