@@ -29,6 +29,7 @@ from .enums import *
 from .gateway import *
 
 __all__: tuple[str, ...] = (
+    "__version__",
     "PynextClient",
     "SelfBot",
     "GuildMessage",
@@ -58,7 +59,6 @@ __all__: tuple[str, ...] = (
     "WebsocketNotConnected",
     "Unauthorized",
     "Image",
-    "pynext_version",
     "CaptchaRequired",
     "PresenceBuilder",
     "StatusType",
