@@ -9,7 +9,7 @@ class File:
     """
     Represents a file.
 
-    ..versionadded:: 1.2.0
+    .. versionadded:: 1.2.0
 
     Parameters
     ----------
