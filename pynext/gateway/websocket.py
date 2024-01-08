@@ -25,8 +25,10 @@ from typing import TYPE_CHECKING, Any, ClassVar, Callable
 
 from logging import Logger, getLogger
 from aiohttp import ClientWebSocketResponse
+
 from asyncio import gather, Queue, Task, sleep, create_task, Event
 from time import time, perf_counter
+from warnings import warn
 
 from ..utils import json_dumps
 from ..enums import GatewayCodes
@@ -60,15 +62,21 @@ class WebSocketConnector:
     ----------
     client: :class:`PynextClient`
         Pynext client.
+    chunk_guilds: :class:`bool`
+        Whether the client should chunk guilds of each selfbot.
+    chunk_channels: :class:`bool`
+        Whether the client should chunks guild channels.
+    debug_events: :class:`bool`
+        Whether the client should run debug events such as: on_websocket_raw_receive.
     """
 
     __slots__ = (
         "client",
-        "_events",
+        "chunk_guilds",
+        "chunk_channels",
+        "debug_events",
         "_logger",
-        "_chunk_guilds",
-        "_chunk_channels",
-        "_debug_events",
+        "_websockets",
     )
 
     gateway_url: ClassVar[str] = "wss://gateway.discord.gg/?v=10&encoding=json"
@@ -81,12 +89,43 @@ class WebSocketConnector:
         debug_events: bool,
     ):
         self.client: PynextClient = client
+        self.chunk_guilds: bool = chunk_guilds
+        self.chunk_channels: bool = chunk_channels
+        self.debug_events: bool = debug_events
 
-        self._chunk_guilds: bool = chunk_guilds
-        self._chunk_channels: bool = chunk_channels
-        self._debug_events: bool = debug_events
-
+        self._websockets: dict[SelfBot, DiscordWebSocket] = {}
         self._logger: Logger = getLogger("pynext.gateway")
+
+    @property
+    def websockets(self) -> dict[SelfBot, DiscordWebSocket]:
+        """
+        A dictionary with websocket connections.
+        """
+        return self._websockets
+
+    def get_websocket(self, user: SelfBot) -> DiscordWebSocket | None:
+        """
+        Method to get websocket connection for user.
+        """
+        return self._websockets.get(user)
+
+    def add_websocket(self, websocket: DiscordWebSocket) -> None:
+        """
+        Method to add websocket to the connector.
+        """
+        websocket.connected.set()
+        websocket.user.gateway = websocket
+        self._websockets[websocket.user] = websocket
+
+    def remove_websocket(self, websocket: DiscordWebSocket) -> None:
+        """
+        Method to remove websocket from the connector.
+        """
+        try:
+            del self._websockets[websocket.user]
+            websocket.connected.clear()
+        except KeyError:
+            pass
 
     async def start(self, reconnect: bool = False):
         """
@@ -104,15 +143,8 @@ class WebSocketConnector:
         )
 
         for user in self.client.users:
-            web_socket = DiscordWebSocket(
-                user=user,
-                client=self.client,
-                chunk_guilds=self._chunk_guilds,
-                chunk_channels=self._chunk_channels,
-                debug_events=self._debug_events,
-            )
-
-            task: Task = self.client.loop.create_task(web_socket.run(self.gateway_url))
+            websocket: DiscordWebSocket = DiscordWebSocket(user=user, connector=self)
+            task: Task = self.client.loop.create_task(websocket.run(self.gateway_url))
             tasks.append(task)
 
         await gather(*tasks)
@@ -125,7 +157,14 @@ class WebSocketConnector:
         ----------
         event_name:
             Event name to register.
+
+        # TODO: Remove this method in the future and change 'gateway' attribute to 'connector' in Selfbot.
         """
+        warn(
+            "Using client.gateway.event is deprecated. Use client.dispatcher.listen instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.client.dispatcher.listen(event_name)
 
 
@@ -137,14 +176,6 @@ class DiscordWebSocket:
     ----------
     user:
         Selfbot assigned to the connection.
-    client:
-        Pynext client.
-    chunk_guilds:
-        Whether the client should chunk selfbot guilds.
-    chunk_channels:
-        Whether the client should chunks guild channels.
-    debug_events:
-        Whether the client should run debug events such as: ``on_websocket_raw_receive``.
 
     Attributes
     ----------
@@ -166,6 +197,7 @@ class DiscordWebSocket:
         "dispatcher",
         "connected",
         "latency",
+        "connector",
         "_request_queue",
         "_last_send",
         "_client",
@@ -179,23 +211,22 @@ class DiscordWebSocket:
     def __init__(
         self,
         user: SelfBot,
-        client: PynextClient,
-        chunk_guilds: bool,
-        chunk_channels: bool,
-        debug_events: bool,
+        connector: WebSocketConnector,
     ) -> None:
         self.user: SelfBot = user
         self.websocket: ClientWebSocketResponse | None = None
         self.connected: Event = Event()
-        self.dispatcher: Dispatcher[PynextClient] = client.dispatcher
+
+        self.connector: WebSocketConnector = connector
+        self.dispatcher: Dispatcher[PynextClient] = connector.client.dispatcher
         self.latency: float = 0.0
 
         self._parser: Parser = Parser(
-            chunk_guilds=chunk_guilds, chunk_channels=chunk_channels
+            chunk_guilds=connector.chunk_guilds, chunk_channels=connector.chunk_channels
         )
         self._request_queue: Queue[dict[str, Any]] = Queue()
-        self._client: PynextClient = client
-        self._debug_events: bool = debug_events
+        self._client: PynextClient = connector.client
+        self._debug_events: bool = connector.debug_events
 
         self._logger: Logger = getLogger("pynext.gateway")
         self._pulse: int = 10
@@ -229,7 +260,7 @@ class DiscordWebSocket:
 
             self._logger.info("Closing gateway connection...")
 
-            self.connected.clear()
+            self.connector.remove_websocket(self)
             await self.websocket.close()
 
     async def run(self, gateway_url: str) -> None:
@@ -242,8 +273,7 @@ class DiscordWebSocket:
             Url to connect gateway.
         """
         self.websocket = await self.user.http.connect_to_gateway(url=gateway_url)
-        self.connected.set()
-        self.user.gateway = self
+        self.connector.add_websocket(self)
 
         self._logger.info(f"Connected {self.user} to the discord gateway.")
 

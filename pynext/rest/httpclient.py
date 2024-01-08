@@ -468,8 +468,6 @@ class HTTPClient:
         if message_reference:
             payload["allowed_mentions"] = {"replied_user": reply_mention}
 
-        print(payload)
-
         response: ClientResponse = await self.request(route, payload, user)
         return await response.json()
 
