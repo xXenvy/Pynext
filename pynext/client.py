@@ -59,6 +59,10 @@ class PynextClient:
         Parameter to manage HTTP connection timeout.
     debug_events:
         Whether the client should run debug events such as: on_websocket_raw_receive.
+    reconnect:
+        Whether the client should reconnect to the gateway after disconnecting.
+
+        .. versionadded:: 1.2.0
 
     Attributes
     ----------

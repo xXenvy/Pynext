@@ -57,6 +57,10 @@ class WebSocketConnector:
         Whether the client should chunks guild channels.
     debug_events:
         Whether the client should run debug events such as: on_websocket_raw_receive.
+    reconnect:
+        Whether the client should reconnect to the gateway after disconnecting.
+
+        .. versionadded:: 1.2.0
 
     Attributes
     ----------
@@ -72,6 +76,10 @@ class WebSocketConnector:
         .. versionadded:: 1.2.0
     debug_events: :class:`bool`
         Whether the client should run debug events such as: on_websocket_raw_receive.
+
+        .. versionadded:: 1.2.0
+    reconnect: :class:`bool`
+        Whether the client should reconnect to the gateway after disconnecting.
 
         .. versionadded:: 1.2.0
     """
@@ -142,17 +150,13 @@ class WebSocketConnector:
         try:
             del self._websockets[websocket.user]
             websocket.connected.clear()
+            websocket.user.gateway = None
         except KeyError:
             pass
 
-    async def start(self, reconnect: bool = False):
+    async def start(self):
         """
         Asynchronous method to connect selfbots to gateway.
-
-        Parameters
-        ----------
-        reconnect:
-            Whether websocket should reconnect if the connection breaks.
         """
         tasks: list[Task] = []
 
@@ -317,7 +321,6 @@ class DiscordWebSocket:
                 return
 
         self.connector.add_websocket(self)
-
         self._logger.info(f"Connected {self.user} to the discord gateway.")
 
         tasks = [
@@ -381,8 +384,8 @@ class DiscordWebSocket:
             if response.event and response.event_name:
                 await self.__dispatch_event(response)
 
+        self._logger.error(f"Websocket connection for {self.user} has been closed.")
         if self.connector.reconnect is True:
-            self._logger.error("Failed to connect to the gateway. Reconnecting...")
             await self.connector.reconnect_websocket(self.user)
 
     async def __dispatch_event(self, response: GatewayResponse):
