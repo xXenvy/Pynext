@@ -92,4 +92,4 @@ class GatewayResponse:
             return None
 
         converter: dict[str, str] = {event.name: event.value for event in Events}
-        return converter.get(event_name, event_name)
+        return converter.get(event_name)

@@ -10,7 +10,7 @@ To avoid this, you can increase the timeout limit.
 """
 
 
-@client.gateway.event("on_user_ready")
+@client.dispatcher.listen("on_user_ready")
 async def on_ready(user: SelfBot):
     print(f"Selfbot: {user.username} is ready!")
 
