@@ -100,18 +100,24 @@ class WebSocketConnector:
     def websockets(self) -> dict[SelfBot, DiscordWebSocket]:
         """
         A dictionary with websocket connections.
+
+        .. versionadded:: 1.2.0
         """
         return self._websockets
 
     def get_websocket(self, user: SelfBot) -> DiscordWebSocket | None:
         """
         Method to get websocket connection for user.
+
+        .. versionadded:: 1.2.0
         """
         return self._websockets.get(user)
 
     def add_websocket(self, websocket: DiscordWebSocket) -> None:
         """
         Method to add websocket to the connector.
+
+        .. versionadded:: 1.2.0
         """
         websocket.connected.set()
         websocket.user.gateway = websocket
@@ -120,6 +126,8 @@ class WebSocketConnector:
     def remove_websocket(self, websocket: DiscordWebSocket) -> None:
         """
         Method to remove websocket from the connector.
+
+        .. versionadded:: 1.2.0
         """
         try:
             del self._websockets[websocket.user]
