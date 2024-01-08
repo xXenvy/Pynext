@@ -85,12 +85,14 @@ class PynextClient:
         chunk_channels: bool = True,
         http_timeout: ClientTimeout = ClientTimeout(total=10),
         debug_events: bool = False,
+        reconnect: bool = True
     ):
         self.gateway: WebSocketConnector = WebSocketConnector(
             client=self,
             chunk_guilds=chunk_guilds,
             chunk_channels=chunk_channels,
             debug_events=debug_events,
+            reconnect=reconnect
         )
 
         self.loop: AbstractEventLoop = get_event_loop()
