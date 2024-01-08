@@ -10,12 +10,12 @@ Events Example
 
    client = PynextClient()
 
-   @client.gateway.event('on_user_ready')
+   @client.dispatcher.listen('on_user_ready')
    async def on_ready(user: SelfBot):
       print(f"Selfbot: {user.username} is ready!")
 
 
-   @client.gateway.event('on_message_create')
+   @client.dispatcher.listen('on_message_create')
    async def on_message(user: SelfBot, message: Union[GuildMessage, PrivateMessage]):
        print(f"{user.username} received an event on_message!")
        print(message.content)

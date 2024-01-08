@@ -35,12 +35,12 @@ from typing import Union
 
 client = PynextClient(chunk_guilds=False)
 
-@client.gateway.event('on_user_ready')
+@client.dispatcher.listen('on_user_ready')
 async def on_ready(user: SelfBot):
     print("User: {} is ready!".format(user))
 
 
-@client.gateway.event('on_message_create')
+@client.dispatcher.listen('on_message_create')
 async def on_message(selfbot: SelfBot, message: Union[PrivateMessage, GuildMessage]):
     if message.content == "?ping":
         await message.reply(selfbot, content=f"**Pong!** {round(selfbot.latency * 1000)}ms")
