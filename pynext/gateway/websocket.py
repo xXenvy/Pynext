@@ -143,10 +143,7 @@ class WebSocketConnector:
         )
 
         for user in self.client.users:
-            websocket: DiscordWebSocket = DiscordWebSocket(
-                user=user,
-                connector=self
-            )
+            websocket: DiscordWebSocket = DiscordWebSocket(user=user, connector=self)
             task: Task = self.client.loop.create_task(websocket.run(self.gateway_url))
             tasks.append(task)
 
@@ -166,7 +163,7 @@ class WebSocketConnector:
         warn(
             "Using client.gateway.event is deprecated. Use client.dispatcher.listen instead.",
             DeprecationWarning,
-            stacklevel=2
+            stacklevel=2,
         )
         return self.client.dispatcher.listen(event_name)
 
@@ -216,7 +213,6 @@ class DiscordWebSocket:
         user: SelfBot,
         connector: WebSocketConnector,
     ) -> None:
-
         self.user: SelfBot = user
         self.websocket: ClientWebSocketResponse | None = None
         self.connected: Event = Event()
