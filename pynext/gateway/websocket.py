@@ -237,10 +237,10 @@ class DiscordWebSocket:
         "connected",
         "latency",
         "connector",
+        "last_sequence",
         "_request_queue",
         "_last_send",
         "_client",
-        "_last_sequence",
         "_pulse",
         "_logger",
         "_parser",
@@ -259,6 +259,7 @@ class DiscordWebSocket:
         self.connector: WebSocketConnector = connector
         self.dispatcher: Dispatcher[PynextClient] = connector.client.dispatcher
         self.latency: float = 0.0
+        self.last_sequence: int | None = None
 
         self._parser: Parser = Parser(
             chunk_guilds=connector.chunk_guilds, chunk_channels=connector.chunk_channels
@@ -270,9 +271,6 @@ class DiscordWebSocket:
         self._logger: Logger = getLogger("pynext.gateway")
         self._pulse: int = 10
         self._last_send: float = perf_counter()
-        self._last_sequence: int | None = None
-        # For now, we are not using last_sequence,
-        # however we will need it to resume the connection to the gateway in the future.
 
     @property
     def websocket_status(self) -> bool:
@@ -367,7 +365,7 @@ class DiscordWebSocket:
             self._logger.debug(f"Websocket received response: {response} | {self.user}")
 
             if response.sequence:
-                self._last_sequence = response.sequence
+                self.last_sequence = response.sequence
 
             if response.op == GatewayCodes.HELLO.value:
                 self._pulse = response.data["heartbeat_interval"] / 1000
