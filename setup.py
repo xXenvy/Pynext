@@ -2,14 +2,14 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-from pynext import pynext_version
+from pynext import __version__
 
 here = os.path.abspath(os.path.dirname(__file__))
 
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = pynext_version
+VERSION = __version__
 DESCRIPTION = "Library that will allow you to manage selfbots."
 LONG_DESCRIPTION = (
     "The library was written mainly for selfbots. "
