@@ -215,6 +215,32 @@ class SelectMenu(Generic[MessageT]):
     def __ne__(self, other: Any) -> bool:
         return not self.__eq__(other)
 
+    def get_option_by_value(self, value: str) -> SelectMenuOption | None:
+        """
+        Method to get an option from the select menu by value.
+
+        Parameters
+        ----------
+        value: :class:`str`
+            The value of the option.
+        """
+        for option in self.options:
+            if option.value == value:
+                return option
+
+    def get_option_by_label(self, label: str) -> SelectMenuOption | None:
+        """
+        Method to get an option from the select menu by label.
+
+        Parameters
+        ----------
+        label: :class:`str`
+            The label of the option.
+        """
+        for option in self.options:
+            if option.label == label:
+                return option
+
     async def use(self, selfbot: SelfBot, *options: SelectMenuOption) -> None:
         """
         Method to use the select menu.

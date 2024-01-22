@@ -195,6 +195,21 @@ class BaseMessage(Hashable):
             if button.label == label:
                 return button
 
+    def get_select_menu_by_custom_id(self, custom_id: str) -> SelectMenu | None:
+        """
+        Method to get select menu by custom id.
+
+        .. versionadded:: 1.3.0
+
+        Parameters
+        ----------
+        custom_id:
+            Select menu custom id.
+        """
+        for select_menu in self.select_menus:
+            if select_menu.custom_id == custom_id:
+                return select_menu
+
     def get_reaction(self, unique_id: int) -> MessageReaction | None:
         """
         Method to get message reaction from cache by unique id.
