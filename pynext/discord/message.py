@@ -42,6 +42,7 @@ if TYPE_CHECKING:
 
     from .channel import DMChannel, TextChannel, ThreadChannel
     from .attachment import Attachment
+    from .components import Button, SelectMenu
 
 
 class BaseMessage(Hashable):
@@ -80,11 +81,17 @@ class BaseMessage(Hashable):
         Message reference.
 
         .. versionadded:: 1.2.0
+    flags:
+        Message flags.
+
+        .. versionadded:: 1.3.0
     """
 
     __slots__ = (
         "_state",
         "_reactions",
+        "_buttons",
+        "_select_menus",
         "channel",
         "author",
         "type",
@@ -95,11 +102,15 @@ class BaseMessage(Hashable):
         "channel_id",
         "tts",
         "reference",
+        "flags"
     )
 
     def __init__(self, state: State, data: dict[str, Any]):
         self._state: State = state
         self._reactions: dict[int, MessageReaction] = {}
+
+        self._buttons: set[Button] = set()
+        self._select_menus: set[SelectMenu] = set()
 
         self.reference: MessageReference | None = None
         self.channel: DMChannel | TextChannel = data["channel"]
@@ -113,12 +124,31 @@ class BaseMessage(Hashable):
         self.author_id: int = int(data["author"]["id"])
         self.channel_id: int = int(data["channel_id"])
         self.tts: bool = data["tts"]
+        self.flags: int = data.get('flags', 0)
 
         if reference := data.get("message_reference"):
             self.reference = MessageReference(
                 channel_id=int(reference["channel_id"]),
                 message_id=int(reference["message_id"]),
             )
+
+        if components_data := data.get('components'):
+            for row, row_content in enumerate(components_data):
+                for component in row_content['components']:
+                    if component['type'] == 2:
+                        button: Button[PrivateMessage] = self._state.create_button(
+                            message=self,
+                            row=row,
+                            data=component
+                        )
+                        self._buttons.add(button)
+                    else:
+                        select_menu: SelectMenu[PrivateMessage] = self._state.create_select_menu(
+                            message=self,
+                            row=row,
+                            data=component
+                        )
+                        self._select_menus.add(select_menu)
 
     @property
     def created_at(self) -> datetime:
@@ -133,6 +163,39 @@ class BaseMessage(Hashable):
         List with all message reactions.
         """
         return list(self._reactions.values())
+
+    @property
+    def select_menus(self) -> list[SelectMenu]:
+        """
+        List with all message select menus.
+
+        .. versionadded:: 1.3.0
+        """
+        return list(self._select_menus)
+
+    @property
+    def buttons(self) -> list[Button]:
+        """
+        List with all message buttons.
+
+        .. versionadded:: 1.3.0
+        """
+        return list(self._buttons)
+
+    def get_button_by_label(self, label: str) -> Button | None:
+        """
+        Method to get button by label.
+
+        .. versionadded:: 1.3.0
+
+        Parameters
+        ----------
+        label:
+            Button label.
+        """
+        for button in self.buttons:
+            if button.label == label:
+                return button
 
     def get_reaction(self, unique_id: int) -> MessageReaction | None:
         """

@@ -39,6 +39,7 @@ from .application import *
 from .slash_command import *
 from .attachment import *
 from .file import *
+from .components import *
 
 __all__ = (
     "GuildMessage",
@@ -71,4 +72,6 @@ __all__ = (
     "File",
     "BaseMessage",
     "BaseCommand",
+    "Button",
+    "SelectMenu",
 )

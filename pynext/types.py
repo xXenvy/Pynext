@@ -208,3 +208,30 @@ class ThreadMembersUpdatePayload:
     thread: ThreadChannel
     added_members: list[GuildMember]
     removed_members: list[int]
+
+
+@dataclass
+class SelectMenuOption:
+    """
+    SelectMenuOption dataclass.
+
+    .. versionadded:: 1.3.0
+
+    Parameters
+    ----------
+    label:
+        Option label.
+    value:
+        Option value.
+    description:
+        Option description.
+    emoji:
+        Option emoji.
+    default:
+        Whether the option is default.
+    """
+    label: str
+    value: str
+    description: str | None = None
+    emoji: Emoji | None = None
+    default: bool = False
