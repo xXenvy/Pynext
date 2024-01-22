@@ -56,27 +56,37 @@ class Button(Generic[MessageT]):
         self.type: int = data["type"]
 
         self.style: int = data["style"]
-        self.disabled: bool = data.get('disabled', False)
+        self.disabled: bool = data.get("disabled", False)
 
-        self.url: str | None = data.get('url')
-        self.label: str | None = data.get('label')
+        self.url: str | None = data.get("url")
+        self.label: str | None = data.get("label")
         # Im not sure how this can be None but acording to the docs it can be.
 
-        self.custom_id: str | None = data.get('custom_id')
+        self.custom_id: str | None = data.get("custom_id")
         self.emoji: Emoji | None = None
 
-        if emoji_data := data.get('emoji'):
+        if emoji_data := data.get("emoji"):
             self.emoji = Emoji(
-                name=emoji_data['name'],
-                animated=emoji_data.get('animated', False),
-                emoji_id=emoji_data.get('id')
+                name=emoji_data["name"],
+                animated=emoji_data.get("animated", False),
+                emoji_id=emoji_data.get("id"),
             )
 
     def __repr__(self) -> str:
         return f"<Button(style={self.style}, label={self.label})>"
 
     def __hash__(self) -> int:
-        return hash((self.type, self.row, self.style, self.label, self.custom_id, self.emoji, self.message))
+        return hash(
+            (
+                self.type,
+                self.row,
+                self.style,
+                self.label,
+                self.custom_id,
+                self.emoji,
+                self.message,
+            )
+        )
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, Button) and hash(other) == hash(self)
@@ -104,7 +114,7 @@ class Button(Generic[MessageT]):
             "data": {
                 "component_type": self.type,
                 "custom_id": self.custom_id,
-            }
+            },
         }
         if guild := getattr(self.message, "guild", None):
             interaction_payload["guild_id"] = guild.id
@@ -154,38 +164,50 @@ class SelectMenu(Generic[MessageT]):
 
         self.options: list[SelectMenuOption] = []
         self.type: int = data["type"]
-        self.custom_id: str = data['custom_id']
+        self.custom_id: str = data["custom_id"]
 
-        self.placeholder: str | None = data.get('placeholder')
-        self.disabled: bool = data.get('disabled', False)
+        self.placeholder: str | None = data.get("placeholder")
+        self.disabled: bool = data.get("disabled", False)
 
-        self.min_values: int = data.get('min_values', 1)
-        self.max_values: int = data.get('max_values', 1)
+        self.min_values: int = data.get("min_values", 1)
+        self.max_values: int = data.get("max_values", 1)
 
-        for option in data.get('options', []):
-            emoji_data: dict[str, Any] | None = option.get('emoji')
+        for option in data.get("options", []):
+            emoji_data: dict[str, Any] | None = option.get("emoji")
             if emoji_data:
                 emoji = Emoji(
-                    name=emoji_data['name'],
-                    animated=emoji_data.get('animated', False),
-                    emoji_id=emoji_data.get('id')
+                    name=emoji_data["name"],
+                    animated=emoji_data.get("animated", False),
+                    emoji_id=emoji_data.get("id"),
                 )
             else:
                 emoji = None
 
-            self.options.append(SelectMenuOption(
-                label=option['label'],
-                value=option['value'],
-                description=option.get('description'),
-                emoji=emoji,
-                default=option.get('default', False)
-            ))
+            self.options.append(
+                SelectMenuOption(
+                    label=option["label"],
+                    value=option["value"],
+                    description=option.get("description"),
+                    emoji=emoji,
+                    default=option.get("default", False),
+                )
+            )
 
     def __repr__(self) -> str:
         return f"<SelectMenu(type={self.type}, custom_id={self.custom_id}, options={len(self.options)})>"
 
     def __hash__(self) -> int:
-        return hash((self.type, self.row, self.placeholder, self.min_values, self.max_values, self.custom_id, self.message))
+        return hash(
+            (
+                self.type,
+                self.row,
+                self.placeholder,
+                self.min_values,
+                self.max_values,
+                self.custom_id,
+                self.message,
+            )
+        )
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, SelectMenu) and hash(other) == hash(self)
@@ -215,8 +237,8 @@ class SelectMenu(Generic[MessageT]):
             "data": {
                 "component_type": self.type,
                 "custom_id": self.custom_id,
-                "values": [option.value for option in options]
-            }
+                "values": [option.value for option in options],
+            },
         }
         if guild := getattr(self.message, "guild", None):
             interaction_payload["guild_id"] = guild.id

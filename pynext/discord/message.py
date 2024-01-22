@@ -102,7 +102,7 @@ class BaseMessage(Hashable):
         "channel_id",
         "tts",
         "reference",
-        "flags"
+        "flags",
     )
 
     def __init__(self, state: State, data: dict[str, Any]):
@@ -124,7 +124,7 @@ class BaseMessage(Hashable):
         self.author_id: int = int(data["author"]["id"])
         self.channel_id: int = int(data["channel_id"])
         self.tts: bool = data["tts"]
-        self.flags: int = data.get('flags', 0)
+        self.flags: int = data.get("flags", 0)
 
         if reference := data.get("message_reference"):
             self.reference = MessageReference(
@@ -132,21 +132,19 @@ class BaseMessage(Hashable):
                 message_id=int(reference["message_id"]),
             )
 
-        if components_data := data.get('components'):
+        if components_data := data.get("components"):
             for row, row_content in enumerate(components_data):
-                for component in row_content['components']:
-                    if component['type'] == 2:
+                for component in row_content["components"]:
+                    if component["type"] == 2:
                         button: Button[PrivateMessage] = self._state.create_button(
-                            message=self,
-                            row=row,
-                            data=component
+                            message=self, row=row, data=component
                         )
                         self._buttons.add(button)
                     else:
-                        select_menu: SelectMenu[PrivateMessage] = self._state.create_select_menu(
-                            message=self,
-                            row=row,
-                            data=component
+                        select_menu: SelectMenu[
+                            PrivateMessage
+                        ] = self._state.create_select_menu(
+                            message=self, row=row, data=component
                         )
                         self._select_menus.add(select_menu)
 

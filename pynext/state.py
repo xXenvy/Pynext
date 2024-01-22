@@ -141,7 +141,9 @@ class State:
         return GuildMember(data=data, guild=guild)
 
     @staticmethod
-    def create_button(message: Message | BaseMessage, row: int, data: dict[str, Any]) -> Button:
+    def create_button(
+        message: Message | BaseMessage, row: int, data: dict[str, Any]
+    ) -> Button:
         """
         Method to create a button object from a data.
 
@@ -159,7 +161,9 @@ class State:
         return Button(message=message, row=row, data=data)
 
     @staticmethod
-    def create_select_menu(message: Message | BaseMessage, row: int, data: dict[str, Any]) -> SelectMenu:
+    def create_select_menu(
+        message: Message | BaseMessage, row: int, data: dict[str, Any]
+    ) -> SelectMenu:
         """
         Method to create a select menu object from a data.
 

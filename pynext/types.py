@@ -230,6 +230,7 @@ class SelectMenuOption:
     default:
         Whether the option is default.
     """
+
     label: str
     value: str
     description: str | None = None
