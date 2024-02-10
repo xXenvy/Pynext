@@ -60,7 +60,6 @@ class Button(Generic[MessageT]):
 
         self.url: str | None = data.get("url")
         self.label: str | None = data.get("label")
-        # Im not sure how this can be None but acording to the docs it can be.
 
         self.custom_id: str | None = data.get("custom_id")
         self.emoji: Emoji | None = None
@@ -102,7 +101,24 @@ class Button(Generic[MessageT]):
         ----------
         selfbot: :class:`SelfBot`
             Selfbot to send the button interaction.
+
+        Raises
+        ------
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Using the button failed.
+        NotFound
+            Button not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
+        ValueError
+            If the button is a link button.
+            Discord doesn't allow link buttons to be used.
         """
+        if self.style == 5:
+            raise ValueError("Cannot use a link button.")
+
         interaction_payload: dict[str, Any] = {
             "type": 3,
             "application_id": self.message.author_id,
@@ -160,7 +176,6 @@ class SelectMenu(Generic[MessageT]):
     def __init__(self, message: MessageT, row: int, data: dict[str, Any]):
         self.message: MessageT = message
         self.row: int = row
-        print(data)
 
         self.options: list[SelectMenuOption] = []
         self.type: int = data["type"]
@@ -251,6 +266,19 @@ class SelectMenu(Generic[MessageT]):
             Selfbot to send the select menu interaction.
         options: :class:`SelectMenuOption`
             The options to use.
+
+        Raises
+        ------
+        ValueError
+            If the option is not in the select menu.
+        HTTPTimeoutError
+            Request reached http timeout limit.
+        HTTPException
+            Using the select menu failed.
+        NotFound
+            SelectMenu not found.
+        Forbidden
+            Selfbot doesn't have proper permissions.
         """
         interaction_payload: dict[str, Any] = {
             "type": 3,
