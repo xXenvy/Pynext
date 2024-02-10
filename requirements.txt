@@ -1,0 +1,2 @@
+aiohttp>=3.8.0
+colorlog>=6.7.0
