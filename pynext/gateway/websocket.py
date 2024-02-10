@@ -391,7 +391,7 @@ class DiscordWebSocket:
                 self.last_sequence = response.sequence
 
             if response.op == GatewayCodes.HELLO.value:
-                self._pulse = response.data["heartbeat_interval"] / 1000
+                self._pulse = (response.data["heartbeat_interval"] / 1000) - 1
                 await self._send_identify()
                 continue
 
