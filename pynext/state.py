@@ -140,11 +140,53 @@ class State:
         self.logger.debug("Creating a guild member object...")
         return GuildMember(data=data, guild=guild)
 
+    @staticmethod
+    def create_button(
+        message: Message | BaseMessage, row: int, data: dict[str, Any]
+    ) -> Button:
+        """
+        Method to create a button object from a data.
+
+        .. versionadded:: 1.3.0
+
+        Parameters
+        ----------
+        message:
+            Message to which the created button should belong.
+        row:
+            Row number of the button.
+        data:
+            Required data to create a button object.
+        """
+        return Button(message=message, row=row, data=data)
+
+    @staticmethod
+    def create_select_menu(
+        message: Message | BaseMessage, row: int, data: dict[str, Any]
+    ) -> SelectMenu:
+        """
+        Method to create a select menu object from a data.
+
+        .. versionadded:: 1.3.0
+
+        Parameters
+        ----------
+        message:
+            Message to which the created select menu should belong.
+        row:
+            Row number of the select menu.
+        data:
+            Required data to create a select menu object.
+        """
+        return SelectMenu(message=message, row=row, data=data)
+
     def create_attachment(
         self, message: MessageT, data: dict[str, Any]
     ) -> Attachment[MessageT]:
         """
         Method to create a attachment object from a data.
+
+        .. versionadded:: 1.2.0
 
         Parameters
         ----------

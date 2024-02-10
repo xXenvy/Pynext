@@ -91,6 +91,9 @@ __all__: tuple[str, ...] = (
     "File",
     "BaseMessage",
     "BaseCommand",
+    "Button",
+    "SelectMenu",
+    "SelectMenuOption",
 )
 
 __version__: str = PynextClient.__version__
