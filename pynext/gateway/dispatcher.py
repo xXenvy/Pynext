@@ -20,6 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+
 from __future__ import annotations
 from typing import (
     TYPE_CHECKING,
@@ -78,9 +79,9 @@ class Dispatcher(Generic[ObjectT]):
 
         self.events: dict[str, Callable[..., Coroutine]] = {}
         self.logger: Logger = getLogger("pynext.gateway")
-        self._wait_for_futures: dict[
-            str, list[tuple[Future, WaitForCheck | None]]
-        ] = defaultdict(list)
+        self._wait_for_futures: dict[str, list[tuple[Future, WaitForCheck | None]]] = (
+            defaultdict(list)
+        )
 
     def __repr__(self) -> str:
         return f"<Dispatcher(events={len(self.events)})>"

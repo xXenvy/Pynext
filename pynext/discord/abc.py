@@ -20,6 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+
 from __future__ import annotations
 from typing import TYPE_CHECKING, overload, Any, AsyncIterable
 
@@ -109,14 +110,12 @@ class Messageable:
     @overload
     async def send(
         self, user: SelfBot, content: str, files: list[File] | None = None
-    ) -> PrivateMessage:
-        ...
+    ) -> PrivateMessage: ...
 
     @overload
     async def send(
         self, user: SelfBot, content: str, files: list[File] | None = None
-    ) -> GuildMessage:
-        ...
+    ) -> GuildMessage: ...
 
     async def send(
         self, user: SelfBot, content: str, files: list[File] | None = None

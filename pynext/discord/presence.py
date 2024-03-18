@@ -20,6 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
+
 from __future__ import annotations
 from typing import Literal, Any, TYPE_CHECKING
 
@@ -68,8 +69,9 @@ class PresenceBuilder:
 
     def __init__(
         self,
-        status: Literal["online", "dnd", "idle", "invisible", "offline"]
-        | StatusType = "online",
+        status: (
+            Literal["online", "dnd", "idle", "invisible", "offline"] | StatusType
+        ) = "online",
         afk: bool = False,
         since: int | None = None,
         activities: list[Activity] | None = None,
